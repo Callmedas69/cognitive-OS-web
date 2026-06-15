@@ -27,12 +27,15 @@ const QUICKSTART = [
 ];
 
 // Scroll-driven 0xNull mood per section. v = vivid (decorative fills),
-// ink = darker AA-safe variant (text). hero/agent/quickstart = shipping green;
-// problem = broke red; filesystem/principles = flow cyan. Closes on brand.
+// ink = darker AA-safe variant (text). Every adjacent section uses a distinct
+// hue so each transition visibly morphs: emerald → red → cyan → violet →
+// emerald → amber. On-brand (accent + zone tokens).
 const MOOD = {
-  shipping: { v: "#10b981", ink: "#047857" },
-  broke: { v: "#ff3366", ink: "#e11d48" },
-  flow: { v: "#06b6d4", ink: "#0e7490" },
+  shipping: { v: "#10b981", ink: "#047857" }, // emerald
+  broke: { v: "#ff3366", ink: "#e11d48" }, // red
+  flow: { v: "#06b6d4", ink: "#0e7490" }, // cyan
+  ideas: { v: "#7b61ff", ink: "#6d28d9" }, // violet (ideas zone)
+  capture: { v: "#ff6b35", ink: "#c2410c" }, // amber (capture zone)
 } as const;
 
 function H2({ children }: { children: React.ReactNode }) {
@@ -127,7 +130,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 4 — Three Principles ───────────────── */}
-      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink}>
+      <Section mood={MOOD.ideas.v} moodInk={MOOD.ideas.ink}>
         <H2>Why this isn&apos;t another Notion</H2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           <PrincipleCard label="ZERO MAINTENANCE">
@@ -159,7 +162,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 6 — Quickstart ─────────────────────── */}
-      <Section mood={MOOD.shipping.v} moodInk={MOOD.shipping.ink} className="max-w-[760px]">
+      <Section mood={MOOD.capture.v} moodInk={MOOD.capture.ink} className="max-w-[760px]">
         <H2>Start in 60 seconds</H2>
         <div className="mt-10 flex flex-col gap-3">
           {QUICKSTART.map((q) => (
