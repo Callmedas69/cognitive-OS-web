@@ -22,7 +22,7 @@ const SITE_URL = "https://cognitiveos.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "cognitiveOS — never lose context between sessions",
+  title: "cognitiveOS — stop relearning your own project",
   description:
     "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do. Free, open source, npx cognitiveos init.",
   keywords: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "0xDas" }],
   openGraph: {
-    title: "cognitiveOS — never lose context between sessions",
+    title: "cognitiveOS — stop relearning your own project",
     description:
       "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do.",
     url: SITE_URL,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "cognitiveOS — never lose context between sessions",
+    title: "cognitiveOS — stop relearning your own project",
     description:
       "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do.",
   },
