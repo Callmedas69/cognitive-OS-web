@@ -67,9 +67,9 @@ export default function Home() {
         <Mascot />
 
         <h1 className="mt-8 font-display text-[length:var(--text-h1)] leading-[0.95] tracking-wide">
-          Never lose context
+          Stop relearning
           <br />
-          between sessions
+          your own project
         </h1>
 
         <p className="mt-6 max-w-md text-text-muted">
