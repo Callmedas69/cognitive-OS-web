@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Section from "./_components/Section";
+import MoodController from "./_components/MoodController";
 import Terminal from "./_components/Terminal";
 import Mascot from "./_components/Mascot";
 import ZoneTree from "./_components/ZoneTree";
@@ -25,22 +26,23 @@ const QUICKSTART = [
   { cmd: "cognitiveos check", label: "verify it's wired" },
 ];
 
-// Scroll-driven 0xNull mood per section (AA-safe accent tier).
-// hero/agent/quickstart = shipping green; problem = broke red; filesystem/
-// principles = flow cyan. Journey closes back on brand emerald.
+// Scroll-driven 0xNull mood per section. v = vivid (decorative fills),
+// ink = darker AA-safe variant (text). hero/agent/quickstart = shipping green;
+// problem = broke red; filesystem/principles = flow cyan. Closes on brand.
 const MOOD = {
-  shipping: "#10b981",
-  broke: "#ff3366",
-  flow: "#06b6d4",
+  shipping: { v: "#10b981", ink: "#047857" },
+  broke: { v: "#ff3366", ink: "#e11d48" },
+  flow: { v: "#06b6d4", ink: "#0e7490" },
 } as const;
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide">
+      {/* section title shifts color by scroll (AA-safe ink tier) */}
+      <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide text-mood-ink">
         {children}
       </h2>
-      {/* mood underline bar — shifts color by scroll */}
+      {/* mood underline bar — vivid fill */}
       <span className="mt-4 block h-1 w-12 rounded-full bg-mood" aria-hidden />
     </>
   );
@@ -49,13 +51,15 @@ function H2({ children }: { children: React.ReactNode }) {
 export default function Home() {
   return (
     <main className="flex-1">
+      <MoodController />
       {/* ── Section 1 — Hero ───────────────────────────── */}
       <Section
         noReveal
-        mood={MOOD.shipping}
+        mood={MOOD.shipping.v}
+        moodInk={MOOD.shipping.ink}
         className="flex min-h-[70vh] flex-col items-center justify-center text-center"
       >
-        <p className="mb-6 text-sm font-bold text-mood">{"// the thinking is free."}</p>
+        <p className="mb-6 text-sm font-bold text-mood-ink">{"// the thinking is free."}</p>
 
         <Mascot />
 
@@ -85,7 +89,7 @@ export default function Home() {
           </a>
           <Link
             href="/docs"
-            className="text-sm text-mood underline-offset-4 hover:underline"
+            className="text-sm text-mood-ink underline-offset-4 hover:underline"
           >
             Read the docs
           </Link>
@@ -93,7 +97,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 2 — The Problem ────────────────────── */}
-      <Section mood={MOOD.broke} className="max-w-[760px]">
+      <Section mood={MOOD.broke.v} moodInk={MOOD.broke.ink} className="max-w-[760px]">
         <H2>The 30-minute tax</H2>
         <p className="mt-6 text-text-muted">
           Every time you reopen your laptop, you spend 15–45 minutes remembering
@@ -111,7 +115,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 3 — The Filesystem ─────────────────── */}
-      <Section mood={MOOD.flow}>
+      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink}>
         <H2>The filesystem is the fix</H2>
         <p className="mt-6 max-w-[640px] text-text-muted">
           Each folder is one cognitive mode. Your agent reads it automatically.
@@ -123,7 +127,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 4 — Three Principles ───────────────── */}
-      <Section mood={MOOD.flow}>
+      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink}>
         <H2>Why this isn&apos;t another Notion</H2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           <PrincipleCard label="ZERO MAINTENANCE">
@@ -142,7 +146,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 5 — Works With Your Agent ──────────── */}
-      <Section mood={MOOD.shipping}>
+      <Section mood={MOOD.shipping.v} moodInk={MOOD.shipping.ink}>
         <H2>Bring your own agent</H2>
         <div className="mt-10 grid gap-px overflow-hidden rounded-[10px] border border-border bg-border sm:grid-cols-2">
           {AGENTS.map((a) => (
@@ -155,7 +159,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 6 — Quickstart ─────────────────────── */}
-      <Section mood={MOOD.shipping} className="max-w-[760px]">
+      <Section mood={MOOD.shipping.v} moodInk={MOOD.shipping.ink} className="max-w-[760px]">
         <H2>Start in 60 seconds</H2>
         <div className="mt-10 flex flex-col gap-3">
           {QUICKSTART.map((q) => (
@@ -165,7 +169,7 @@ export default function Home() {
         <div className="mt-10">
           <Link
             href="/docs"
-            className="text-sm text-mood underline-offset-4 hover:underline"
+            className="text-sm text-mood-ink underline-offset-4 hover:underline"
           >
             Full documentation →
           </Link>
@@ -175,7 +179,7 @@ export default function Home() {
       {/* ── Footer ─────────────────────────────────────── */}
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6 px-6 py-16">
-          <p className="text-sm font-bold text-mood">{"// the thinking is free."}</p>
+          <p className="text-sm font-bold text-mood-ink">{"// the thinking is free."}</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
             <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import Nav from "./_components/Nav";
+import MoodBar from "./_components/MoodBar";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
@@ -61,6 +62,7 @@ export default function RootLayout({
       className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <MoodBar />
         <Nav />
         {children}
       </body>

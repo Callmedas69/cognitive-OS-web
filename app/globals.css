@@ -43,26 +43,32 @@
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Scroll-driven mood accent — resolves the live --mood var at runtime,
-     so text-mood / border-mood / bg-mood follow the 0xNull mood by scroll. */
+  /* Scroll-driven mood accent — resolves the live vars at runtime, so
+     text-mood / bg-mood (vivid, fills) and text-mood-ink (AA-safe, text)
+     follow the 0xNull mood by scroll. */
   --color-mood: var(--mood);
+  --color-mood-ink: var(--mood-ink);
 }
 
-/* Registered so the color can be smoothly interpolated by CSS transition.
-   Mood is set per-section by the IntersectionObserver in Section.tsx. */
+/* Registered so the colors can be smoothly interpolated by CSS transition.
+   Set per-section by the IntersectionObserver in Section.tsx.
+   --mood = vivid (decorative fills); --mood-ink = darker, AA-safe (text). */
 @property --mood {
   syntax: "<color>";
   inherits: true;
   initial-value: #10b981;
 }
+@property --mood-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #047857;
+}
 :root {
   --mood: #10b981;
+  --mood-ink: #047857;
 }
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    transition: --mood 0.6s var(--ease-out);
-  }
-}
+/* The lerp is driven by GSAP ScrollTrigger (scrub) in MoodController, not a
+   CSS transition — continuous morph tied to scroll position. */
 
 html {
   scroll-behavior: smooth;

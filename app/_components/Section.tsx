@@ -8,15 +8,18 @@ type SectionProps = {
   className?: string;
   /** Disable the fade-up reveal (e.g. hero, which is above the fold). */
   noReveal?: boolean;
-  /** When this section is centered in the viewport, drive the global --mood
-   *  accent to this color (scroll-driven 0xNull mood). */
+  /** Vivid mood color (decorative fills) — read by MoodController via the
+   *  data-mood attribute and scrubbed into --mood by GSAP ScrollTrigger. */
   mood?: string;
+  /** AA-safe text variant of the mood, drives --mood-ink. */
+  moodInk?: string;
 };
 
 /**
- * Content container — enforces max-width 1100px + generous vertical rhythm,
- * fades content up ONCE on scroll into view (spec §0: no repeat), and
- * optionally sets the scroll-driven --mood accent while centered.
+ * Content container — enforces max-width 1100px + generous vertical rhythm
+ * and fades content up ONCE on scroll into view (spec §0: no repeat).
+ * Mood colors are emitted as data-mood attributes; MoodController scrubs them
+ * into the global --mood / --mood-ink vars with GSAP for a seamless morph.
  */
 export default function Section({
   children,
@@ -24,6 +27,7 @@ export default function Section({
   className = "",
   noReveal = false,
   mood,
+  moodInk,
 }: SectionProps) {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(noReveal);
@@ -46,30 +50,12 @@ export default function Section({
     return () => obs.disconnect();
   }, [noReveal]);
 
-  // Persistent mood driver — sets --mood when this section crosses the
-  // viewport center. Skipped under reduced-motion (mood stays at default).
-  useEffect(() => {
-    if (!mood) return;
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          document.documentElement.style.setProperty("--mood", mood);
-        }
-      },
-      // Only the section nearest the vertical center is "intersecting".
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [mood]);
-
   return (
     <section
       ref={ref}
       id={id}
+      data-mood={mood}
+      data-mood-ink={moodInk}
       className={`mx-auto w-full max-w-[1100px] px-6 py-[var(--spacing-section)] ${
         noReveal ? "" : `reveal ${visible ? "is-visible" : ""}`
       } ${className}`}
