@@ -1,0 +1,19 @@
+export const metadata = {
+  title: "Agent Setup — cognitiveOS docs",
+  description: "Wire your AI agent to cognitiveOS: Claude Code, Codex, Antigravity, Cursor.",
+};
+
+# Agent Setup
+
+cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md`, so whichever agent you use reads your context automatically.
+
+| Agent | How |
+| --- | --- |
+| Claude Code | reads `CLAUDE.md` + slash-command hooks (`/project:start`, `/project:end`, `/project:dump`) |
+| Codex CLI | reads `AGENTS.md` |
+| Antigravity | reads `AGENTS.md` |
+| Cursor / Windsurf | reads `AGENTS.md` |
+
+> Per-agent setup walkthroughs are coming soon.
+
+See also: [Hooks](/docs/hooks) · [Getting Started](/docs).
