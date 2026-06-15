@@ -25,11 +25,24 @@ const QUICKSTART = [
   { cmd: "cognitiveos check", label: "verify it's wired" },
 ];
 
+// Scroll-driven 0xNull mood per section (AA-safe accent tier).
+// hero/agent/quickstart = shipping green; problem = broke red; filesystem/
+// principles = flow cyan. Journey closes back on brand emerald.
+const MOOD = {
+  shipping: "#10b981",
+  broke: "#ff3366",
+  flow: "#06b6d4",
+} as const;
+
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide">
-      {children}
-    </h2>
+    <>
+      <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide">
+        {children}
+      </h2>
+      {/* mood underline bar — shifts color by scroll */}
+      <span className="mt-4 block h-1 w-12 rounded-full bg-mood" aria-hidden />
+    </>
   );
 }
 
@@ -39,9 +52,10 @@ export default function Home() {
       {/* ── Section 1 — Hero ───────────────────────────── */}
       <Section
         noReveal
+        mood={MOOD.shipping}
         className="flex min-h-[70vh] flex-col items-center justify-center text-center"
       >
-        <p className="mb-6 text-sm text-text-muted">{"// the thinking is free."}</p>
+        <p className="mb-6 text-sm font-bold text-mood">{"// the thinking is free."}</p>
 
         <Mascot />
 
@@ -71,7 +85,7 @@ export default function Home() {
           </a>
           <Link
             href="/docs"
-            className="text-sm text-emerald underline-offset-4 hover:underline"
+            className="text-sm text-mood underline-offset-4 hover:underline"
           >
             Read the docs
           </Link>
@@ -79,7 +93,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 2 — The Problem ────────────────────── */}
-      <Section className="max-w-[760px]">
+      <Section mood={MOOD.broke} className="max-w-[760px]">
         <H2>The 30-minute tax</H2>
         <p className="mt-6 text-text-muted">
           Every time you reopen your laptop, you spend 15–45 minutes remembering
@@ -97,7 +111,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 3 — The Filesystem ─────────────────── */}
-      <Section>
+      <Section mood={MOOD.flow}>
         <H2>The filesystem is the fix</H2>
         <p className="mt-6 max-w-[640px] text-text-muted">
           Each folder is one cognitive mode. Your agent reads it automatically.
@@ -109,7 +123,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 4 — Three Principles ───────────────── */}
-      <Section>
+      <Section mood={MOOD.flow}>
         <H2>Why this isn&apos;t another Notion</H2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           <PrincipleCard label="ZERO MAINTENANCE">
@@ -128,7 +142,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 5 — Works With Your Agent ──────────── */}
-      <Section>
+      <Section mood={MOOD.shipping}>
         <H2>Bring your own agent</H2>
         <div className="mt-10 grid gap-px overflow-hidden rounded-[10px] border border-border bg-border sm:grid-cols-2">
           {AGENTS.map((a) => (
@@ -141,7 +155,7 @@ export default function Home() {
       </Section>
 
       {/* ── Section 6 — Quickstart ─────────────────────── */}
-      <Section className="max-w-[760px]">
+      <Section mood={MOOD.shipping} className="max-w-[760px]">
         <H2>Start in 60 seconds</H2>
         <div className="mt-10 flex flex-col gap-3">
           {QUICKSTART.map((q) => (
@@ -151,7 +165,7 @@ export default function Home() {
         <div className="mt-10">
           <Link
             href="/docs"
-            className="text-sm text-emerald underline-offset-4 hover:underline"
+            className="text-sm text-mood underline-offset-4 hover:underline"
           >
             Full documentation →
           </Link>
@@ -161,7 +175,7 @@ export default function Home() {
       {/* ── Footer ─────────────────────────────────────── */}
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6 px-6 py-16">
-          <p className="text-sm text-text-muted">{"// the thinking is free."}</p>
+          <p className="text-sm font-bold text-mood">{"// the thinking is free."}</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
             <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
