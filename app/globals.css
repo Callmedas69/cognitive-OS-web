@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─────────────────────────────────────────────
+   cognitiveOS brand tokens (design spec v1.1 §1)
+   Tailwind v4 CSS-first — utilities generated from @theme
+   ───────────────────────────────────────────── */
+@theme {
+  /* Base — light theme */
+  --color-bg: #fafaf7;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b6b6b;
+  --color-border: #e8e8e2;
+
+  /* Brand accents (locked) */
+  --color-emerald: #10b981;
+  --color-coral: #ff6b5c;
+
+  /* Zone colors */
+  --color-zone-capture: #ff6b35;
+  --color-zone-queue: #ffb800;
+  --color-zone-focus: #ff3366;
+  --color-zone-projects: #10b981;
+  --color-zone-ideas: #7b61ff;
+  --color-zone-someday: #6b7280;
+
+  /* Terminal contrast element (the ONE dark element) */
+  --color-term-bg: #1a1a1f;
+  --color-term-text: #e8e8e8;
+  --color-term-green: #10b981;
+
+  /* Fonts (wired from next/font in layout.tsx) */
+  --font-display: var(--font-bebas);
+  --font-mono: var(--font-space-mono);
+
+  /* Layout rhythm */
+  --spacing-section: 120px;
+
+  /* Type scale (spec §1) */
+  --text-h1: clamp(48px, 8vw, 96px);
+  --text-h2: clamp(32px, 5vw, 56px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Signature blinking cursor — calm-compliant (off for reduced-motion) */
+.cursor::after {
+  content: "▋";
+  color: var(--color-term-green);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cursor::after {
+    animation: blink 1s step-end infinite;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Scroll reveal — fade-up ONCE (spec §0: no repeat). Static if reduced-motion.
+   Hidden state only when JS can reveal it: no-JS users see content (spec: zero-JS safe). */
+@media (scripting: enabled) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Gentle mascot float (spec §2.5 motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .mascot-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

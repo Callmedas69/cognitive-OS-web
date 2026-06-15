@@ -1,65 +1,180 @@
-import Image from "next/image";
+import Link from "next/link";
+import Section from "./_components/Section";
+import Terminal from "./_components/Terminal";
+import Mascot from "./_components/Mascot";
+import ZoneTree from "./_components/ZoneTree";
+import PrincipleCard from "./_components/PrincipleCard";
+import Callout from "./_components/Callout";
+
+const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
+const NPM_URL = "https://www.npmjs.com/package/cognitiveos";
+const X_URL = "https://x.com/Callmedas69";
+const FARCASTER_URL = "https://warpcast.com/callmedas69";
+
+const AGENTS = [
+  { name: "Claude Code", reads: "reads CLAUDE.md + slash-command hooks" },
+  { name: "Codex CLI", reads: "reads AGENTS.md" },
+  { name: "Antigravity", reads: "reads AGENTS.md" },
+  { name: "Cursor", reads: "reads AGENTS.md" },
+];
+
+const QUICKSTART = [
+  { cmd: "npx cognitiveos init", label: "one-time setup" },
+  { cmd: "cognitiveos start", label: "where you left off" },
+  { cmd: 'cognitiveos dump "..."', label: "capture anything" },
+  { cmd: "cognitiveos check", label: "verify it's wired" },
+];
+
+function H2({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide">
+      {children}
+    </h2>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex-1">
+      {/* ── Section 1 — Hero ───────────────────────────── */}
+      <Section
+        noReveal
+        className="flex min-h-[70vh] flex-col items-center justify-center text-center"
+      >
+        <p className="mb-6 text-sm text-text-muted">{"// the thinking is free."}</p>
+
+        <Mascot />
+
+        <h1 className="mt-8 font-display text-[length:var(--text-h1)] leading-[0.95] tracking-wide">
+          Never lose context
+          <br />
+          between sessions
+        </h1>
+
+        <p className="mt-6 max-w-md text-text-muted">
+          An AI filesystem for developers with executive dysfunction. Open your
+          laptop and know exactly what to do.
+        </p>
+
+        <div className="mt-10 w-full max-w-md">
+          <Terminal command="npx cognitiveos init" cursor />
+        </div>
+
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-[6px] bg-emerald px-6 py-3 text-sm font-bold text-[#06281d] transition-opacity hover:opacity-90"
+          >
+            View on GitHub →
+          </a>
+          <Link
+            href="/docs"
+            className="text-sm text-emerald underline-offset-4 hover:underline"
+          >
+            Read the docs
+          </Link>
+        </div>
+      </Section>
+
+      {/* ── Section 2 — The Problem ────────────────────── */}
+      <Section className="max-w-[760px]">
+        <H2>The 30-minute tax</H2>
+        <p className="mt-6 text-text-muted">
+          Every time you reopen your laptop, you spend 15–45 minutes remembering
+          where you were. Not coding. Recovering.
+        </p>
+        <p className="mt-4 text-text-muted">
+          This isn&apos;t a discipline problem. It&apos;s executive dysfunction.
+          These brains can&apos;t hold working memory across sessions.
+        </p>
+        <div className="mt-8">
+          <Callout tone="coral">
+            The root cause isn&apos;t you. It&apos;s the environment.
+          </Callout>
+        </div>
+      </Section>
+
+      {/* ── Section 3 — The Filesystem ─────────────────── */}
+      <Section>
+        <H2>The filesystem is the fix</H2>
+        <p className="mt-6 max-w-[640px] text-text-muted">
+          Each folder is one cognitive mode. Your agent reads it automatically.
+          You never decide where to look.
+        </p>
+        <div className="mt-10">
+          <ZoneTree />
+        </div>
+      </Section>
+
+      {/* ── Section 4 — Three Principles ───────────────── */}
+      <Section>
+        <H2>Why this isn&apos;t another Notion</H2>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <PrincipleCard label="ZERO MAINTENANCE">
+            Hooks update your state automatically. You never run a
+            &quot;save&quot; command.
+          </PrincipleCard>
+          <PrincipleCard label="NO INVISIBLE STATE">
+            Everything is a markdown file you can open. No database. No account.
+            No sync.
+          </PrincipleCard>
+          <PrincipleCard label="ONE THING AT A TIME">
+            focus/ holds exactly one task. The architecture makes two
+            impossible.
+          </PrincipleCard>
+        </div>
+      </Section>
+
+      {/* ── Section 5 — Works With Your Agent ──────────── */}
+      <Section>
+        <H2>Bring your own agent</H2>
+        <div className="mt-10 grid gap-px overflow-hidden rounded-[10px] border border-border bg-border sm:grid-cols-2">
+          {AGENTS.map((a) => (
+            <div key={a.name} className="bg-surface p-6">
+              <div className="font-bold">{a.name}</div>
+              <div className="mt-1 text-sm text-text-muted">{a.reads}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ── Section 6 — Quickstart ─────────────────────── */}
+      <Section className="max-w-[760px]">
+        <H2>Start in 60 seconds</H2>
+        <div className="mt-10 flex flex-col gap-3">
+          {QUICKSTART.map((q) => (
+            <Terminal key={q.cmd} command={q.cmd} label={q.label} />
+          ))}
+        </div>
+        <div className="mt-10">
+          <Link
+            href="/docs"
+            className="text-sm text-emerald underline-offset-4 hover:underline"
+          >
+            Full documentation →
+          </Link>
+        </div>
+      </Section>
+
+      {/* ── Footer ─────────────────────────────────────── */}
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-[1100px] flex-col gap-6 px-6 py-16">
+          <p className="text-sm text-text-muted">{"// the thinking is free."}</p>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
+            <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
+            <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
+            <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
+            <Link href="/docs" className="hover:text-emerald">Docs</Link>
+          </div>
+          <p className="text-xs text-text-muted">MIT · built by 0xDas</p>
+          <p className="text-sm text-text-muted">
+            &quot;I opened my laptop and knew exactly what to do.&quot;
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </footer>
+    </main>
   );
 }
