@@ -5,7 +5,7 @@ export const DOCS_NAV: DocLink[] = [
   { title: "Getting Started", href: "/docs" },
   { title: "Commands", href: "/docs/commands" },
   { title: "The Zones", href: "/docs/zones" },
-  { title: "memory.md", href: "/docs/memory" },
+  { title: "STATE.md", href: "/docs/state" },
   { title: "Hooks", href: "/docs/hooks" },
   { title: "Agent Setup", href: "/docs/agent-setup" },
   { title: "Project Templates", href: "/docs/project-templates" },

@@ -14,7 +14,7 @@ type Row = {
 };
 
 const ROWS: Row[] = [
-  { tree: "├──", name: "memory.md", color: "text-text", note: "your persistent brain" },
+  { tree: "├──", name: "STATE.md", color: "text-text", note: "your current-state snapshot" },
   { tree: "├──", name: "brain-dump/", color: "text-zone-capture", note: "capture everything" },
   { tree: "├──", name: "queue/", color: "text-zone-queue", note: "what's next, sorted" },
   { tree: "├──", name: "focus/", color: "text-zone-focus", note: "the ONE thing" },

@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  // memory.md → STATE.md rename: keep the old docs URL alive.
+  async redirects() {
+    return [
+      {
+        source: "/docs/memory",
+        destination: "/docs/state",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const withMDX = createMDX({

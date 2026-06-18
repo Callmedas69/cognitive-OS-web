@@ -16,7 +16,7 @@ cognitiveos check    # verify everything is wired correctly
 
 ## init
 
-One-time setup. A 3-question wizard generates your filesystem: the zone folders, `memory.md`, and the agent routing files (`AGENTS.md` + `CLAUDE.md`).
+One-time setup. A 3-question wizard generates your filesystem: the zone folders, `STATE.md`, and the agent routing files (`AGENTS.md` + `CLAUDE.md`).
 
 ```bash
 npx cognitiveos init
@@ -28,7 +28,7 @@ npx cognitiveos init
 
 ## start
 
-Prints **Mission Control** to your terminal — a snapshot of where you left off, read straight from `memory.md`: current focus, blockers, and open loops. Renders in under half a second.
+Prints **Mission Control** to your terminal — a snapshot of where you left off, read straight from `STATE.md`. It leads with the **➡ PICK UP** line from your Session Handoff — the exact next action — then current focus, blockers, and open loops. Renders in under half a second.
 
 ```bash
 cognitiveos start
@@ -70,4 +70,4 @@ Run it whenever something feels off, or after editing the generated files by han
 ## Next steps
 
 - [The Zones](/docs/zones) — what each folder means.
-- [Hooks](/docs/hooks) — the automation that updates `memory.md` for you.
+- [Hooks](/docs/hooks) — the automation that updates `STATE.md` for you.
