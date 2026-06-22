@@ -1,15 +1,15 @@
 export const metadata = {
-  title: "Commands — cognitiveOS docs",
+  title: "Commands: cognitiveOS docs",
   description: "Full reference for the four cognitiveOS commands: init, start, dump, check.",
 };
 
 # Commands
 
-cognitiveOS ships four commands. The CLI is a scaffolding tool, not a runtime — `init` generates your filesystem once, and your agent plus hooks maintain state from then on.
+cognitiveOS ships four commands. The CLI is a scaffolding tool, not a runtime. `init` generates your filesystem once, and your agent plus hooks maintain state from then on.
 
 ```bash
 cognitiveos init     # one-time setup (3 questions)
-cognitiveos start    # Mission Control — where you left off, in your terminal
+cognitiveos start    # Mission Control, where you left off, in your terminal
 cognitiveos dump "thought"   # capture anything, zero friction
 cognitiveos check    # verify everything is wired correctly
 ```
@@ -22,13 +22,13 @@ One-time setup. A 3-question wizard generates your filesystem: the zone folders,
 npx cognitiveos init
 ```
 
-- **Atomic** — generation either completes or makes no changes.
-- **Never overwrites** — existing files are left untouched; `init` is additive.
+- **Atomic.** Generation either completes or makes no changes.
+- **Never overwrites.** Existing files are left untouched; `init` is additive.
 - Finishes in well under a minute.
 
 ## start
 
-Prints **Mission Control** to your terminal — a snapshot of where you left off, read straight from `STATE.md`. It leads with the **➡ PICK UP** line from your Session Handoff — the exact next action — then current focus, blockers, and open loops. Renders in under half a second.
+Prints **Mission Control** to your terminal: a snapshot of where you left off, read straight from `STATE.md`. It leads with the **➡ PICK UP** line from your Session Handoff (the exact next action), then current focus, blockers, and open loops. Renders in under half a second.
 
 ```bash
 cognitiveos start
@@ -48,7 +48,7 @@ function cd { Set-Location @args; cognitiveos start 2>$null }
 
 ## dump
 
-Friction-free capture. Appends a thought to `brain-dump/` without breaking your flow — it never fails and never asks follow-up questions.
+Friction-free capture. Appends a thought to `brain-dump/` without breaking your flow. It never fails and never asks follow-up questions.
 
 ```bash
 cognitiveos dump "refactor the auth middleware before shipping"
@@ -58,7 +58,7 @@ Capture now, triage later. Getting it out of your head is the whole point.
 
 ## check
 
-Verifies your cognitiveOS install is wired correctly — a silent-failure detector that runs a set of integrity checks and reports drift.
+Verifies your cognitiveOS install is wired correctly: a silent-failure detector that runs a set of integrity checks and reports drift.
 
 ```bash
 cognitiveos check          # report problems
@@ -69,5 +69,5 @@ Run it whenever something feels off, or after editing the generated files by han
 
 ## Next steps
 
-- [The Zones](/docs/zones) — what each folder means.
-- [Hooks](/docs/hooks) — the automation that updates `STATE.md` for you.
+- [The Zones](/docs/zones): what each folder means.
+- [Hooks](/docs/hooks): the automation that updates `STATE.md` for you.

@@ -1,22 +1,53 @@
 export const metadata = {
-  title: "The Zones — cognitiveOS docs",
+  title: "The Zones: cognitiveOS docs",
   description: "What each cognitiveOS folder means and when to use it.",
 };
 
 # The Zones
 
-Each folder cognitiveOS generates is one **cognitive mode**. You never decide where to look — your agent routes to the right zone automatically.
+Each folder cognitiveOS generates is one **cognitive mode**. You never decide where to look. Your agent reads `STATE.md`, then routes to the right zone for what you're doing. The zones map to how an ADHD brain actually moves: capture without friction, triage later, then protect one task at a time.
 
 | Zone | What it holds |
 | --- | --- |
 | `brain-dump/` | Capture everything, no filter. |
 | `queue/` | What's next, already sorted. |
-| `focus/` | The ONE thing right now — one task, enforced. |
-| `projects/` | Active work, max 3. |
+| `focus/` | The ONE thing right now, one task, enforced. |
+| `projects/` | Active work. |
 | `ideas/` | Captured, not committed. |
 | `someday/` | Not now, not never. |
 | `sessions/` | Auto-logged history. |
 
-> Full per-zone reference — when to use each, how the agent routes between them — is coming soon.
+## brain-dump
+
+A capture buffer. Accept everything, judge nothing. When a stray thought shows up mid-task, `cognitiveos dump "..."` appends it here (`brain-dump/inbox.md`) and you keep working. No filter, no "is this relevant", no follow-up questions. Getting it out of your head is the whole job. Triage happens later, in `queue/`.
+
+## queue
+
+The triager. It turns raw captures into a sorted, ready backlog, reading `brain-dump/inbox.md` against your current focus. It sorts by urgency, energy, and dopamine, surfaces the smallest next action first, and shows at most 3 items so the list never becomes its own overwhelm.
+
+## focus
+
+The execution guard, the most opinionated zone. `focus/current-task.md` holds **exactly one task**. Try to add a second and the agent refuses, and `cognitiveos check` fails if two ever land there. Responses stay narrow: a few action items, one question at a time. Stuck longer than 30 minutes, it notes the blocker and offers the smallest next step instead of letting you spin.
+
+## projects
+
+The steward for active work. One subfolder per project under `projects/[name]/`, each with its own context, no loose files at this level. This is the ADHD cap on parallel work: keep active projects few, and when a new one competes for attention the agent surfaces the conflict rather than quietly letting you run six at once.
+
+## ideas
+
+An idea keeper. Hold possibilities with zero pressure to act. One line per idea, an optional one-line why. Nothing here is auto-promoted to a task. You decide what graduates to `queue/` or `projects/`, so capturing an idea never silently commits you to doing it.
+
+## someday
+
+The holding zone: not now, not never. Nothing here is urgent and there's zero guilt about inaction. Entries stay short, a pointer rather than a plan, and you review it monthly, not daily. It exists so "maybe later" has a home that isn't your working memory.
+
+## sessions
+
+Auto-logged history. At session end the [hook](/docs/hooks) rolls closed loops and older wins out of `STATE.md` into `sessions/`, which is how `STATE.md` stays a flat snapshot instead of growing into a log. You rarely open this by hand, it's the archive your current state sheds.
+
+## Next steps
+
+- [STATE.md](/docs/state): the snapshot the agent reads before routing here.
+- [Hooks](/docs/hooks): the automation that rolls history into `sessions/`.
 
 See also: [Getting Started](/docs) · [Commands](/docs/commands).

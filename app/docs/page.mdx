@@ -1,13 +1,13 @@
 export const metadata = {
-  title: "Getting Started — cognitiveOS docs",
+  title: "Getting Started: cognitiveOS docs",
   description: "Install cognitiveOS and run your first session in under 60 seconds.",
 };
 
 # Getting Started
 
-cognitiveOS is an AI-powered filesystem scaffold for developers with executive dysfunction. Your AI agent reads your project state automatically — so you open your laptop and know exactly what to do, instead of spending 30 minutes remembering where you were.
+cognitiveOS is an AI-powered filesystem scaffold for developers with executive dysfunction. Your AI agent reads your project state automatically, so you open your laptop and know exactly what to do, instead of spending 30 minutes remembering where you were.
 
-**Free. Open source. MIT. No servers, no accounts, no database — just markdown files on your machine.**
+**Free. Open source. MIT. No servers, no accounts, no database. Just markdown files on your machine.**
 
 ## Install
 
@@ -18,13 +18,13 @@ cd your-project
 npx cognitiveos init
 ```
 
-Answer 3 questions. Done in under 60 seconds. Open your AI agent and start working — it already knows your context.
+Answer 3 questions. Done in under 60 seconds. Open your AI agent and start working. It already knows your context.
 
 ## What it generates
 
 ```
 your-project/
-├── AGENTS.md        routing table — your agent reads this automatically
+├── AGENTS.md        routing table, your agent reads this automatically
 ├── CLAUDE.md        same, for Claude Code
 ├── STATE.md         your current-state snapshot: focus, blockers, open loops
 ├── brain-dump/      capture everything, no filter
@@ -36,7 +36,7 @@ your-project/
 └── sessions/        auto-logged history
 ```
 
-Each folder is one cognitive mode. Your agent reads `STATE.md` at session start and updates it at session end — via hooks, automatically. You never run a "save" command. You never maintain anything.
+Each folder is one cognitive mode. Your agent reads `STATE.md` at session start and updates it at session end, via hooks, automatically. You never run a "save" command. You never maintain anything.
 
 > This is not a productivity system. It's a cognitive prosthetic. A productivity system asks you to maintain it. This maintains itself.
 
@@ -44,14 +44,14 @@ Each folder is one cognitive mode. Your agent reads `STATE.md` at session start 
 
 1. Run `npx cognitiveos init` in your project and answer the 3 questions.
 2. Open your AI agent (Claude Code, Codex, Antigravity, Cursor). It reads `CLAUDE.md` / `AGENTS.md` and loads your context automatically.
-3. Run `cognitiveos start` any time to print **Mission Control** — exactly where you left off — in your terminal.
+3. Run `cognitiveos start` any time to print **Mission Control**, exactly where you left off, in your terminal.
 4. Capture stray thoughts with `cognitiveos dump "..."` without breaking flow.
 5. Run `cognitiveos check` to confirm everything is wired correctly.
 
 ## Next steps
 
-- [Commands](/docs/commands) — full reference for `init`, `start`, `dump`, `check`.
-- [The Zones](/docs/zones) — what each folder means and when to use it.
-- [Agent Setup](/docs/agent-setup) — wire your specific AI agent.
+- [Commands](/docs/commands): full reference for `init`, `start`, `dump`, `check`.
+- [The Zones](/docs/zones): what each folder means and when to use it.
+- [Agent Setup](/docs/agent-setup): wire your specific AI agent.
 
 **The bet: structure beats willpower.**

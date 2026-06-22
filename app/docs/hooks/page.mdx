@@ -1,14 +1,56 @@
 export const metadata = {
-  title: "Hooks — cognitiveOS docs",
+  title: "Hooks: cognitiveOS docs",
   description: "Session start/end automation that maintains your state for you.",
 };
 
 # Hooks
 
-Hooks are what make cognitiveOS zero-maintenance. They run on session start and session end to read and update [`STATE.md`](/docs/state) automatically — so you never run a "save" command.
+Hooks are what make cognitiveOS zero-maintenance. They read and update [`STATE.md`](/docs/state) around each session, so you never run a "save" command and never maintain anything by hand. There are two layers: slash commands you invoke, and a deterministic session-start hook that fires on its own.
 
-For Claude Code, `init` generates slash-command hooks: `/project:start`, `/project:end`, and `/project:dump`.
+## Slash-command hooks (Claude Code)
 
-> Full reference — per-agent hook wiring and customization — is coming soon. Codex and Antigravity hook implementations are open [community targets](/docs/contributing).
+`init` generates three slash commands into `.claude/commands/`:
+
+```bash
+/start-session   # load STATE.md, print where you left off
+/end-session     # roll closed loops + old wins to sessions/, overwrite STATE.md
+/dump            # capture a thought to brain-dump/, zero friction
+```
+
+`/end-session` is the one that keeps `STATE.md` flat: it overwrites current state, moves closed loops and older wins to `sessions/`, and prunes Agent Notes. You run `/end-session` when wrapping up, and the next session starts already knowing where you stopped.
+
+## Deterministic session-start hook
+
+So you never even have to type `/start-session`, `init` wires a hook into your agent's native config that loads `STATE.md` the moment a session opens. It can't be skipped and needs zero typing.
+
+| Agent | Config file | Wiring |
+| --- | --- | --- |
+| Claude Code | `.claude/settings.json` | `hooks.SessionStart` |
+| Antigravity | `.agents/hooks.json` | `cognitiveos-session.PreInvocation` |
+
+Both run the same command:
+
+```bash
+npx -y cognitiveos start --hook --agent=claude       # or --agent=antigravity
+```
+
+The merge is safe by design. If the config is absent it's created; if it exists, the hook is appended after a backup and the write is idempotent (running `init` again never duplicates it); if the file is malformed it's left untouched and the snippet is printed for you to paste manually. It never overwrites your existing settings.
+
+If the hook ever misfires, nothing breaks. The [agent skill](/docs/agent-setup) still instructs your agent to read `STATE.md` first thing.
+
+## Verifying the wiring
+
+```bash
+cognitiveos check          # reports if a hook or command is missing
+cognitiveos check --fix    # restores missing hooks (idempotent, never touches your content)
+```
+
+> **Tip (make it instant and offline):** the hook runs `npx cognitiveos start --hook`, which resolves a local or global install before hitting the network. Install once so session-start never fetches:
+>
+> ```bash
+> npm i -g cognitiveos
+> ```
+
+Codex and Antigravity hook coverage is an open [community target](/docs/contributing).
 
 See also: [Agent Setup](/docs/agent-setup) · [STATE.md](/docs/state).

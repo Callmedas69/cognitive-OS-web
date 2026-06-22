@@ -1,14 +1,31 @@
 export const metadata = {
-  title: "Project Templates — cognitiveOS docs",
-  description: "Project-type templates: blockchain, fullstack, cli, content.",
+  title: "Project Templates: cognitiveOS docs",
+  description: "Project-type templates: blockchain ships a full stage map, others start minimal.",
 };
 
 # Project Templates
 
-`init` can tailor the generated scaffold to your project type, so the zones and routing start with sensible defaults for how you actually work.
+`init` asks for your project type in the 3-question wizard and tailors the first project under `projects/[name]/` to match. The zones and routing are the same for everyone, the template only sets how much structure your first project starts with.
 
-Planned templates: **blockchain**, **fullstack**, **cli**, **content**.
+## blockchain: the full vertical
 
-> Full template reference — what each one changes and how to pick — is coming soon.
+The blockchain type ships a complete 5-stage pipeline, one subfolder per stage, each with its own `CONTEXT.md` and a defined reviewer role:
 
-See also: [Getting Started](/docs) · [Commands](/docs/commands).
+```
+projects/[name]/
+├── research/     summarize findings, flag risks
+├── contracts/    Solidity reviewer
+├── frontend/     dApp frontend reviewer
+├── deploy/       track deployed contracts, verify state
+└── audit/        adversarial reviewer, find exploits
+```
+
+Each stage stays in its own job and hands off to the next when its work is done, so the agent never sprawls across the whole project at once.
+
+## fullstack · cli-tool · content
+
+These types are selectable today but start **minimal**: just the project root, no prescribed stages. You add structure as the project grows, and the zones still give you capture, queue, and focus from day one. Only blockchain ships a full stage map in the current MVP.
+
+A richer set of per-type stage maps (the same treatment blockchain gets) is the open [contribution target](/docs/contributing). The scaffolding is in place, the verticals just need authoring.
+
+See also: [Getting Started](/docs) · [The Zones](/docs/zones).

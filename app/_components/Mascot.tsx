@@ -54,7 +54,7 @@ export default function Mascot() {
     <div className="relative h-[140px] w-[140px] sm:h-[180px] sm:w-[180px]">
       <Image
         src="/0xnull.svg"
-        alt="0xNull — the cognitiveOS mascot"
+        alt="0xNull, the cognitiveOS mascot"
         width={180}
         height={180}
         priority

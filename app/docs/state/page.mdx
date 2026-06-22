@@ -1,30 +1,30 @@
 export const metadata = {
-  title: "STATE.md — cognitiveOS docs",
+  title: "STATE.md: cognitiveOS docs",
   description: "The current-state snapshot: 7 sections, the Session Handoff, and how it updates.",
 };
 
 # STATE.md
 
-`STATE.md` is your current-state snapshot — the single file your agent reads at the start of every session and overwrites at the end. It holds your current focus, blockers, and open loops, so context survives between sessions.
+`STATE.md` is your current-state snapshot: the single file your agent reads at the start of every session and overwrites at the end. It holds your current focus, blockers, and open loops, so context survives between sessions.
 
-It is **a snapshot, not a log.** It holds CURRENT state only and stays roughly the same size forever. History rolls to `sessions/`; idea and someday lists live in their zone folders. You never edit it by hand and you never run a "save" command — [Hooks](/docs/hooks) keep it current automatically.
+It is **a snapshot, not a log.** It holds CURRENT state only and stays roughly the same size forever. History rolls to `sessions/`; idea and someday lists live in their zone folders. You never edit it by hand and you never run a "save" command. [Hooks](/docs/hooks) keep it current automatically.
 
-> Why not `memory.md`? `MEMORY.md` is now an agent-memory convention (Claude Code keeps its own under `.claude/`). Naming this file `STATE.md` sidesteps that collision and says what it is: the current state, curated by you — not the agent's auto-memory.
+> Why not `memory.md`? `MEMORY.md` is now an agent-memory convention (Claude Code keeps its own under `.claude/`). Naming this file `STATE.md` sidesteps that collision and says what it is: the current state, curated by you, not the agent's auto-memory.
 
 ## The 7 sections
 
 ```markdown
-# STATE.md — Current State
+# STATE.md: Current State
 > A snapshot, not a log. Overwritten each session. History lives in sessions/.
 
 ## Current Focus
 - Project / Task / Status
 
 ## Blockers
-- active blockers only — removed when resolved
+- active blockers only, removed when resolved
 
 ## Open Loops
-- started but unfinished — ACTIVE only (closed loops roll to sessions/)
+- started but unfinished, ACTIVE only (closed loops roll to sessions/)
 
 ## Active Projects
 - max 3, enforced
@@ -33,7 +33,7 @@ It is **a snapshot, not a log.** It holds CURRENT state only and stays roughly t
 - Last worked on / Stopped because / Pick up by / Watch out for
 
 ## Recently Completed
-- last 5 only — older wins roll to sessions/
+- last 5 only, older wins roll to sessions/
 
 ## Agent Notes
 - learned preferences, capped at ~10
@@ -42,27 +42,27 @@ It is **a snapshot, not a log.** It holds CURRENT state only and stays roughly t
 | Section | Holds |
 |---|---|
 | **Current Focus** | Project, the one-line task, and status (in progress / blocked / ready to ship). |
-| **Blockers** | Active blockers only — removed the moment they're resolved. |
+| **Blockers** | Active blockers only, removed the moment they're resolved. |
 | **Open Loops** | Started-but-unfinished work, active only. Closed loops roll to `sessions/`. |
-| **Active Projects** | Max 3, enforced — the ADHD cap on parallel work. |
+| **Active Projects** | Max 3, enforced: the ADHD cap on parallel work. |
 | **Session Handoff** | The bridge between sessions. See below. |
 | **Recently Completed** | The last 5 wins. Older ones roll to `sessions/`. |
 | **Agent Notes** | Learned preferences about how you work, capped at ~10. |
 
-## Session Handoff — the most important section
+## Session Handoff, the most important section
 
 The Handoff is the bridge between one session and the next. It's overwritten at every session-end and answers four questions:
 
-- **Last worked on** — the task you were in.
-- **Stopped because** — the interruption point or reason you stopped.
-- **Pick up by** — the exact next action.
-- **Watch out for** — the gotcha, the half-done thing, the fragile state.
+- **Last worked on:** the task you were in.
+- **Stopped because:** the interruption point or reason you stopped.
+- **Pick up by:** the exact next action.
+- **Watch out for:** the gotcha, the half-done thing, the fragile state.
 
 This is what an ADHD brain needs first: not "here's your state," but "here's literally the next thing to do."
 
-## PICK UP — the Mission Control headline
+## PICK UP, the Mission Control headline
 
-`cognitiveos start` reads the Handoff and leads with it. The **➡ PICK UP** line is the first thing you see — the exact next action, with the stop reason underneath:
+`cognitiveos start` reads the Handoff and leads with it. The **➡ PICK UP** line is the first thing you see: the exact next action, with the stop reason underneath:
 
 ```
 ┌─ cognitiveOS ──────────────────────────────┐
@@ -80,6 +80,6 @@ The same pick-up line leads the hook envelope your agent reads at session start,
 
 ## How it stays flat
 
-STATE.md doesn't grow because the end-session [hook](/docs/hooks) overwrites current state, rolls closed loops and old wins to `sessions/`, and prunes Agent Notes. `cognitiveos check` flags it if it ever exceeds ~150 lines ("STATE.md is growing — should be a snapshot") — a backstop, since the roll-out is agent-driven.
+STATE.md doesn't grow because the end-session [hook](/docs/hooks) overwrites current state, rolls closed loops and old wins to `sessions/`, and prunes Agent Notes. `cognitiveos check` flags it if it ever exceeds ~150 lines ("STATE.md is growing, should be a snapshot"), a backstop, since the roll-out is agent-driven.
 
 See also: [Hooks](/docs/hooks) · [Commands](/docs/commands).

@@ -1,14 +1,29 @@
 export const metadata = {
-  title: "Contributing — cognitiveOS docs",
-  description: "Open community targets: Codex and Antigravity hook implementations.",
+  title: "Contributing: cognitiveOS docs",
+  description: "Build from source and the highest-value open targets.",
 };
 
 # Contributing
 
-cognitiveOS is MIT and open source. Issues and PRs are welcome.
+cognitiveOS is MIT and open source. Issues and PRs are welcome on [GitHub](https://github.com/Callmedas69/cognitive-OS).
 
-The highest-value open targets are **hook implementations for Codex and Antigravity** — bringing the same automatic session start/end state updates that Claude Code already has to every agent.
+## Build from source
 
-> A full contributing guide is coming soon. In the meantime, open an issue or PR on [GitHub](https://github.com/Callmedas69/cognitive-OS).
+```bash
+git clone https://github.com/Callmedas69/cognitive-OS.git
+cd cognitive-OS
+npm install
+npm run build        # tsup → dist/cli.js
+npm test             # vitest
+node dist/cli.js --help   # must list init, start, dump, check
+```
+
+The CLI is TypeScript (ESM, Node >=18) with exactly three runtime dependencies: `commander`, `@clack/prompts`, and `chalk`. Adding a fourth is a real maintenance cost for a solo project, so it needs a strong reason. Templates live as typed string functions in `src/templates/`, generators in `src/generators/`, the four commands in `src/commands/`. Windows is the primary test platform, so use `path.join()` everywhere and write `\n` while parsing both `\n` and `\r\n`.
+
+## Highest-value open targets
+
+The best place to contribute is **hook implementations for Codex and Antigravity**, bringing the same automatic session start/end state updates that Claude Code already has to every agent. The agent skill and routing files already ship for all four agents, so this is the gap that closes the loop.
+
+Per-type project templates beyond blockchain (see [Project Templates](/docs/project-templates)) are the other open area. The scaffolding exists, the verticals need authoring.
 
 See also: [Hooks](/docs/hooks) · [Agent Setup](/docs/agent-setup).

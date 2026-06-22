@@ -1,19 +1,31 @@
 export const metadata = {
-  title: "Agent Setup — cognitiveOS docs",
+  title: "Agent Setup: cognitiveOS docs",
   description: "Wire your AI agent to cognitiveOS: Claude Code, Codex, Antigravity, Cursor.",
 };
 
 # Agent Setup
 
-cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md`, so whichever agent you use reads your context automatically.
+cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md` (identical routing tables) plus an **agent skill** for whichever agents you pick, so your agent reads your context automatically. Nothing here is manual: you select agents in the 3-question wizard and `init` writes the right files.
 
-| Agent | How |
-| --- | --- |
-| Claude Code | reads `CLAUDE.md` + slash-command hooks (`/project:start`, `/project:end`, `/project:dump`) |
-| Codex CLI | reads `AGENTS.md` |
-| Antigravity | reads `AGENTS.md` |
-| Cursor / Windsurf | reads `AGENTS.md` |
+## What each agent loads
 
-> Per-agent setup walkthroughs are coming soon.
+| Agent | Skill / rule it loads | Session-start hook |
+| --- | --- | --- |
+| Claude Code | `.claude/skills/cognitiveos/SKILL.md` + slash hooks `/start-session` `/end-session` `/dump` | ✅ auto-loads `STATE.md` |
+| Codex CLI | `.codex/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | not yet |
+| Antigravity | `.agents/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | ✅ auto-loads `STATE.md` |
+| Cursor / Windsurf | `.cursor/rules/cognitiveos.mdc` (+ `AGENTS.md`) | n/a |
+
+Claude Code and Antigravity also get the deterministic [session-start hook](/docs/hooks) that loads `STATE.md` with zero typing. Codex and Cursor load the skill and `AGENTS.md`, so they pick up context on read, the automatic hook for those is an open [community target](/docs/contributing).
+
+## The skill is the operating manual
+
+The generated `SKILL.md` (or `.mdc` rule for Cursor) is what your agent triggers automatically. It carries the zone routing, the one-task and ADHD response rules, and a silent work loop: read state, take one action, update, re-read. It's why the agent behaves the same across every supported tool.
+
+## CLAUDE.md = AGENTS.md
+
+The two routing files are byte-identical on purpose. `cognitiveos check` detects drift between them, and `check --fix` regenerates `CLAUDE.md` from `AGENTS.md` (the source of truth). `--fix` never touches `STATE.md` or your own content.
+
+> `init` never overwrites or deletes your files. Existing configs and skill files are kept and merged, not clobbered.
 
 See also: [Hooks](/docs/hooks) · [Getting Started](/docs).
