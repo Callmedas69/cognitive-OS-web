@@ -10,6 +10,9 @@ const projectRoot = dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   // Let .md / .mdx files act as routes (docs pages).
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  // Pin next build's file-tracing root too — turbopack.root only governs dev,
+  // the parent D:\Harry lockfile otherwise wins at build time.
+  outputFileTracingRoot: projectRoot,
   turbopack: {
     root: projectRoot,
   },
