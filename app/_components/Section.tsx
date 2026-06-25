@@ -13,7 +13,19 @@ type SectionProps = {
   mood?: string;
   /** AA-safe text variant of the mood, drives --mood-ink. */
   moodInk?: string;
+  /** Content measure. default = 1100 editorial column; wide = 1280 for
+   *  asymmetric splits; full = edge-to-edge (own inner padding). */
+  width?: "default" | "wide" | "full";
+  /** Emit the standard section vertical padding. Hero sets false to own its
+   *  full-viewport centering. */
+  padY?: boolean;
 };
+
+const WIDTHS = {
+  default: "max-w-[1100px]",
+  wide: "max-w-[1280px]",
+  full: "max-w-none",
+} as const;
 
 /**
  * Content container — enforces max-width 1100px + generous vertical rhythm
@@ -28,6 +40,8 @@ export default function Section({
   noReveal = false,
   mood,
   moodInk,
+  width = "default",
+  padY = true,
 }: SectionProps) {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(noReveal);
@@ -56,7 +70,9 @@ export default function Section({
       id={id}
       data-mood={mood}
       data-mood-ink={moodInk}
-      className={`mx-auto w-full max-w-[1100px] px-6 py-[var(--spacing-section)] ${
+      className={`mx-auto w-full ${WIDTHS[width]} px-6 ${
+        padY ? "py-[var(--spacing-section)]" : ""
+      } ${
         noReveal ? "" : `reveal ${visible ? "is-visible" : ""}`
       } ${className}`}
     >

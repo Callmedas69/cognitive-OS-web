@@ -2,22 +2,17 @@ import Link from "next/link";
 import Section from "./_components/Section";
 import MoodController from "./_components/MoodController";
 import Terminal from "./_components/Terminal";
-import Mascot from "./_components/Mascot";
 import ZoneTree from "./_components/ZoneTree";
-import PrincipleCard from "./_components/PrincipleCard";
 import Callout from "./_components/Callout";
+import HeroSplit from "./_components/HeroSplit";
+import StatBlock from "./_components/StatBlock";
+import PrincipleRow from "./_components/PrincipleRow";
+import AgentGrid from "./_components/AgentGrid";
 
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
 const NPM_URL = "https://www.npmjs.com/package/cognitiveos";
 const X_URL = "https://x.com/Callmedas69";
 const FARCASTER_URL = "https://warpcast.com/callmedas69";
-
-const AGENTS = [
-  { name: "Claude Code", reads: "reads CLAUDE.md + slash-command hooks" },
-  { name: "Codex CLI", reads: "reads AGENTS.md" },
-  { name: "Antigravity", reads: "reads AGENTS.md" },
-  { name: "Cursor", reads: "reads AGENTS.md" },
-];
 
 const QUICKSTART = [
   { cmd: "npx cognitiveos init", label: "one-time setup" },
@@ -42,7 +37,7 @@ function H2({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* section title shifts color by scroll (AA-safe ink tier) */}
-      <h2 className="font-display text-[length:var(--text-h2)] leading-none tracking-wide text-mood-ink">
+      <h2 className="font-display text-[length:var(--text-h2)] leading-[0.9] tracking-wide text-mood-ink">
         {children}
       </h2>
       {/* mood underline bar — vivid fill */}
@@ -55,121 +50,100 @@ export default function Home() {
   return (
     <main className="flex-1">
       <MoodController />
-      {/* ── Section 1 — Hero ───────────────────────────── */}
+
+      {/* ── Section 1 — Hero (asymmetric editorial) ────── */}
       <Section
         noReveal
+        width="wide"
+        padY={false}
         mood={MOOD.shipping.v}
         moodInk={MOOD.shipping.ink}
-        className="flex min-h-[70vh] flex-col items-center justify-center text-center"
+        className="flex min-h-[100dvh] flex-col justify-center py-24"
       >
-        <p className="mb-6 text-sm font-bold text-mood-ink">{"// the thinking is free."}</p>
-
-        <Mascot />
-
-        <h1 className="mt-8 font-display text-[length:var(--text-h1)] leading-[0.95] tracking-wide">
-          Stop relearning
-          <br />
-          your own project
-        </h1>
-
-        <p className="mt-6 max-w-md text-text-muted">
-          An AI filesystem for developers with executive dysfunction. Open your
-          laptop and know exactly what to do.
-        </p>
-
-        <div className="mt-10 w-full max-w-md">
-          <Terminal command="npx cognitiveos init" cursor />
-        </div>
-
-        <div className="mt-8 flex flex-col items-center gap-4">
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-[6px] bg-emerald px-6 py-3 text-sm font-bold text-[#06281d] transition-opacity hover:opacity-90"
-          >
-            View on GitHub →
-          </a>
-          <Link
-            href="/docs"
-            className="text-sm text-mood-ink underline-offset-4 hover:underline"
-          >
-            Read the docs
-          </Link>
-        </div>
+        <HeroSplit githubUrl={GITHUB_URL} />
       </Section>
 
-      {/* ── Section 2 — The Problem ────────────────────── */}
-      <Section mood={MOOD.broke.v} moodInk={MOOD.broke.ink} className="max-w-[760px]">
+      {/* ── Section 2 — The Problem (big-numeral stat) ─── */}
+      <Section mood={MOOD.broke.v} moodInk={MOOD.broke.ink}>
         <H2>The 30-minute tax</H2>
-        <p className="mt-6 text-text-muted">
-          Every time you reopen your laptop, you spend 15–45 minutes remembering
-          where you were. Not coding. Recovering.
-        </p>
-        <p className="mt-4 text-text-muted">
+        <div className="mt-12">
+          <StatBlock
+            value="15–45"
+            unit="minutes"
+            caption="lost every time you reopen your laptop — not coding, just recovering where you were."
+          />
+        </div>
+        <p className="mt-10 max-w-[56ch] text-base leading-relaxed text-text-muted">
           This isn&apos;t a discipline problem. It&apos;s executive dysfunction.
           These brains can&apos;t hold working memory across sessions.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 max-w-[56ch]">
           <Callout tone="coral">
             The root cause isn&apos;t you. It&apos;s the environment.
           </Callout>
         </div>
       </Section>
 
-      {/* ── Section 3 — The Filesystem ─────────────────── */}
-      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink}>
-        <H2>The filesystem is the fix</H2>
-        <p className="mt-6 max-w-[640px] text-text-muted">
-          Each folder is one cognitive mode. Your agent reads it automatically.
-          You never decide where to look.
-        </p>
-        <div className="mt-10">
+      {/* ── Section 3 — The Filesystem (split centerpiece) */}
+      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink} width="wide">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <H2>The filesystem is the fix</H2>
+            <p className="mt-8 max-w-[44ch] text-base leading-relaxed text-text-muted">
+              Each folder is one cognitive mode. Your agent reads it
+              automatically. You never decide where to look.
+            </p>
+          </div>
           <ZoneTree />
         </div>
       </Section>
 
-      {/* ── Section 4 — Three Principles ───────────────── */}
+      {/* ── Section 4 — Principles (numbered rows) ─────── */}
       <Section mood={MOOD.ideas.v} moodInk={MOOD.ideas.ink}>
         <H2>Why this isn&apos;t another Notion</H2>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          <PrincipleCard label="ZERO MAINTENANCE">
+        <div className="mt-10">
+          <PrincipleRow index="01" label="Zero maintenance">
             Hooks update your state automatically. You never run a
             &quot;save&quot; command.
-          </PrincipleCard>
-          <PrincipleCard label="NO INVISIBLE STATE">
+          </PrincipleRow>
+          <PrincipleRow index="02" label="No invisible state">
             Everything is a markdown file you can open. No database. No account.
             No sync.
-          </PrincipleCard>
-          <PrincipleCard label="ONE THING AT A TIME">
+          </PrincipleRow>
+          <PrincipleRow index="03" label="One thing at a time" last>
             focus/ holds exactly one task. The architecture makes two
             impossible.
-          </PrincipleCard>
+          </PrincipleRow>
         </div>
       </Section>
 
-      {/* ── Section 5 — Works With Your Agent ──────────── */}
+      {/* ── Section 5 — Works With Your Agent (bento) ──── */}
       <Section mood={MOOD.shipping.v} moodInk={MOOD.shipping.ink}>
         <H2>Bring your own agent</H2>
-        <div className="mt-10 grid gap-px overflow-hidden rounded-[10px] border border-border bg-border sm:grid-cols-2">
-          {AGENTS.map((a) => (
-            <div key={a.name} className="bg-surface p-6">
-              <div className="font-bold">{a.name}</div>
-              <div className="mt-1 text-sm text-text-muted">{a.reads}</div>
-            </div>
-          ))}
+        <div className="mt-10">
+          <AgentGrid />
         </div>
       </Section>
 
-      {/* ── Section 6 — Quickstart ─────────────────────── */}
-      <Section mood={MOOD.capture.v} moodInk={MOOD.capture.ink} className="max-w-[760px]">
+      {/* ── Section 6 — Quickstart (numbered terminals) ── */}
+      <Section mood={MOOD.capture.v} moodInk={MOOD.capture.ink}>
         <H2>Start in 60 seconds</H2>
-        <div className="mt-10 flex flex-col gap-3">
-          {QUICKSTART.map((q) => (
-            <Terminal key={q.cmd} command={q.cmd} label={q.label} />
+        <ol className="mt-12 flex flex-col gap-6">
+          {QUICKSTART.map((q, i) => (
+            <li key={q.cmd} className="flex items-center gap-5 sm:gap-8">
+              <span
+                className="font-display text-[length:var(--text-h2)] leading-none tracking-wide text-mood/60"
+                aria-hidden
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="min-w-0 flex-1">
+                <Terminal command={q.cmd} label={q.label} />
+              </div>
+            </li>
           ))}
-        </div>
-        <div className="mt-10">
+        </ol>
+        <div className="mt-12">
           <Link
             href="/docs"
             className="text-sm text-mood-ink underline-offset-4 hover:underline"
