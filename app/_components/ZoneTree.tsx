@@ -30,8 +30,7 @@ export default function ZoneTree() {
         <span className="text-text-muted">your-project/</span>
         {"\n"}
         {ROWS.map((r) => (
-          <span key={r.name}>
-            {"\n"}
+          <span key={r.name} className="tree-row block">
             <span className="text-text-muted">{r.tree} </span>
             <span className={`${r.color} font-bold`}>{r.name}</span>
             <span className="text-text-muted">

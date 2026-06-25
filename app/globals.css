@@ -29,8 +29,7 @@
   --color-term-text: #e8e8e8;
   --color-term-green: #10b981;
 
-  /* Fonts (wired from next/font in layout.tsx) */
-  --font-display: var(--font-bebas);
+  --font-display: var(--font-grotesk);
   --font-mono: var(--font-space-mono);
 
   /* Layout rhythm */

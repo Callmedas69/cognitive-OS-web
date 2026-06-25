@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Mono, Bebas_Neue } from "next/font/google";
+import { Space_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Nav from "./_components/Nav";
 import MoodBar from "./_components/MoodBar";
@@ -11,9 +11,9 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
-  weight: "400",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-grotesk",
+  weight: ["400", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -59,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
+      className={`${spaceMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <MoodBar />

@@ -3,6 +3,7 @@ import Section from "./_components/Section";
 import MoodController from "./_components/MoodController";
 import Terminal from "./_components/Terminal";
 import ZoneTree from "./_components/ZoneTree";
+import PinnedFilesystem from "./_components/PinnedFilesystem";
 import Callout from "./_components/Callout";
 import HeroSplit from "./_components/HeroSplit";
 import StatBlock from "./_components/StatBlock";
@@ -86,16 +87,7 @@ export default function Home() {
 
       {/* ── Section 3 — The Filesystem (split centerpiece) */}
       <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink} width="wide">
-        <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <H2>The filesystem is the fix</H2>
-            <p className="mt-8 max-w-[44ch] text-base leading-relaxed text-text-muted">
-              Each folder is one cognitive mode. Your agent reads it
-              automatically. You never decide where to look.
-            </p>
-          </div>
-          <ZoneTree />
-        </div>
+        <PinnedFilesystem />
       </Section>
 
       {/* ── Section 4 — Principles (numbered rows) ─────── */}
