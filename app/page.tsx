@@ -1,167 +1,176 @@
 import Link from "next/link";
-import Section from "./_components/Section";
-import MoodController from "./_components/MoodController";
 import Terminal from "./_components/Terminal";
-import ZoneTree from "./_components/ZoneTree";
-import PinnedFilesystem from "./_components/PinnedFilesystem";
-import Callout from "./_components/Callout";
-import HeroSplit from "./_components/HeroSplit";
-import StatBlock from "./_components/StatBlock";
-import PrincipleRow from "./_components/PrincipleRow";
-import AgentGrid from "./_components/AgentGrid";
+import SceneStage from "./_components/scene/SceneStage";
+import { ZONES } from "@/content/stops";
 
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
 const NPM_URL = "https://www.npmjs.com/package/cognitiveos";
 const X_URL = "https://x.com/Callmedas69";
 const FARCASTER_URL = "https://warpcast.com/callmedas69";
 
-const QUICKSTART = [
-  { cmd: "npx cognitiveos init", label: "one-time setup" },
-  { cmd: "cognitiveos start", label: "where you left off" },
-  { cmd: 'cognitiveos dump "..."', label: "capture anything" },
-  { cmd: "cognitiveos check", label: "verify it's wired" },
+// One body node per stop, aligned to STOPS. Number, kicker + headline come from
+// the section meta (rendered by SectionPanel).
+const panels = [
+  // 01 Overview (hero body — eyebrow/kicker/headline come from HeroPanel)
+  <div key="01">
+    <p>
+      cognitiveOS scaffolds your project into an ICM filesystem. Your AI agent keeps the context
+      in a persistent <code className="font-mono font-bold">STATE.md</code>, so you open your
+      laptop already oriented, never from zero.
+    </p>
+    <p className="mt-3 text-sm text-text-muted">
+      Built for brains that lose context between sessions, ADHD or executive dysfunction.
+    </p>
+    <div className="mt-5 max-w-[380px]">
+      <Terminal command="npx cognitiveos init" cursor />
+    </div>
+    <div className="mt-4 flex flex-wrap items-center gap-5 text-sm">
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-lg bg-emerald px-4 py-2 font-bold text-white transition-opacity hover:opacity-90"
+      >
+        View on GitHub →
+      </a>
+      <Link href="/docs" className="text-mood-ink underline-offset-4 hover:underline">
+        Read the docs
+      </Link>
+    </div>
+  </div>,
+
+  // 02 The Problem
+  <div key="02">
+    <p>
+      Every time you reopen your laptop, you spend{" "}
+      <strong className="font-bold text-coral">15 to 30 minutes</strong> remembering where you
+      were. Not coding. Recovering.
+    </p>
+    <p className="mt-3">
+      This is not a discipline problem. It is executive dysfunction. The root cause is not you,
+      it is the environment.
+    </p>
+    <p className="mt-4 rounded-lg border border-coral/40 bg-coral/[0.07] px-4 py-3 font-medium text-text">
+      Structure beats willpower.
+    </p>
+  </div>,
+
+  // 03 How It Works
+  <div key="03">
+    <p>
+      CognitiveOS scaffolds your project with ICM, the Interpreted Context Methodology. The
+      filesystem becomes a state machine: each folder is one cognitive mode, and a{" "}
+      <code className="font-mono font-bold">CONTEXT.md</code> in each folder tells your AI agent
+      how to behave there.
+    </p>
+    <p className="mt-3">
+      You do not maintain it. It maintains your context for you. A cognitive prosthetic, not a
+      productivity system.
+    </p>
+  </div>,
+
+  // 04 Six Zones
+  <div key="04">
+    <p>
+      <code className="font-mono font-bold">init</code> creates six zones plus STATE.md. Each
+      folder is one mode of work; <code className="font-mono font-bold">sessions/</code> logs your
+      history automatically.
+    </p>
+    <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 font-mono text-xs">
+      {ZONES.map((z) => (
+        <li key={z.name} className="flex items-center gap-2">
+          <span
+            className="h-2.5 w-2.5 shrink-0 rounded-full"
+            style={{ background: z.color }}
+            aria-hidden
+          />
+          {z.name}
+        </li>
+      ))}
+    </ul>
+    <p className="mt-4 text-xs text-text-muted">
+      focus/ holds exactly one task. The architecture makes two impossible.
+    </p>
+  </div>,
+
+  // 05 Commands
+  <div key="05">
+    <p>
+      Four commands. That is it. Agent-agnostic: a session hook auto-loads STATE.md the moment
+      your agent opens.
+    </p>
+    <div className="mt-4">
+      <Terminal command="npx cognitiveos init" label="one-time setup" />
+    </div>
+    <p className="mt-3 font-mono text-xs text-text-muted">
+      then: start · dump · check — full reference in the docs.
+    </p>
+  </div>,
+
+  // 06 Open Source
+  <div key="06">
+    <p>
+      MIT licensed. No servers, no accounts, no database. Just markdown files on your machine.
+      The repo is the product.
+    </p>
+    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
+    </div>
+  </div>,
+
+  // 07 Start
+  <div key="07">
+    <p>Start your journey. Stay in context. Build with ease.</p>
+    <div className="mt-4 max-w-[360px]">
+      <Terminal command="npx cognitiveos init" cursor />
+    </div>
+    <div className="mt-4">
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block rounded-lg bg-emerald px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
+      >
+        View on GitHub →
+      </a>
+    </div>
+  </div>,
 ];
 
-// Scroll-driven 0xNull mood per section. v = vivid (decorative fills),
-// ink = darker AA-safe variant (text). Every adjacent section uses a distinct
-// hue so each transition visibly morphs: emerald → red → cyan → violet →
-// emerald → amber. On-brand (accent + zone tokens).
-const MOOD = {
-  shipping: { v: "#10b981", ink: "#047857" }, // emerald
-  broke: { v: "#ff3366", ink: "#e11d48" }, // red
-  flow: { v: "#06b6d4", ink: "#0e7490" }, // cyan
-  ideas: { v: "#7b61ff", ink: "#6d28d9" }, // violet (ideas zone)
-  capture: { v: "#ff6b35", ink: "#c2410c" }, // amber (capture zone)
-} as const;
+// Footer — the final horizontal panel, centered to fill the viewport.
+const footer = (
+  <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">
+    <p className="font-display text-[clamp(48px,9vw,120px)] leading-[0.9] tracking-wide text-mood-ink">
+      {"// the thinking is free."}
+    </p>
+    <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
+      <Link href="/docs" className="hover:text-emerald">Docs</Link>
+    </div>
+    <p className="mt-6 text-xs text-text-muted">MIT · built by 0xDas</p>
+    <p className="mt-2 text-sm text-text-muted">
+      &quot;I opened my laptop and knew exactly what to do.&quot;
+    </p>
+  </div>
+);
 
-function H2({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {/* section title shifts color by scroll (AA-safe ink tier) */}
-      <h2 className="font-display text-[length:var(--text-h2)] leading-[0.9] tracking-wide text-mood-ink">
-        {children}
-      </h2>
-      {/* mood underline bar — vivid fill */}
-      <span className="mt-4 block h-1 w-12 rounded-full bg-mood" aria-hidden />
-    </>
-  );
-}
+// Hero headline — FILESYSTEM is the selling word, tinted in the mood ink.
+const heroHeadline = (
+  <>
+    A <span className="text-mood-ink">FILESYSTEM</span> THAT REMEMBERS FOR YOU
+  </>
+);
 
 export default function Home() {
   return (
-    <main className="flex-1">
-      <MoodController />
-
-      {/* ── Section 1 — Hero (asymmetric editorial) ────── */}
-      <Section
-        noReveal
-        width="wide"
-        padY={false}
-        mood={MOOD.shipping.v}
-        moodInk={MOOD.shipping.ink}
-        className="flex min-h-[100dvh] flex-col justify-center py-24"
-      >
-        <HeroSplit githubUrl={GITHUB_URL} />
-      </Section>
-
-      {/* ── Section 2 — The Problem (big-numeral stat) ─── */}
-      <Section mood={MOOD.broke.v} moodInk={MOOD.broke.ink}>
-        <H2>The 30-minute tax</H2>
-        <div className="mt-12">
-          <StatBlock
-            value="15–45"
-            unit="minutes"
-            caption="lost every time you reopen your laptop — not coding, just recovering where you were."
-          />
-        </div>
-        <p className="mt-10 max-w-[56ch] text-base leading-relaxed text-text-muted">
-          This isn&apos;t a discipline problem. It&apos;s executive dysfunction.
-          These brains can&apos;t hold working memory across sessions.
-        </p>
-        <div className="mt-8 max-w-[56ch]">
-          <Callout tone="coral">
-            The root cause isn&apos;t you. It&apos;s the environment.
-          </Callout>
-        </div>
-      </Section>
-
-      {/* ── Section 3 — The Filesystem (split centerpiece) */}
-      <Section mood={MOOD.flow.v} moodInk={MOOD.flow.ink} width="wide">
-        <PinnedFilesystem />
-      </Section>
-
-      {/* ── Section 4 — Principles (numbered rows) ─────── */}
-      <Section mood={MOOD.ideas.v} moodInk={MOOD.ideas.ink}>
-        <H2>Why this isn&apos;t another Notion</H2>
-        <div className="mt-10">
-          <PrincipleRow index="01" label="Zero maintenance">
-            Hooks update your state automatically. You never run a
-            &quot;save&quot; command.
-          </PrincipleRow>
-          <PrincipleRow index="02" label="No invisible state">
-            Everything is a markdown file you can open. No database. No account.
-            No sync.
-          </PrincipleRow>
-          <PrincipleRow index="03" label="One thing at a time" last>
-            focus/ holds exactly one task. The architecture makes two
-            impossible.
-          </PrincipleRow>
-        </div>
-      </Section>
-
-      {/* ── Section 5 — Works With Your Agent (bento) ──── */}
-      <Section mood={MOOD.shipping.v} moodInk={MOOD.shipping.ink}>
-        <H2>Bring your own agent</H2>
-        <div className="mt-10">
-          <AgentGrid />
-        </div>
-      </Section>
-
-      {/* ── Section 6 — Quickstart (numbered terminals) ── */}
-      <Section mood={MOOD.capture.v} moodInk={MOOD.capture.ink}>
-        <H2>Start in 60 seconds</H2>
-        <ol className="mt-12 flex flex-col gap-6">
-          {QUICKSTART.map((q, i) => (
-            <li key={q.cmd} className="flex items-center gap-5 sm:gap-8">
-              <span
-                className="font-display text-[length:var(--text-h2)] leading-none tracking-wide text-mood/60"
-                aria-hidden
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="min-w-0 flex-1">
-                <Terminal command={q.cmd} label={q.label} />
-              </div>
-            </li>
-          ))}
-        </ol>
-        <div className="mt-12">
-          <Link
-            href="/docs"
-            className="text-sm text-mood-ink underline-offset-4 hover:underline"
-          >
-            Full documentation →
-          </Link>
-        </div>
-      </Section>
-
-      {/* ── Footer ─────────────────────────────────────── */}
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-6 px-6 py-16">
-          <p className="text-sm font-bold text-mood-ink">{"// the thinking is free."}</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
-            <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
-            <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
-            <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
-            <Link href="/docs" className="hover:text-emerald">Docs</Link>
-          </div>
-          <p className="text-xs text-text-muted">MIT · built by 0xDas</p>
-          <p className="text-sm text-text-muted">
-            &quot;I opened my laptop and knew exactly what to do.&quot;
-          </p>
-        </div>
-      </footer>
+    <main className="relative flex-1">
+      <SceneStage panels={panels} footer={footer} heroHeadline={heroHeadline} />
     </main>
   );
 }

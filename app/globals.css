@@ -29,7 +29,30 @@
   --color-term-text: #e8e8e8;
   --color-term-green: #10b981;
 
-  --font-display: var(--font-grotesk);
+  /* Village world palette (pixel backdrop) */
+  --color-sky-1: #7ec8ee;
+  --color-sky-2: #9bd3f0;
+  --color-sky-3: #c3e6f7;
+  --color-sky-4: #e3f4e6;
+  --color-sun: #fff3c4;
+  --color-mtn-far: #a9c7d8;
+  --color-hill: #8fc08a;
+  --color-grass: #7bb37a;
+  --color-path: #d8c39a;
+
+  /* Landmark sprite palette */
+  --color-wall: #efe6d2;
+  --color-wall-dk: #cdbb98;
+  --color-wood: #9c6b3f;
+  --color-glass: #bfe0f2;
+  --color-leaf: #6fae5f;
+  --color-leaf-dk: #4f8c45;
+  --color-trunk: #7a5230;
+  --color-stone: #b9bec4;
+  --color-blossom: #f4a9c7;
+  --color-screen: #1a1a1f;
+
+  --font-display: var(--font-bebas);
   --font-mono: var(--font-space-mono);
 
   /* Layout rhythm */
@@ -39,7 +62,7 @@
   --text-display: clamp(52px, 9.5vw, 148px);
   --text-h1: clamp(56px, 9vw, 128px);
   --text-h2: clamp(36px, 5.5vw, 72px);
-  --text-numeral: clamp(72px, 14vw, 200px);
+  --text-numeral: clamp(56px, 10vw, 120px);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -139,3 +162,4 @@ body {
     transform: translateY(-10px);
   }
 }
+

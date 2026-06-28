@@ -12,10 +12,7 @@ type StatBlockProps = {
 export default function StatBlock({ value, unit, caption }: StatBlockProps) {
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-6">
-      <span
-        className="font-display leading-[0.8] tracking-tight text-mood-ink text-[length:var(--text-numeral)]"
-        aria-hidden
-      >
+      <span className="font-display leading-[0.8] tracking-tight text-mood-ink text-[length:var(--text-numeral)]">
         {value}
       </span>
       <span className="mb-2 flex flex-col">

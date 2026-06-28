@@ -137,7 +137,7 @@ export async function createMascot(
   let raf = 0;
   let nextBlink = 2 + Math.random() * 4;
   let blinkUntil = 0;
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
 
   function renderOnce() {
     moodTarget.set(readMoodVar());
@@ -147,8 +147,8 @@ export async function createMascot(
 
   function tick() {
     raf = requestAnimationFrame(tick);
-    const t = clock.getElapsedTime();
-    const dt = clock.getDelta();
+    timer.update();
+    const t = timer.getElapsed();
 
     // idle float + breathe
     root.position.y = Math.sin((t / 3) * Math.PI * 2) * 22;
@@ -188,7 +188,6 @@ export async function createMascot(
       mesh.position.y = Math.sin((t / 1.8 + i) * Math.PI * 2) * 4;
     });
 
-    void dt;
     renderer.render(scene, camera);
   }
 
