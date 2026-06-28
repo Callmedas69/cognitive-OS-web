@@ -87,6 +87,13 @@
   inherits: true;
   initial-value: #047857;
 }
+/* Per-section reveal 0..1 — drives each headline + rule black -> its own accent.
+   Registered as a number so it inherits + can be CSS-transitioned (mobile). */
+@property --reveal {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
 :root {
   --mood: #10b981;
   --mood-ink: #047857;

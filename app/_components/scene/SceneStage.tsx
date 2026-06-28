@@ -90,6 +90,12 @@ export default function SceneStage({
             commit(i);
             const m = Math.min(i, last);
             setMood(STOPS[m].accent, STOPS[m].accentInk);
+            // Per-section reveal: sections at/above the active one are colored,
+            // the rest stay black (reverses as you scroll back up). The CSS
+            // transition on the section eases the black<->accent fade.
+            cards.forEach((c, idx) =>
+              c.style.setProperty("--reveal", idx <= i ? "1" : "0")
+            );
             root.style.setProperty(
               "--village-progress",
               String(PANELS > 1 ? i / (PANELS - 1) : 0)
@@ -124,26 +130,36 @@ export default function SceneStage({
         // viewport (= (PANELS - 1) screen widths).
         const distance = () => Math.max(track.scrollWidth - window.innerWidth, 0);
 
+        // The content sections (hero + 02..07), index-aligned to STOPS. Each gets
+        // a per-section `--reveal` (0..1) so its headline + rule morph black->accent.
+        const sectionEls = Array.from(
+          track.querySelectorAll<HTMLElement>('section[id^="stop-"]')
+        );
+
+        const BLACK = "#0a0a0a";
+        // Section k is centered at seg=k. Reveal ramps 0->1 as the section goes
+        // from 45% visible (seg=k-0.55) to centered (seg=k), saturates at 1 when
+        // it exits forward, and reverses on scroll-back. Hero (k=0) is always 1.
+        const WINDOW = 0.55; // start morphing once the section is 45% visible
+        const reveal = (k: number, seg: number) =>
+          k === 0 ? 1 : Math.min(Math.max((seg - (k - WINDOW)) / WINDOW, 0), 1);
+
         const apply = (p: number) => {
           const cl = Math.min(Math.max(p, 0), 1);
           const seg = cl * (PANELS - 1);
           commit(Math.min(Math.round(seg), PANELS - 1));
-          // Continuous scroll-driven morph: hold the current section's color for
-          // the first 25% of the transition, then smoothstep to the next over the
-          // remaining 75%. With snap removed, this is visible as you scroll.
-          const k = Math.min(Math.floor(seg), last);
-          if (k >= last) {
-            setMood(STOPS[last].accent, STOPS[last].accentInk);
-          } else {
-            const t = seg - k;
-            const HOLD = 0.25;
-            let u = t <= HOLD ? 0 : (t - HOLD) / (1 - HOLD);
-            u = u * u * (3 - 2 * u); // smoothstep
-            setMood(
-              lerp(STOPS[k].accent, STOPS[k + 1].accent, u) as string,
-              lerp(STOPS[k].accentInk, STOPS[k + 1].accentInk, u) as string
-            );
-          }
+          // Per-section reveal: each section's own black->accent fade.
+          sectionEls.forEach((el, k) =>
+            el.style.setProperty("--reveal", String(reveal(k, seg)))
+          );
+          // Chrome (timeline dot, progress bar, mascot orb) blooms black->the
+          // active section's accent and reverses with scroll.
+          const a = Math.min(Math.max(Math.round(seg), 0), last);
+          const ra = reveal(a, seg);
+          setMood(
+            lerp(BLACK, STOPS[a].accent, ra) as string,
+            lerp(BLACK, STOPS[a].accentInk, ra) as string
+          );
           root.style.setProperty("--village-progress", String(cl));
         };
 
@@ -243,7 +259,12 @@ export default function SceneStage({
       ) : (
         <div ref={pinRef} className="relative flex flex-col">
           {STOPS.map((s, i) => (
-            <section key={s.id} id={s.id} data-stop className="min-h-[100dvh] w-full">
+            <section
+              key={s.id}
+              id={s.id}
+              data-stop
+              className="min-h-[100dvh] w-full [transition:--reveal_500ms_ease-out]"
+            >
               {i === 0 ? (
                 <HeroPanel meta={s} headline={heroHeadline}>
                   {panels[i]}

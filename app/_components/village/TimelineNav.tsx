@@ -1,5 +1,19 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
+
+// SSR-safe "are we on the client yet" flag — false during SSR + first hydration
+// render (matches server), true afterwards. Avoids a hydration mismatch when the
+// portal mounts, without a setState-in-effect.
+const emptySubscribe = () => () => {};
+const useMounted = () =>
+  useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+
 export type Stop = { id: string; num: string; name: string };
 
 type TimelineNavProps = {
@@ -21,7 +35,11 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
   const a = Math.min(Math.max(active, 0), stops.length - 1);
   const pct = stops.length > 1 ? (a / (stops.length - 1)) * 100 : 0;
 
-  return (
+  // Portal to <body> so this fixed bar lives outside ScrollSmoother's transformed
+  // #smooth-content (a fixed child of a transformed element scrolls with it).
+  const mounted = useMounted();
+
+  const nav = (
     <nav
       aria-label="Journey stops"
       className="fixed inset-x-0 bottom-0 z-40 hidden border-t border-border bg-bg/85 backdrop-blur-sm md:block"
@@ -62,4 +80,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
       </div>
     </nav>
   );
+
+  if (!mounted) return null;
+  return createPortal(nav, document.body);
 }

@@ -100,6 +100,35 @@ driven by IntersectionObserver. Timeline is hidden on mobile (`hidden md:block`)
   numbered circle so the active state (filled `bg-mood` + border + text) crossfades between dots; the
   progress line already slides via its width transition. Digits stay static.
 
+## 2026-06-28 (cont.) — Per-section black->accent reveal (replaces global morph)
+
+- The global `--mood` morph made all visible headlines share one color. Switched to a per-section
+  reveal: each headline + rule starts black and morphs to its OWN accent.
+- `SceneStage.tsx` `apply()`: per-section `reveal(k,seg) = clamp((seg-(k-0.75))/0.75, 0, 1)` (0 until
+  25% visible, 1 at center, saturates forward, reverses on scroll-back; hero k=0 always 1). Sets
+  `--reveal` on each `section[id^=stop-]`; chrome `--mood`/`--mood-ink = lerp(#0a0a0a, activeAccent,
+  reveal_active)` so timeline/progress/orb also bloom black->accent and reverse.
+- `SectionPanel.tsx`: headline + rule use `color-mix(in srgb, #0a0a0a (1-reveal), <accent> reveal)`
+  inline (each section its own accent). `globals.css`: registered `@property --reveal <number>`.
+- Mobile IO branch: sets `--reveal` 1 for sections at/above the active index, 0 otherwise, with a
+  `[transition:--reveal_500ms]` ease.
+- Verified (Playwright): at stop-03 centered, stop-02=orange / stop-03=cyan / stop-04=black
+  simultaneously; forward keeps colored, scroll-back reverses stop-04 then stop-03 to black.
+
+## 2026-06-28 (cont.) — GSAP ScrollSmoother
+
+- Added smooth momentum scroll over the whole deck (eases the horizontal pan + per-section reveal).
+- New `app/_components/SmoothScroll.tsx`: lazy-imports `gsap/ScrollSmoother`, wraps `{children}` in
+  `#smooth-wrapper > #smooth-content`, `ScrollSmoother.create({ smooth: 1.4, smoothTouch: 0 })`.
+  Disabled under `prefers-reduced-motion`.
+- `layout.tsx`: `MoodBar` + `Nav` stay OUTSIDE the wrapper (fixed must not be inside the transformed
+  content). `TimelineNav` portals itself to `<body>` (it is `fixed`); SSR-safe mount gate via
+  `useSyncExternalStore` (no setState-in-effect, no hydration mismatch).
+- Jumps keep `gsap.to(window, { scrollTo })` — ScrollSmoother drives native scroll, so it eases.
+- Verified: content transform lags scroll then settles (smoothing), pin/pan + reveal intact, dots
+  land correct, nav+timeline fixed, mobile native scroll + 0 overflow, no hydration/console errors,
+  lint + build clean. (GSAP is fully free post-Webflow; ScrollSmoother ships in the public `gsap` pkg.)
+
 ## Open / follow-ups
 - Vertical rhythm of section content sits slightly below true center; could nudge to optical center.
 - `village-wide.webp` + `public/game/art/*` + village palette tokens in `globals.css` are now dead;

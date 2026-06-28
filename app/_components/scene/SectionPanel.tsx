@@ -21,10 +21,21 @@ export default function SectionPanel({
           {meta.num} / {meta.name}
         </p>
         <p className="mt-4 font-mono text-sm leading-snug text-text-muted">{meta.bubble}</p>
-        <h2 className="mt-2 font-display text-[clamp(40px,6vw,92px)] leading-[0.92] tracking-wide text-balance text-mood-ink">
+        <h2
+          className="mt-2 font-display text-[clamp(40px,6vw,92px)] leading-[0.92] tracking-wide text-balance"
+          style={{
+            color: `color-mix(in srgb, #0a0a0a calc((1 - var(--reveal, 0)) * 100%), ${meta.accentInk} calc(var(--reveal, 0) * 100%))`,
+          }}
+        >
           {meta.headline}
         </h2>
-        <span className="mt-5 block h-1 w-14 rounded-full bg-mood" aria-hidden />
+        <span
+          className="mt-5 block h-1 w-14 rounded-full"
+          style={{
+            background: `color-mix(in srgb, #0a0a0a calc((1 - var(--reveal, 0)) * 100%), ${meta.accent} calc(var(--reveal, 0) * 100%))`,
+          }}
+          aria-hidden
+        />
         <div className="mt-6 text-base leading-relaxed text-text">{children}</div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { Space_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import Nav from "./_components/Nav";
 import MoodBar from "./_components/MoodBar";
+import SmoothScroll from "./_components/SmoothScroll";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
@@ -62,10 +63,12 @@ export default function RootLayout({
       lang="en"
       className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full">
+        {/* Fixed UI lives OUTSIDE the smooth wrapper (ScrollSmoother transforms
+            #smooth-content, which would break position: fixed). */}
         <MoodBar />
         <Nav />
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
