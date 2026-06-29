@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
+import { gsap } from "gsap";
 
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
 
@@ -60,15 +61,49 @@ export default function Nav() {
 
   const toggleTheme = () => {
     const nextDark = !isDark;
-    setIsDark(nextDark);
-    if (nextDark) {
-      document.documentElement.classList.remove("light");
-      localStorage.setItem("theme", "dark");
+    const overlay = document.getElementById("theme-transition-overlay");
+
+    if (overlay) {
+      // Set overlay background to the new theme's background color
+      overlay.style.backgroundColor = nextDark ? "#0A0D0D" : "#fafaf7";
+
+      // Animate the clip-path circle from top-right corner
+      gsap.fromTo(
+        overlay,
+        { clipPath: "circle(0% at 100% 0%)" },
+        {
+          clipPath: "circle(150% at 100% 0%)",
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            // Apply actual theme changes
+            setIsDark(nextDark);
+            if (nextDark) {
+              document.documentElement.classList.remove("light");
+              localStorage.setItem("theme", "dark");
+            } else {
+              document.documentElement.classList.add("light");
+              localStorage.setItem("theme", "light");
+            }
+            window.dispatchEvent(new CustomEvent("theme:change", { detail: { isDark: nextDark } }));
+
+            // Reset overlay clip-path
+            gsap.set(overlay, { clipPath: "circle(0% at 100% 0%)" });
+          },
+        }
+      );
     } else {
-      document.documentElement.classList.add("light");
-      localStorage.setItem("theme", "light");
+      // Fallback if overlay element is not found
+      setIsDark(nextDark);
+      if (nextDark) {
+        document.documentElement.classList.remove("light");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.add("light");
+        localStorage.setItem("theme", "light");
+      }
+      window.dispatchEvent(new CustomEvent("theme:change", { detail: { isDark: nextDark } }));
     }
-    window.dispatchEvent(new CustomEvent("theme:change", { detail: { isDark: nextDark } }));
   };
 
   const handleJump = (stop: number) => {

@@ -81,6 +81,13 @@ export default function RootLayout({
       <body className="min-h-full">
         <SkipLink />
 
+        {/* Theme Wipe Transition Overlay */}
+        <div
+          id="theme-transition-overlay"
+          className="fixed inset-0 z-[100] pointer-events-none"
+          style={{ clipPath: "circle(0% at 100% 0%)" }}
+        />
+
         {/* Fixed UI lives OUTSIDE the smooth wrapper (ScrollSmoother transforms
             #smooth-content, which would break position: fixed). */}
         <MoodBar />
