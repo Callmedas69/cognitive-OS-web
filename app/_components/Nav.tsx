@@ -64,8 +64,9 @@ export default function Nav() {
     const overlay = document.getElementById("theme-transition-overlay");
 
     if (overlay) {
-      // Set overlay background to the new theme's background color
+      // Set overlay background to the new theme's background color and make sure opacity is reset
       overlay.style.backgroundColor = nextDark ? "#0A0D0D" : "#fafaf7";
+      overlay.style.opacity = "1";
 
       // Animate the clip-path circle from top-right corner
       gsap.fromTo(
@@ -76,7 +77,7 @@ export default function Nav() {
           duration: 0.8,
           ease: "power2.inOut",
           onComplete: () => {
-            // Apply actual theme changes
+            // Apply actual theme changes under the cover of the overlay
             setIsDark(nextDark);
             if (nextDark) {
               document.documentElement.classList.remove("light");
@@ -87,8 +88,19 @@ export default function Nav() {
             }
             window.dispatchEvent(new CustomEvent("theme:change", { detail: { isDark: nextDark } }));
 
-            // Reset overlay clip-path
-            gsap.set(overlay, { clipPath: "circle(0% at 100% 0%)" });
+            // Wait 2 frames for React and GSAP layout to paint, then fade out overlay smoothly
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                gsap.to(overlay, {
+                  opacity: 0,
+                  duration: 0.2,
+                  onComplete: () => {
+                    // Reset overlay clip-path and opacity for the next toggle
+                    gsap.set(overlay, { clipPath: "circle(0% at 100% 0%)", opacity: 1 });
+                  },
+                });
+              });
+            });
           },
         }
       );
