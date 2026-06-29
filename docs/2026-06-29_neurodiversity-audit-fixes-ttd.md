@@ -40,9 +40,9 @@ This pass covers both Critical and Important fixes identified in the neurodivers
   Added a visually hidden “Skip to main content” client component as the first child of `<body>`, before fixed chrome. It explicitly focuses `#main-content` before scrolling. Added `id="main-content"` and `tabIndex={-1}` to the homepage `<main>`.
   done when: first Tab exposes the skip link; Enter targets `#main-content`; lint + build clean.
 
-- [x] **T-004** · Dark mode via `prefers-color-scheme` · `app/globals.css` + `app/_components/scene/SceneStage.tsx`
-  Added prefers-color-scheme overrides for bg, surface, text, text-muted, border, emerald-ink, and coral-ink colors in globals.css. Overrode reveal-initial (starts white in dark mode) and dynamically mapped accent-ink to the bright accent color. Updated setMood in SceneStage.tsx to use media query to select initial color and mood accent ink dynamically during horizontal and vertical scroll.
-  done when: Toggle OS to dark — full page renders dark, text contrast is AA-safe; lint + build clean.
+- [x] **T-004** · Dark mode default & manual toggle · `app/globals.css` + `app/layout.tsx` + `app/_components/Nav.tsx` + `app/_components/scene/SceneStage.tsx`
+  Made dark mode the default theme globally in globals.css, with light mode class overrides (`html.light`). Added an inline anti-FOUC script inside layout.tsx to apply the light theme before hydration if stored in localStorage. Implemented a universal theme toggle button in Nav.tsx that dispatches a custom event to synchronize the isDark state in SceneStage.tsx, which triggers GSAP ScrollTrigger updates with the correct color lerp values.
+  done when: Toggle theme button changes background, text, and mood colors immediately; light/dark persists on reload without flash; lint + build clean.
 
 - [x] **T-005** · Show timeline nav (dots) on mobile · `app/_components/village/TimelineNav.tsx`
   Removed `hidden md:block` from the TimelineNav wrapper. Timeline dots are now fully visible on mobile viewports.
