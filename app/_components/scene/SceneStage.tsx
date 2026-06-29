@@ -241,6 +241,7 @@ export default function SceneStage({
               <section
                 key={s.id}
                 id={s.id}
+                inert={i !== active ? true : undefined}
                 className="h-[100dvh] w-screen shrink-0"
               >
                 {i === 0 ? (
@@ -253,7 +254,12 @@ export default function SceneStage({
               </section>
             ))}
             {/* Footer — the final horizontal panel. */}
-            <section className="h-[100dvh] w-screen shrink-0">{footer}</section>
+            <section
+              inert={active !== STOPS.length ? true : undefined}
+              className="h-[100dvh] w-screen shrink-0"
+            >
+              {footer}
+            </section>
           </div>
         </div>
       ) : (

@@ -43,7 +43,7 @@ const panels = [
   <div key="02">
     <p>
       Every time you reopen your laptop, you spend{" "}
-      <strong className="font-bold text-coral">15 to 30 minutes</strong> remembering where you
+      <strong className="font-bold text-coral-ink">15 to 30 minutes</strong> remembering where you
       were. Not coding. Recovering.
     </p>
     <p className="mt-3">
@@ -169,7 +169,7 @@ const heroHeadline = (
 
 export default function Home() {
   return (
-    <main className="relative flex-1">
+    <main id="main-content" tabIndex={-1} className="relative flex-1">
       <SceneStage panels={panels} footer={footer} heroHeadline={heroHeadline} />
     </main>
   );

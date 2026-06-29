@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "./_components/Nav";
 import MoodBar from "./_components/MoodBar";
 import SmoothScroll from "./_components/SmoothScroll";
+import SkipLink from "./_components/SkipLink";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
@@ -64,6 +65,8 @@ export default function RootLayout({
       className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full">
+        <SkipLink />
+
         {/* Fixed UI lives OUTSIDE the smooth wrapper (ScrollSmoother transforms
             #smooth-content, which would break position: fixed). */}
         <MoodBar />
