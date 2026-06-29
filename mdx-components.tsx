@@ -49,14 +49,14 @@ const components: MDXComponents = {
   // Inline code (block code is wrapped in <pre> below)
   code: (props) => (
     <code
-      className="rounded-[4px] bg-border/50 px-1.5 py-0.5 text-[0.85em] text-text"
+      className="rounded-[4px] bg-border/50 px-1.5 py-0.5 text-[0.85em] text-text font-mono"
       {...props}
     />
   ),
   // Code block — the dark terminal contrast element
   pre: (props) => (
     <pre
-      className="my-6 overflow-x-auto rounded-[10px] bg-term-bg p-4 text-sm text-term-text [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-term-text"
+      className="my-6 overflow-x-auto rounded-[10px] bg-term-bg p-4 text-sm text-term-text font-mono [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-term-text"
       {...props}
     />
   ),

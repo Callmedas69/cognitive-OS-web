@@ -17,7 +17,7 @@ export default function SectionPanel({
   return (
     <div className="flex h-full w-full items-center justify-center px-6 py-24">
       <div className="w-full max-w-[680px]">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <p className="font-mono text-xs tracking-[0.15em] text-text-muted">
           {meta.num} / {meta.name}
         </p>
         <p className="mt-4 font-mono text-sm leading-snug text-text-muted">{meta.bubble}</p>

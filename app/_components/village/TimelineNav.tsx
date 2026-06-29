@@ -42,7 +42,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
   const nav = (
     <nav
       aria-label="Journey stops"
-      className="fixed inset-x-0 bottom-0 z-40 hidden border-t border-border bg-bg/85 backdrop-blur-sm md:block"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-bg/85 backdrop-blur-sm"
     >
       <div className="relative mx-auto max-w-[1100px] px-6 py-3">
         <div className="absolute left-6 right-6 top-[1.15rem] h-px bg-border" aria-hidden />

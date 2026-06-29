@@ -11,7 +11,7 @@ export default function DocsLayout({
       <Sidebar />
       <div className="min-w-0 flex-1">
         {/* Readable line length (spec §3: content max-width 720px) */}
-        <article className="max-w-[720px]">{children}</article>
+        <article className="max-w-[720px] font-sans">{children}</article>
         <div className="mt-16 max-w-[720px] border-t border-border pt-6">
           <EditOnGithub />
         </div>

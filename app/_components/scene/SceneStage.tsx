@@ -89,7 +89,8 @@ export default function SceneStage({
           if (i >= 0) {
             commit(i);
             const m = Math.min(i, last);
-            setMood(STOPS[m].accent, STOPS[m].accentInk);
+            const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            setMood(STOPS[m].accent, isDark ? STOPS[m].accent : STOPS[m].accentInk);
             // Per-section reveal: sections at/above the active one are colored,
             // the rest stay black (reverses as you scroll back up). The CSS
             // transition on the section eases the black<->accent fade.
@@ -136,7 +137,8 @@ export default function SceneStage({
           track.querySelectorAll<HTMLElement>('section[id^="stop-"]')
         );
 
-        const BLACK = "#0a0a0a";
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const INITIAL_COLOR = isDark ? "#ffffff" : "#0a0a0a";
         // Section k is centered at seg=k. Reveal ramps 0->1 as the section goes
         // from 45% visible (seg=k-0.55) to centered (seg=k), saturates at 1 when
         // it exits forward, and reverses on scroll-back. Hero (k=0) is always 1.
@@ -157,8 +159,8 @@ export default function SceneStage({
           const a = Math.min(Math.max(Math.round(seg), 0), last);
           const ra = reveal(a, seg);
           setMood(
-            lerp(BLACK, STOPS[a].accent, ra) as string,
-            lerp(BLACK, STOPS[a].accentInk, ra) as string
+            lerp(INITIAL_COLOR, STOPS[a].accent, ra) as string,
+            lerp(INITIAL_COLOR, isDark ? STOPS[a].accent : STOPS[a].accentInk, ra) as string
           );
           root.style.setProperty("--village-progress", String(cl));
         };
@@ -243,6 +245,10 @@ export default function SceneStage({
                 id={s.id}
                 inert={i !== active ? true : undefined}
                 className="h-[100dvh] w-screen shrink-0"
+                style={{
+                  "--accent-light": s.accent,
+                  "--accent-ink-light": s.accentInk,
+                } as React.CSSProperties}
               >
                 {i === 0 ? (
                   <HeroPanel meta={s} headline={heroHeadline}>
@@ -270,6 +276,10 @@ export default function SceneStage({
               id={s.id}
               data-stop
               className="min-h-[100dvh] w-full [transition:--reveal_500ms_ease-out]"
+              style={{
+                "--accent-light": s.accent,
+                "--accent-ink-light": s.accentInk,
+              } as React.CSSProperties}
             >
               {i === 0 ? (
                 <HeroPanel meta={s} headline={heroHeadline}>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
 
@@ -24,6 +24,8 @@ function jumpToStop(stop: number) {
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -34,12 +36,31 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Listen for Escape key to close the mobile menu
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+
+  const handleJump = (stop: number) => {
+    setOpen(false);
+    jumpToStop(stop);
+  };
+
   return (
     <header
       className={`${
         isHome ? "fixed inset-x-0" : "sticky"
       } top-0 z-50 bg-bg/85 backdrop-blur-sm transition-colors ${
-        scrolled ? "border-b border-border" : "border-b border-transparent"
+        scrolled || open ? "border-b border-border" : "border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-14 max-w-[1280px] items-center justify-between gap-4 px-6">
@@ -48,33 +69,54 @@ export default function Nav() {
         </Link>
 
         {isHome ? (
-          <div className="hidden items-center gap-5 overflow-x-auto text-sm lg:flex">
-            {HOME_LINKS.map((l) => (
+          <>
+            <div className="hidden items-center gap-5 overflow-x-auto text-sm lg:flex">
+              {HOME_LINKS.map((l) => (
+                <button
+                  key={l.label}
+                  type="button"
+                  onClick={() => jumpToStop(l.stop)}
+                  className="whitespace-nowrap text-text-muted transition-colors hover:text-text"
+                >
+                  {l.label}
+                </button>
+              ))}
               <button
-                key={l.label}
                 type="button"
-                onClick={() => jumpToStop(l.stop)}
+                onClick={() => jumpToStop(6)}
+                className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-[#06281d] transition-opacity hover:opacity-90"
+              >
+                Get Started
+              </button>
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="whitespace-nowrap text-text-muted transition-colors hover:text-text"
               >
-                {l.label}
-              </button>
-            ))}
+                GitHub
+              </a>
+            </div>
+
             <button
+              ref={buttonRef}
               type="button"
-              onClick={() => jumpToStop(6)}
-              className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-[#06281d] transition-opacity hover:opacity-90"
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-label="Toggle menu"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-text-muted hover:text-text lg:hidden focus:outline-none focus:ring-2 focus:ring-emerald"
             >
-              Get Started
+              {open ? (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whitespace-nowrap text-text-muted transition-colors hover:text-text"
-            >
-              GitHub
-            </a>
-          </div>
+          </>
         ) : (
           <div className="flex items-center gap-6 text-sm">
             <Link href="/docs" className="text-text-muted transition-colors hover:text-text">
@@ -91,6 +133,47 @@ export default function Nav() {
           </div>
         )}
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {isHome && open && (
+        <div className="fixed inset-x-0 bottom-0 top-14 z-40 flex flex-col gap-6 bg-bg/95 px-6 py-8 backdrop-blur-md lg:hidden overflow-y-auto">
+          <div className="flex flex-col gap-4">
+            {HOME_LINKS.map((l) => (
+              <button
+                key={l.label}
+                type="button"
+                onClick={() => handleJump(l.stop)}
+                className="text-left text-lg font-medium text-text-muted transition-colors hover:text-text py-2"
+              >
+                {l.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleJump(6)}
+              className="text-left text-lg font-bold text-emerald-ink transition-colors hover:opacity-90 py-2"
+            >
+              Get Started
+            </button>
+            <Link
+              href="/docs"
+              onClick={() => setOpen(false)}
+              className="text-left text-lg font-medium text-text-muted transition-colors hover:text-text py-2"
+            >
+              Docs
+            </Link>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="text-left text-lg font-medium text-text-muted transition-colors hover:text-text py-2"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

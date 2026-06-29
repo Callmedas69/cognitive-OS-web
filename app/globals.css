@@ -99,6 +99,32 @@
 :root {
   --mood: #10b981;
   --mood-ink: #047857;
+  --reveal-initial: #0a0a0a;
+  --accent: var(--accent-light);
+  --accent-ink: var(--accent-ink-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f0f0f;
+    --color-surface: #1a1a1f;
+    --color-text: #e8e8e2;
+    --color-text-muted: #9ca3af;
+    --color-border: #2a2a2f;
+
+    /* A11y Ink overrides for dark mode */
+    --color-emerald-ink: #34d399;
+    --color-coral-ink: #ff6b5c;
+
+    /* Overrides for reveal color morphs in dark mode */
+    --reveal-initial: #ffffff;
+    --accent: var(--accent-light);
+    --accent-ink: var(--accent-light);
+
+    /* Fallback mood values for dark mode before ScrollTrigger override */
+    --mood: #10b981;
+    --mood-ink: #10b981;
+  }
 }
 /* The lerp is driven by GSAP ScrollTrigger (scrub) in MoodController, not a
    CSS transition — continuous morph tied to scroll position. */
