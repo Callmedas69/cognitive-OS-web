@@ -17,8 +17,10 @@ export type StopMeta = {
   name: string;
   /** Vivid mood fill (decorative). */
   accent: string;
-  /** AA-safe mood ink (headline text). */
+  /** AA-safe mood ink (headline text on light bg). */
   accentInk: string;
+  /** Dark-mode headline ink (cool-anchored, distinct from mood). */
+  headlineInk: string;
   /** One-line kicker above the headline. */
   bubble: string;
   /** Display headline (Bebas Neue). */
@@ -32,6 +34,7 @@ export const STOPS: StopMeta[] = [
     name: "Overview",
     accent: "#34d399",
     accentInk: "#047857",
+    headlineInk: "#E2E8F0",
     bubble: "Built for developers with executive dysfunction.",
     headline: "STOP RELEARNING YOUR OWN PROJECT",
   },
@@ -41,6 +44,7 @@ export const STOPS: StopMeta[] = [
     name: "The Problem",
     accent: "#ff8a5c",
     accentInk: "#c2410c",
+    headlineInk: "#FDE68A",
     bubble: "Why ADHD minds lose context every session.",
     headline: "THE 30-MINUTE TAX",
   },
@@ -50,6 +54,7 @@ export const STOPS: StopMeta[] = [
     name: "How It Works",
     accent: "#22d3ee",
     accentInk: "#0e7490",
+    headlineInk: "#6EE7B7",
     bubble: "ICM turns your folders into a state machine.",
     headline: "A FILESYSTEM THAT THINKS IN MODES",
   },
@@ -59,6 +64,7 @@ export const STOPS: StopMeta[] = [
     name: "Six Zones",
     accent: "#a78bfa",
     accentInk: "#6d28d9",
+    headlineInk: "#C4B5FD",
     bubble: "Each folder is one mode of work.",
     headline: "SIX ZONES, ONE BRAIN",
   },
@@ -68,6 +74,7 @@ export const STOPS: StopMeta[] = [
     name: "Commands",
     accent: "#34d399",
     accentInk: "#047857",
+    headlineInk: "#7DD3FC",
     bubble: "Agent-agnostic CLI. Zero maintenance.",
     headline: "FOUR COMMANDS. THAT IS IT.",
   },
@@ -77,6 +84,7 @@ export const STOPS: StopMeta[] = [
     name: "Open Source",
     accent: "#fb7185",
     accentInk: "#e11d48",
+    headlineInk: "#FDA4AF",
     bubble: "MIT. No servers. The repo is the product.",
     headline: "FREE. OPEN SOURCE. YOURS.",
   },
@@ -86,6 +94,7 @@ export const STOPS: StopMeta[] = [
     name: "Start",
     accent: "#34d399",
     accentInk: "#047857",
+    headlineInk: "#D1D5DB",
     bubble: "Start your journey. Stay in context.",
     headline: "OPEN YOUR LAPTOP. KNOW WHAT TO DO.",
   },

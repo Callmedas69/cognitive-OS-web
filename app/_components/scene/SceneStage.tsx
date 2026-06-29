@@ -190,7 +190,7 @@ export default function SceneStage({
             const stop = STOPS[k];
             if (!stop) return;
             const targetAccent = stop.accent;
-            const targetInk = isDarkLocal ? stop.accent : stop.accentInk;
+            const targetInk = isDarkLocal ? stop.headlineInk : stop.accentInk;
             el.style.setProperty("--local-accent", lerp(INITIAL_COLOR, targetAccent, ra) as string);
             el.style.setProperty("--local-ink", lerp(INITIAL_COLOR, targetInk, ra) as string);
           });
