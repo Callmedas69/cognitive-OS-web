@@ -144,10 +144,10 @@ const footer = (
   </div>
 );
 
-// Hero headline — FILESYSTEM is the selling word, tinted in the mood ink.
+// Hero headline — PROJECT is the selling word, tinted in the mood ink.
 const heroHeadline = (
   <>
-    A <span className="text-mood-ink">FILESYSTEM</span> THAT REMEMBERS FOR YOU
+    STOP RELEARNING YOUR OWN <span className="text-mood-ink">PROJECT</span>
   </>
 );
 
