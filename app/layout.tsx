@@ -64,6 +64,20 @@ export default function RootLayout({
       lang="en"
       className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const t = localStorage.getItem("theme");
+                if (t === "light") {
+                  document.documentElement.classList.add("light");
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full">
         <SkipLink />
 

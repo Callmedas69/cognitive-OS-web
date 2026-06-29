@@ -25,6 +25,7 @@ function jumpToStop(stop: number) {
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -34,6 +35,14 @@ export default function Nav() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Initialize theme from HTML element (which anti-FOUC script modified)
+  useEffect(() => {
+    const isLight = document.documentElement.classList.contains("light");
+    if (isLight) {
+      setTimeout(() => setIsDark(false), 0);
+    }
   }, []);
 
   // Listen for Escape key to close the mobile menu
@@ -49,6 +58,18 @@ export default function Nav() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    }
+    window.dispatchEvent(new CustomEvent("theme:change", { detail: { isDark: nextDark } }));
+  };
 
   const handleJump = (stop: number) => {
     setOpen(false);
@@ -68,70 +89,92 @@ export default function Nav() {
           cognitive<span className="text-emerald-ink">OS</span>
         </Link>
 
-        {isHome ? (
-          <>
-            <div className="hidden items-center gap-5 overflow-x-auto text-sm lg:flex">
-              {HOME_LINKS.map((l) => (
+        <div className="flex items-center gap-4 text-sm">
+          {isHome ? (
+            <>
+              <div className="hidden items-center gap-5 overflow-x-auto text-sm lg:flex">
+                {HOME_LINKS.map((l) => (
+                  <button
+                    key={l.label}
+                    type="button"
+                    onClick={() => jumpToStop(l.stop)}
+                    className="whitespace-nowrap text-text-muted transition-colors hover:text-text cursor-pointer"
+                  >
+                    {l.label}
+                  </button>
+                ))}
                 <button
-                  key={l.label}
                   type="button"
-                  onClick={() => jumpToStop(l.stop)}
+                  onClick={() => jumpToStop(6)}
+                  className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-[#06281d] transition-opacity hover:opacity-90 cursor-pointer"
+                >
+                  Get Started
+                </button>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="whitespace-nowrap text-text-muted transition-colors hover:text-text"
                 >
-                  {l.label}
-                </button>
-              ))}
+                  GitHub
+                </a>
+              </div>
+
               <button
+                ref={buttonRef}
                 type="button"
-                onClick={() => jumpToStop(6)}
-                className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-[#06281d] transition-opacity hover:opacity-90"
+                onClick={() => setOpen(!open)}
+                aria-expanded={open}
+                aria-label="Toggle menu"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-text-muted hover:text-text lg:hidden focus:outline-none focus:ring-2 focus:ring-emerald cursor-pointer"
               >
-                Get Started
+                {open ? (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
               </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-6 text-sm">
+              <Link href="/docs" className="text-text-muted transition-colors hover:text-text">
+                Docs
+              </Link>
               <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="whitespace-nowrap text-text-muted transition-colors hover:text-text"
+                className="text-text-muted transition-colors hover:text-text"
               >
                 GitHub
               </a>
             </div>
+          )}
 
-            <button
-              ref={buttonRef}
-              type="button"
-              onClick={() => setOpen(!open)}
-              aria-expanded={open}
-              aria-label="Toggle menu"
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-text-muted hover:text-text lg:hidden focus:outline-none focus:ring-2 focus:ring-emerald"
-            >
-              {open ? (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
-          </>
-        ) : (
-          <div className="flex items-center gap-6 text-sm">
-            <Link href="/docs" className="text-text-muted transition-colors hover:text-text">
-              Docs
-            </Link>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-muted transition-colors hover:text-text"
-            >
-              GitHub
-            </a>
-          </div>
-        )}
+          {/* Theme Toggle (visible on all viewports) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-text-muted hover:text-text focus:outline-none focus:ring-2 focus:ring-emerald cursor-pointer"
+            aria-label="Toggle theme"
+          >
+            {isDark ? (
+              /* Sun icon (when dark, show sun to toggle to light) */
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              </svg>
+            ) : (
+              /* Moon icon (when light, show moon to toggle to dark) */
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            )}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu Overlay */}

@@ -40,6 +40,21 @@ export default function SceneStage({
   const activeRef = useRef(0);
   const [active, setActive] = useState(0);
   const [horizontal, setHorizontal] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+
+  // Synchronize isDark state from theme toggle events
+  useEffect(() => {
+    const isLight = document.documentElement.classList.contains("light");
+    if (isLight) {
+      setTimeout(() => setIsDark(false), 0);
+    }
+
+    const onThemeChange = (e: Event) => {
+      setIsDark((e as CustomEvent).detail.isDark);
+    };
+    window.addEventListener("theme:change", onThemeChange);
+    return () => window.removeEventListener("theme:change", onThemeChange);
+  }, []);
 
   // Total panels = the seven content sections plus the footer.
   const PANELS = STOPS.length + 1;
@@ -89,7 +104,6 @@ export default function SceneStage({
           if (i >= 0) {
             commit(i);
             const m = Math.min(i, last);
-            const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
             setMood(STOPS[m].accent, isDark ? STOPS[m].accent : STOPS[m].accentInk);
             // Per-section reveal: sections at/above the active one are colored,
             // the rest stay black (reverses as you scroll back up). The CSS
@@ -137,7 +151,6 @@ export default function SceneStage({
           track.querySelectorAll<HTMLElement>('section[id^="stop-"]')
         );
 
-        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const INITIAL_COLOR = isDark ? "#ffffff" : "#0a0a0a";
         // Section k is centered at seg=k. Reveal ramps 0->1 as the section goes
         // from 45% visible (seg=k-0.55) to centered (seg=k), saturates at 1 when
@@ -188,9 +201,8 @@ export default function SceneStage({
             onUpdate: (self) => apply(self.progress),
           },
         });
-        apply(0);
-
         const st = tween.scrollTrigger!;
+        apply(st.progress);
         jumpRef.current = (i) => {
           const p = i / (PANELS - 1);
           // Smoothly tween the scroll to the section's exact position (GSAP, not
@@ -219,7 +231,7 @@ export default function SceneStage({
       cancelled = true;
       cleanup();
     };
-  }, [horizontal, PANELS]);
+  }, [horizontal, PANELS, isDark]);
 
   // Top-nav jumps (CustomEvent from Nav).
   useEffect(() => {
