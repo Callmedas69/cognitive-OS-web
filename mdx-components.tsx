@@ -26,7 +26,7 @@ const components: MDXComponents = {
   p: (props) => <p className="my-4 text-text-muted" {...props} />,
   a: ({ href = "", ...props }: ComponentPropsWithoutRef<"a">) => {
     const external = /^https?:\/\//.test(href);
-    const cls = "text-emerald underline-offset-4 hover:underline";
+    const cls = "text-emerald-ink underline-offset-4 hover:underline";
     return external ? (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls} {...props} />
     ) : (

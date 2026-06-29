@@ -44,7 +44,7 @@ export default function Nav() {
     >
       <nav className="mx-auto flex h-14 max-w-[1280px] items-center justify-between gap-4 px-6">
         <Link href="/" className="shrink-0 text-lg font-bold tracking-tight">
-          cognitive<span className="text-emerald">OS</span>
+          cognitive<span className="text-emerald-ink">OS</span>
         </Link>
 
         {isHome ? (
@@ -62,7 +62,7 @@ export default function Nav() {
             <button
               type="button"
               onClick={() => jumpToStop(6)}
-              className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-white transition-opacity hover:opacity-90"
+              className="whitespace-nowrap rounded-lg bg-emerald px-3.5 py-1.5 font-bold text-[#06281d] transition-opacity hover:opacity-90"
             >
               Get Started
             </button>

@@ -29,7 +29,7 @@ const panels = [
         href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-lg bg-emerald px-4 py-2 font-bold text-white transition-opacity hover:opacity-90"
+        className="rounded-lg bg-emerald px-4 py-2 font-bold text-[#06281d] transition-opacity hover:opacity-90"
       >
         View on GitHub →
       </a>
@@ -114,10 +114,10 @@ const panels = [
       The repo is the product.
     </p>
     <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
-      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
-      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">GitHub</a>
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">Farcaster</a>
     </div>
   </div>,
 
@@ -132,7 +132,7 @@ const panels = [
         href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block rounded-lg bg-emerald px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
+        className="inline-block rounded-lg bg-emerald px-4 py-2 text-sm font-bold text-[#06281d] transition-opacity hover:opacity-90"
       >
         View on GitHub →
       </a>
@@ -147,11 +147,11 @@ const footer = (
       {"// the thinking is free."}
     </p>
     <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">GitHub</a>
-      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">npm</a>
-      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">Farcaster</a>
-      <Link href="/docs" className="hover:text-emerald">Docs</Link>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">GitHub</a>
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">Farcaster</a>
+      <Link href="/docs" className="hover:text-emerald-ink">Docs</Link>
     </div>
     <p className="mt-6 text-xs text-text-muted">MIT · built by 0xDas</p>
     <p className="mt-2 text-sm text-text-muted">

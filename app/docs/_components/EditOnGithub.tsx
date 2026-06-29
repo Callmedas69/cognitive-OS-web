@@ -10,7 +10,7 @@ export default function EditOnGithub() {
       href={editUrlFor(pathname)}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-sm text-text-muted underline-offset-4 hover:text-emerald hover:underline"
+      className="text-sm text-text-muted underline-offset-4 hover:text-emerald-ink hover:underline"
     >
       Edit this page on GitHub →
     </a>

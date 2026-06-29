@@ -20,7 +20,7 @@ export default function Sidebar() {
               onClick={() => setOpen(false)}
               className={`block rounded-[6px] px-3 py-1.5 text-sm transition-colors ${
                 active
-                  ? "bg-emerald/10 font-bold text-emerald"
+                  ? "bg-emerald/10 font-bold text-emerald-ink"
                   : "text-text-muted hover:bg-border/40 hover:text-text"
               }`}
             >

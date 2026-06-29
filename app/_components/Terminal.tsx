@@ -44,7 +44,7 @@ export default function Terminal({ command, label, cursor = false }: TerminalPro
         type="button"
         onClick={copy}
         aria-label={copied ? "Copied" : `Copy command: ${command}`}
-        className="shrink-0 rounded-[6px] px-2 py-1 text-xs text-term-text/50 transition-colors hover:bg-white/10 hover:text-term-text"
+        className="shrink-0 rounded-[6px] px-2 py-1 text-xs text-term-text/60 transition-colors hover:bg-white/10 hover:text-term-text"
       >
         {copied ? "copied ✓" : "copy"}
       </button>
