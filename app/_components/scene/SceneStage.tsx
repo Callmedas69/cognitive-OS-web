@@ -180,16 +180,24 @@ export default function SceneStage({
           const cl = Math.min(Math.max(p, 0), 1);
           const seg = cl * (PANELS - 1);
           commit(Math.min(Math.round(seg), PANELS - 1));
-          // Per-section reveal: each section's own black->accent fade.
-          sectionEls.forEach((el, k) =>
-            el.style.setProperty("--reveal", String(reveal(k, seg)))
-          );
+          const isDarkLocal = isDarkRef.current;
+          const INITIAL_COLOR = isDarkLocal ? "#ffffff" : "#0A0D0D";
+
+          // Per-section reveal: each section's own color fade.
+          sectionEls.forEach((el, k) => {
+            const ra = reveal(k, seg);
+            el.style.setProperty("--reveal", String(ra));
+            const stop = STOPS[k];
+            if (!stop) return;
+            const targetAccent = stop.accent;
+            const targetInk = isDarkLocal ? stop.accent : stop.accentInk;
+            el.style.setProperty("--local-accent", lerp(INITIAL_COLOR, targetAccent, ra) as string);
+            el.style.setProperty("--local-ink", lerp(INITIAL_COLOR, targetInk, ra) as string);
+          });
           // Chrome (timeline dot, progress bar, mascot orb) blooms black->the
           // active section's accent and reverses with scroll.
           const a = Math.min(Math.max(Math.round(seg), 0), last);
           const ra = reveal(a, seg);
-          const isDarkLocal = isDarkRef.current;
-          const INITIAL_COLOR = isDarkLocal ? "#ffffff" : "#0A0D0D";
           setMood(
             lerp(INITIAL_COLOR, STOPS[a].accent, ra) as string,
             lerp(INITIAL_COLOR, isDarkLocal ? STOPS[a].accent : STOPS[a].accentInk, ra) as string
