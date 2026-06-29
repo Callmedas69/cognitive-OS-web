@@ -246,7 +246,7 @@ export default function SceneStage({
   return (
     <>
       {horizontal ? (
-        <div ref={pinRef} className="relative h-[100dvh] overflow-hidden">
+        <div ref={pinRef} className="relative h-[100dvh] overflow-hidden bg-bg">
           <div
             ref={trackRef}
             className="flex h-[100dvh] w-max flex-nowrap will-change-transform"

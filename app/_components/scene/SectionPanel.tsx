@@ -24,7 +24,7 @@ export default function SectionPanel({
         <h2
           className="mt-2 font-display text-[clamp(40px,6vw,92px)] leading-[0.92] tracking-wide text-balance"
           style={{
-            color: `color-mix(in srgb, #0a0a0a calc((1 - var(--reveal, 0)) * 100%), ${meta.accentInk} calc(var(--reveal, 0) * 100%))`,
+            color: `color-mix(in srgb, var(--reveal-initial) calc((1 - var(--reveal, 0)) * 100%), ${meta.accentInk} calc(var(--reveal, 0) * 100%))`,
           }}
         >
           {meta.headline}
@@ -32,7 +32,7 @@ export default function SectionPanel({
         <span
           className="mt-5 block h-1 w-14 rounded-full"
           style={{
-            background: `color-mix(in srgb, #0a0a0a calc((1 - var(--reveal, 0)) * 100%), ${meta.accent} calc(var(--reveal, 0) * 100%))`,
+            background: `color-mix(in srgb, var(--reveal-initial) calc((1 - var(--reveal, 0)) * 100%), ${meta.accent} calc(var(--reveal, 0) * 100%))`,
           }}
           aria-hidden
         />
