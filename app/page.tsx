@@ -18,24 +18,8 @@ const panels = [
       in a persistent <code className="font-mono font-bold">STATE.md</code>, so you open your
       laptop already oriented, never from zero.
     </p>
-    <p className="mt-3 text-sm text-text-muted">
-      Built for brains that lose context between sessions, ADHD or executive dysfunction.
-    </p>
     <div className="mt-5 max-w-[380px]">
       <Terminal command="npx cognitiveos init" cursor />
-    </div>
-    <div className="mt-4 flex flex-wrap items-center gap-5 text-sm">
-      <a
-        href={GITHUB_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="rounded-lg bg-emerald px-4 py-2 font-bold text-[#06281d] transition-opacity hover:opacity-90"
-      >
-        View on GitHub →
-      </a>
-      <Link href="/docs" className="text-mood-ink underline-offset-4 hover:underline">
-        Read the docs
-      </Link>
     </div>
   </div>,
 

@@ -33,7 +33,7 @@ export const STOPS: StopMeta[] = [
     accent: "#10b981",
     accentInk: "#047857",
     bubble: "Built for developers with executive dysfunction.",
-    headline: "A FILESYSTEM THAT REMEMBERS FOR YOU",
+    headline: "STOP RELEARNING YOUR OWN PROJECT",
   },
   {
     id: "stop-02",
