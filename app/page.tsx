@@ -30,11 +30,7 @@ const panels = [
       <strong className="font-bold text-coral-ink">15 to 30 minutes</strong> remembering where you
       were. Not coding. Recovering.
     </p>
-    <p className="mt-3">
-      This is not a discipline problem. It is executive dysfunction. The root cause is not you,
-      it is the environment.
-    </p>
-    <p className="mt-4 rounded-lg border border-coral/40 bg-coral/[0.07] px-4 py-3 font-medium text-text">
+    <p className="mt-6 rounded-lg border border-border bg-surface/60 px-4 py-3 font-medium text-text">
       Structure beats willpower.
     </p>
   </div>,
@@ -42,14 +38,10 @@ const panels = [
   // 03 How It Works
   <div key="03">
     <p>
-      CognitiveOS scaffolds your project with ICM, the Interpreted Context Methodology. The
-      filesystem becomes a state machine: each folder is one cognitive mode, and a{" "}
-      <code className="font-mono font-bold">CONTEXT.md</code> in each folder tells your AI agent
+      CognitiveOS scaffolds your project with ICM, the Interpreted Context Methodology. Each
+      folder is one cognitive mode, and a{" "}
+      <code className="font-mono font-bold text-text-muted">CONTEXT.md</code> tells your AI agent
       how to behave there.
-    </p>
-    <p className="mt-3">
-      You do not maintain it. It maintains your context for you. A cognitive prosthetic, not a
-      productivity system.
     </p>
   </div>,
 
@@ -79,15 +71,11 @@ const panels = [
 
   // 05 Commands
   <div key="05">
-    <p>
-      Four commands. That is it. Agent-agnostic: a session hook auto-loads STATE.md the moment
-      your agent opens.
-    </p>
-    <div className="mt-4">
+    <div className="mt-2">
       <Terminal command="npx cognitiveos init" label="one-time setup" />
     </div>
-    <p className="mt-3 font-mono text-xs text-text-muted">
-      then: start · dump · check — full reference in the docs.
+    <p className="mt-4 font-mono text-xs text-text-muted">
+      then: start · dump · check
     </p>
   </div>,
 
@@ -107,11 +95,10 @@ const panels = [
 
   // 07 Start
   <div key="07">
-    <p>Start your journey. Stay in context. Build with ease.</p>
-    <div className="mt-4 max-w-[360px]">
+    <div className="max-w-[360px]">
       <Terminal command="npx cognitiveos init" cursor />
     </div>
-    <div className="mt-4">
+    <div className="mt-5">
       <a
         href={GITHUB_URL}
         target="_blank"
