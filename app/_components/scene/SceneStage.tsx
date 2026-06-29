@@ -276,7 +276,7 @@ export default function SceneStage({
                 key={s.id}
                 id={s.id}
                 inert={i !== active ? true : undefined}
-                className="h-[100dvh] w-screen shrink-0"
+                className="h-[100dvh] w-screen shrink-0 pt-14 pb-20"
                 style={{
                   "--accent-light": s.accent,
                   "--accent-ink-light": s.accentInk,
@@ -294,7 +294,7 @@ export default function SceneStage({
             {/* Footer — the final horizontal panel. */}
             <section
               inert={active !== STOPS.length ? true : undefined}
-              className="h-[100dvh] w-screen shrink-0"
+              className="h-[100dvh] w-screen shrink-0 pt-14 pb-20"
             >
               {footer}
             </section>
@@ -307,7 +307,7 @@ export default function SceneStage({
               key={s.id}
               id={s.id}
               data-stop
-              className="min-h-[100dvh] w-full [transition:--reveal_500ms_ease-out]"
+              className="min-h-[100dvh] w-full [transition:--reveal_500ms_ease-out] pt-14 pb-20"
               style={{
                 "--accent-light": s.accent,
                 "--accent-ink-light": s.accentInk,
@@ -322,7 +322,7 @@ export default function SceneStage({
               )}
             </section>
           ))}
-          <section data-stop className="min-h-[100dvh] w-full">
+          <section data-stop className="min-h-[100dvh] w-full pt-14 pb-20">
             {footer}
           </section>
         </div>

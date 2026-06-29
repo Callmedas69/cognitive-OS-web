@@ -15,7 +15,7 @@ export default function SectionPanel({
   children: ReactNode;
 }) {
   return (
-    <div className="flex h-full w-full items-center justify-center px-6 py-24">
+    <div className="flex h-full w-full items-center justify-center px-6 py-4">
       <div className="w-full max-w-[680px]">
         <p className="font-mono text-xs tracking-[0.15em] text-text-muted">
           {meta.num} / {meta.name}

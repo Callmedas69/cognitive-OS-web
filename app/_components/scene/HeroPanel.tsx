@@ -41,7 +41,7 @@ export default function HeroPanel({
   }, []);
 
   return (
-    <div className="flex h-full w-full items-center px-6 py-24 lg:px-12">
+    <div className="flex h-full w-full items-center px-6 py-4 lg:px-12">
       <div className="mx-auto grid w-full max-w-[1280px] items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
         {/* Left: text */}
         <div className="order-2 lg:order-1">
