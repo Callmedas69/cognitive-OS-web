@@ -99,10 +99,10 @@
 :root {
   /* Default is dark mode colors */
   --color-bg: #0A0D0D;
-  --color-surface: #1a1a1f;
-  --color-text: #e8e8e2;
-  --color-text-muted: #9ca3af;
-  --color-border: #2a2a2f;
+  --color-surface: #111616;
+  --color-text: #edf2f2;
+  --color-text-muted: #8ba0a0;
+  --color-border: #1e2626;
 
   /* Default is dark mode ink colors */
   --color-emerald-ink: #34d399;
