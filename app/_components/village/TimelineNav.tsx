@@ -173,7 +173,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
   const nav = (
     <nav
       aria-label="Journey stops"
-      className="entrance-fade entrance-fade-delay-2 chrome-glass fixed inset-x-0 bottom-0 z-40 backdrop-blur-sm"
+      className="js-entrance-hide chrome-glass fixed inset-x-0 bottom-0 z-40 backdrop-blur-sm"
     >
       <div className="relative mx-auto max-w-[1100px] px-6 py-3">
         <div className="absolute left-6 right-6 top-8 h-0.5 bg-border" aria-hidden />

@@ -179,35 +179,12 @@ body::before {
   }
 }
 
-/* Chrome + hero entrance — nav, timeline, headline fade up once on mount, no
-   JS/state needed (auto-plays via `animation`, unlike the unused `.reveal`
-   below which needs a JS-toggled `.is-visible`). Stagger via the delay
-   classes below, defined in this SAME unlayered block — Tailwind's own
-   generated utilities (incl. arbitrary `[animation-delay:…]`) live inside
-   `@layer utilities`, which always loses to unlayered CSS regardless of
-   source order, so an arbitrary-value class here would be silently
-   overridden by this rule's `animation` shorthand (which sets delay to 0
-   as part of the shorthand). Keeping the delay override in the same
-   unlayered context avoids that entirely. */
-@keyframes entrance-fade-up {
-  from {
+/* Chrome + hero entrance — pre-hide targets so GSAP can animate them on mount.
+   Only when scripting is enabled and motion is allowed (zero-JS and reduced-motion safe). */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .js-entrance-hide {
     opacity: 0;
     transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .entrance-fade {
-    animation: entrance-fade-up 0.6s var(--ease-out) both;
-  }
-  .entrance-fade-delay-1 {
-    animation-delay: 0.12s;
-  }
-  .entrance-fade-delay-2 {
-    animation-delay: 0.22s;
   }
 }
 

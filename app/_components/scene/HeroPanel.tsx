@@ -58,15 +58,15 @@ export default function HeroPanel({
       <div className="mx-auto grid w-full max-w-[1280px] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
         {/* Left: promise + command */}
         <div className="order-2 lg:order-1">
-          <h1 className="entrance-fade entrance-fade-delay-1 font-display text-[clamp(44px,6.8vw,104px)] leading-[0.9] tracking-wide text-balance text-text">
+          <h1 className="js-entrance-hide font-display text-[clamp(44px,6.8vw,104px)] leading-[0.9] tracking-wide text-balance text-text">
             {headline}
           </h1>
           <span
             data-hero-scatter="up"
-            className="mt-6 block h-1 w-14 rounded-full bg-mood"
+            className="js-entrance-hide mt-6 block h-1 w-14 rounded-full bg-mood"
             aria-hidden
           />
-          <div data-hero-scatter="left" className="mt-7 max-w-[380px]">
+          <div data-hero-scatter="left" className="js-entrance-hide mt-7 max-w-[380px]">
             {children}
           </div>
 
@@ -97,7 +97,9 @@ export default function HeroPanel({
               aria-hidden
             />
           ) : (
-            <Mascot size="hero" parallax />
+            <div className="js-entrance-hide" data-entrance-mascot>
+              <Mascot size="hero" parallax />
+            </div>
           )}
         </div>
       </div>

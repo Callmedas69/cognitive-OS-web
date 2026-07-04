@@ -76,7 +76,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`entrance-fade ${
+      className={`js-entrance-hide ${
         isHome ? "fixed inset-x-0" : "sticky"
       } top-0 z-50 chrome-glass backdrop-blur-sm transition-[translate,border-color] duration-400 ease-out ${
         hidden && !open ? "-translate-y-full pointer-events-none" : "translate-y-0"

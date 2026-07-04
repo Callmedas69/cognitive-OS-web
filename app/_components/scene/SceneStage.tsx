@@ -7,6 +7,11 @@ import SectionPanel from "./SectionPanel";
 import HeroPanel from "./HeroPanel";
 import Mascot from "../Mascot";
 import { STOPS } from "@/content/stops";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import ScrollToPlugin from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // SSR-safe "are we on the client yet" flag — same pattern as TimelineNav's
 // body portal (a fixed child of a transformed ancestor scrolls with it, so
@@ -178,18 +183,11 @@ export default function SceneStage({
     let cancelled = false;
     let cleanup = () => {};
 
-    Promise.all([
-      import("gsap"),
-      import("gsap/ScrollTrigger"),
-      import("gsap/ScrollToPlugin"),
-    ])
-      .then(([{ gsap }, { ScrollTrigger }, { ScrollToPlugin }]) => {
-        if (cancelled) return;
-        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-        const lerp = gsap.utils.interpolate;
-        const track = trackRef.current;
-        const pin = pinRef.current;
-        if (!track || !pin) return;
+    if (cancelled) return;
+    const lerp = gsap.utils.interpolate;
+    const track = trackRef.current;
+    const pin = pinRef.current;
+    if (!track || !pin) return;
 
         // Read once (not per scroll frame — getComputedStyle forces a style
         // recalc) from the actual CSS tokens instead of re-typed hex, so this
@@ -212,21 +210,16 @@ export default function SceneStage({
         // slot (measured via its rect — a FLIP-style handoff), then T8's dock
         // tween carries it to the bottom-right corner. Re-measured on every
         // ScrollTrigger refresh (covers resize) so it never drifts from the
-        // hero slot before the hold begins.
-        let mascotRevealed = false;
+        // hero slot before the hold begins. Initial reveal (autoAlpha) is
+        // owned by the shared entrance timeline below, not here — keeps a
+        // single writer for the overlay's opacity instead of two tweens
+        // racing each other on mount.
         const positionMascotOverlay = () => {
           const overlay = mascotOverlayRef.current;
           const slot = heroSection?.querySelector<HTMLElement>("[data-mascot-slot]");
           if (!overlay || !slot) return;
           const r = slot.getBoundingClientRect();
-          // Position is always instant (resize/refresh must snap, not
-          // re-animate). Visibility only fades in once, on the very first
-          // call — an instant autoAlpha:1 here read as a snap/pop-in rather
-          // than an entrance; a short fade reads as deliberate instead.
           gsap.set(overlay, { x: r.left, y: r.top, scale: 1 });
-          if (mascotRevealed) return;
-          mascotRevealed = true;
-          gsap.to(overlay, { autoAlpha: 1, duration: 0.5, ease: "power2.out" });
         };
         positionMascotOverlay();
         ScrollTrigger.addEventListener("refresh", positionMascotOverlay);
@@ -537,14 +530,10 @@ export default function SceneStage({
         ScrollTrigger.refresh();
         requestAnimationFrame(() => ScrollTrigger.refresh());
 
-        cleanup = () => {
-          ScrollTrigger.removeEventListener("refresh", positionMascotOverlay);
-          master.kill();
-        };
-      })
-      .catch(() => {
-        /* gsap failed — content still flows in document order */
-      });
+    cleanup = () => {
+      ScrollTrigger.removeEventListener("refresh", positionMascotOverlay);
+      master.kill();
+    };
 
     return () => {
       cancelled = true;
@@ -564,6 +553,49 @@ export default function SceneStage({
     };
     window.addEventListener("scene:jump", onJump);
     return () => window.removeEventListener("scene:jump", onJump);
+  }, []);
+
+  // ── Entrance animation ──────────────────────────────────────────
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let tl: gsap.core.Timeline | undefined;
+    // TimelineNav portals in behind a useSyncExternalStore mounted flag, so its
+    // nav isn't in the DOM on this first effect pass — defer one frame so GSAP's
+    // synchronous selector lookup finds it instead of silently skipping it.
+    const raf = requestAnimationFrame(() => {
+      tl = gsap.timeline({
+        defaults: { ease: "power2.out", duration: 0.6 }
+      });
+
+      tl.to("header.js-entrance-hide", { opacity: 1, y: 0, duration: 0.5 })
+        .to("#stop-01 h1.js-entrance-hide", { opacity: 1, y: 0 }, "-=0.35")
+        .to("span[data-hero-scatter='up'].js-entrance-hide", { opacity: 1, y: 0 }, "-=0.45");
+
+      // Ref only, not the `horizontal` state: this effect has an empty dep
+      // array (runs once), so it'd otherwise capture `horizontal`'s stale
+      // useState(false) initial value forever. The ref itself is null
+      // whenever the horizontal-mode overlay portal isn't rendered, so
+      // checking it directly is both correct and mode-agnostic.
+      if (mascotOverlayRef.current) {
+        tl.to(mascotOverlayRef.current, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, "-=0.3");
+      }
+
+      tl.to("[data-hero-scatter='left'].js-entrance-hide", { opacity: 1, y: 0 }, "-=0.3")
+        .fromTo(
+          "div[data-hero-scatter='up']",
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.5, clearProps: "opacity,transform" },
+          "-=0.3"
+        )
+        .to("[data-entrance-mascot].js-entrance-hide", { opacity: 1, y: 0 }, "-=0.4")
+        .to("nav.js-entrance-hide", { opacity: 1, y: 0 }, "-=0.4");
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      tl?.kill();
+    };
   }, []);
 
   return (
