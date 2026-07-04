@@ -52,6 +52,9 @@ export const metadata: Metadata = {
     description:
       "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do.",
   },
+  appleWebApp: {
+    title: "CogOS",
+  },
 };
 
 export default function RootLayout({
