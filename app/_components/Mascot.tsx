@@ -84,8 +84,8 @@ export default function Mascot({ size = "default", parallax = false }: MascotPro
 
   const stageSize =
     size === "hero"
-      ? "h-[280px] w-[280px] sm:h-[380px] sm:w-[380px] lg:h-[460px] lg:w-[460px]"
-      : "h-[140px] w-[140px] sm:h-[180px] sm:w-[180px]";
+      ? "h-[175px] w-[175px] sm:h-[238px] sm:w-[238px] lg:h-[288px] lg:w-[288px]"
+      : "h-[88px] w-[88px] sm:h-[113px] sm:w-[113px]";
 
   return (
     <div
@@ -96,8 +96,8 @@ export default function Mascot({ size = "default", parallax = false }: MascotPro
       <Image
         src="/0xnull.svg"
         alt="0xNull, the cognitiveOS mascot"
-        width={460}
-        height={460}
+        width={230}
+        height={230}
         priority
         className={`mascot-float pointer-events-none absolute inset-0 h-full w-full select-none transition-opacity duration-500 ${
           enhanced ? "opacity-0" : "opacity-100"

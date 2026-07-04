@@ -5,22 +5,23 @@ import type { StopMeta } from "@/content/stops";
 import Mascot from "../Mascot";
 
 /**
- * The hero panel (section 01) — a full-viewport horizontal split: the editorial
- * text column on the left, the 0xNull mascot on the right. The headline is a
- * ReactNode so the selling word (FILESYSTEM) can be tinted in the mood ink.
- * Mobile / reduced-motion: the mascot stacks above the text (order classes), and
- * the Mascot component itself falls back to the flat SVG.
+ * The hero panel (section 01) — a minimal full-viewport split: the promise and
+ * install command on the left, 0xNull centered in the right grid column.
+ * Mobile / reduced-motion: the mascot stacks above the text, and the Mascot
+ * component itself falls back to the flat SVG.
  */
 export default function HeroPanel({
-  meta,
   headline,
   children,
+  hideMascot = false,
 }: {
   meta: StopMeta;
   /** Display headline with the selling word emphasised. */
   headline: ReactNode;
-  /** Body: kicker handled here, this is the paragraph + terminal + CTAs. */
+  /** Body: terminal command only after the simplification pass. */
   children: ReactNode;
+  /** True in horizontal mode — SceneStage renders the mascot as a fixed overlay instead. */
+  hideMascot?: boolean;
 }) {
   const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -30,46 +31,74 @@ export default function HeroPanel({
     const isHorizontal = mqWide.matches && !mqMotion.matches;
     if (!isHorizontal) return;
 
-    const onScroll = () => {
-      if (window.scrollY > 20) {
-        setHasScrolled(true);
-        window.removeEventListener("scroll", onScroll);
-      }
+    // Same one-shot "scrolled past 20px" signal as before, but sourced from
+    // the GSAP ScrollTrigger engine already driving the page (dynamically
+    // imported, matching SceneStage's own lazy-load pattern) instead of a
+    // raw window scroll listener.
+    let cancelled = false;
+    let trigger: { kill: () => void } | null = null;
+    import("gsap/ScrollTrigger").then(async ({ ScrollTrigger }) => {
+      if (cancelled) return;
+      const { default: gsap } = await import("gsap");
+      gsap.registerPlugin(ScrollTrigger);
+      trigger = ScrollTrigger.create({
+        start: 20,
+        once: true,
+        onEnter: () => setHasScrolled(true),
+      });
+    });
+    return () => {
+      cancelled = true;
+      trigger?.kill();
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <div className="flex h-full w-full items-center px-6 py-4 lg:px-12">
-      <div className="mx-auto grid w-full max-w-[1280px] items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
-        {/* Left: text */}
+      <div className="mx-auto grid w-full max-w-[1280px] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+        {/* Left: promise + command */}
         <div className="order-2 lg:order-1">
-          <p className="font-mono text-xs tracking-[0.15em] text-text-muted">
-            {meta.num} / {meta.name}
-          </p>
-          <p className="mt-4 font-mono text-sm leading-snug text-text-muted">{meta.bubble}</p>
-          <h1 className="mt-2 font-display text-[clamp(40px,6.2vw,96px)] leading-[0.92] tracking-wide text-balance text-text">
+          <h1 className="entrance-fade entrance-fade-delay-1 font-display text-[clamp(44px,6.8vw,104px)] leading-[0.9] tracking-wide text-balance text-text">
             {headline}
           </h1>
-          <span className="mt-5 block h-1 w-14 rounded-full bg-mood" aria-hidden />
-          <div className="mt-6 max-w-[46ch] text-base leading-relaxed text-text">{children}</div>
+          <span
+            data-hero-scatter="up"
+            className="mt-6 block h-1 w-14 rounded-full bg-mood"
+            aria-hidden
+          />
+          <div data-hero-scatter="left" className="mt-7 max-w-[380px]">
+            {children}
+          </div>
 
-          {/* Scroll cue (T-008) */}
+          {/* Scroll cue — arrow only. The pinned horizontal deck is a
+              non-obvious scroll surface, so the affordance stays; the
+              redundant "Scroll to explore" label was the AI-slop tell, not
+              the arrow itself. */}
           <div
-            className={`mt-10 md:flex hidden items-center gap-2 text-xs font-bold text-text-muted transition-opacity duration-500 ease-out select-none ${
-              hasScrolled ? "opacity-0 pointer-events-none" : "opacity-100"
+            data-hero-scatter="up"
+            className={`mt-10 hidden text-base font-bold text-text-muted transition-opacity duration-500 ease-out select-none md:flex ${
+              hasScrolled ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
             aria-hidden="true"
           >
-            <span>Scroll to explore</span>
             <span className="animate-pulse">→</span>
           </div>
         </div>
 
-        {/* Right: mascot */}
-        <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
-          <Mascot size="hero" parallax />
+        {/* Right: mascot placeholder — the real mascot renders in a fixed
+            overlay (SceneStage) so it can dock to the corner independent of
+            this grid; horizontal mode reserves the slot so layout doesn't
+            shift, vertical/reduced-motion fallback renders it inline. */}
+        <div className="order-1 flex items-center justify-center lg:order-2">
+          {hideMascot ? (
+            <div
+              data-mascot-slot
+              className="h-[175px] w-[175px] sm:h-[238px] sm:w-[238px] lg:h-[288px] lg:w-[288px]"
+              aria-hidden
+            />
+          ) : (
+            <Mascot size="hero" parallax />
+          )}
         </div>
       </div>
     </div>

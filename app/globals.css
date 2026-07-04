@@ -55,6 +55,8 @@
   --color-screen: #1a1a1f;
 
   --font-display: var(--font-bebas);
+  --font-body: var(--font-outfit);
+  --font-sans: var(--font-outfit);
   --font-mono: var(--font-space-mono);
 
   /* Layout rhythm */
@@ -97,40 +99,30 @@
   initial-value: 0;
 }
 :root {
-  /* Default is dark mode colors */
-  --color-bg: #0A0D0D;
-  --color-surface: #111616;
-  --color-text: #edf2f2;
-  --color-text-muted: #8ba0a0;
-  --color-border: #1e2626;
-
-  /* Default is dark mode ink colors */
-  --color-emerald-ink: #34d399;
-  --color-coral-ink: #ff6b5c;
-
-  --mood: #10b981;
-  --mood-ink: #10b981;
-  --reveal-initial: #ffffff;
-  --accent: var(--accent-light);
-  --accent-ink: var(--accent-light);
-}
-
-html.light {
-  /* Override for light mode */
-  --color-bg: #fafaf7;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b6b6b;
-  --color-border: #e8e8e2;
-
-  --color-emerald-ink: #047857;
-  --color-coral-ink: #c2410c;
-
   --mood: #10b981;
   --mood-ink: #047857;
   --reveal-initial: #0A0D0D;
   --accent: var(--accent-light);
   --accent-ink: var(--accent-ink-light);
+  /* The one shared deck surface: bg tinted toward the scroll-driven accent.
+     --deck-bg-accent is written on <html> by SceneStage (GSAP scrub on the
+     horizontal deck, discrete per-section on the vertical fallback). */
+  --deck-surface: color-mix(in oklab, var(--color-bg) 94%, var(--deck-bg-accent, var(--color-bg)));
+}
+
+/* Full-viewport deck background — painted once on the stage container so the
+   mood tint reaches every edge (under the fixed nav and bottom timeline). */
+.deck-bg {
+  background-color: var(--deck-surface);
+}
+/* Vertical fallback updates --deck-bg-accent discretely; ease the flip. */
+.deck-bg--eased {
+  transition: background-color 500ms ease-out;
+}
+/* Fixed chrome (top nav, bottom timeline) — translucent take on the same
+   surface so the morph reads through the blur instead of being painted over. */
+.chrome-glass {
+  background-color: color-mix(in oklab, var(--deck-surface) 82%, transparent);
 }
 /* The lerp is driven by GSAP ScrollTrigger (scrub) in MoodController, not a
    CSS transition — continuous morph tied to scroll position. */
@@ -150,10 +142,31 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.75'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body::before {
+    display: none;
+  }
+}
+
 /* Signature blinking cursor — calm-compliant (off for reduced-motion) */
 .cursor::after {
-  content: "▋";
-  color: var(--mood);
+  content: "";
+  display: inline-block;
+  width: 0.1em;
+  height: 0.85em;
+  background-color: var(--mood);
 }
 @media (prefers-reduced-motion: no-preference) {
   .cursor::after {
@@ -163,6 +176,38 @@ body {
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+
+/* Chrome + hero entrance — nav, timeline, headline fade up once on mount, no
+   JS/state needed (auto-plays via `animation`, unlike the unused `.reveal`
+   below which needs a JS-toggled `.is-visible`). Stagger via the delay
+   classes below, defined in this SAME unlayered block — Tailwind's own
+   generated utilities (incl. arbitrary `[animation-delay:…]`) live inside
+   `@layer utilities`, which always loses to unlayered CSS regardless of
+   source order, so an arbitrary-value class here would be silently
+   overridden by this rule's `animation` shorthand (which sets delay to 0
+   as part of the shorthand). Keeping the delay override in the same
+   unlayered context avoids that entirely. */
+@keyframes entrance-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .entrance-fade {
+    animation: entrance-fade-up 0.6s var(--ease-out) both;
+  }
+  .entrance-fade-delay-1 {
+    animation-delay: 0.12s;
+  }
+  .entrance-fade-delay-2 {
+    animation-delay: 0.22s;
   }
 }
 
@@ -188,6 +233,34 @@ body {
   .reveal {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Footer tagline — masked per-char rise, driven by --footer-reveal (0..1),
+   written on <html> by SceneStage. Each char starts at --char-d (0..0.5) and
+   finishes within a 0.5 window, so the last char lands exactly at reveal = 1.
+   Default reveal is 1: no-JS users see the line (zero-JS safe). */
+.tagline-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Bebas descender room inside the clip */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.tagline-char {
+  display: inline-block;
+  will-change: transform;
+}
+.tagline-cursor {
+  /* Let GSAP handle opacity */
+}
+@media (prefers-reduced-motion: reduce) {
+  .tagline-char {
+    transform: none !important;
+  }
+  .tagline-cursor {
+    opacity: 1 !important;
   }
 }
 

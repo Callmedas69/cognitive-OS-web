@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Always-visible scroll-progress bar pinned at the viewport top. Its width
@@ -9,33 +14,24 @@ import { useEffect, useState } from "react";
  * transition in globals.css.
  */
 export default function MoodBar() {
-  const [pct, setPct] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      const el = document.documentElement;
-      const max = el.scrollHeight - el.clientHeight;
-      setPct(max > 0 ? (el.scrollTop / max) * 100 : 0);
-    };
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+  useGSAP(() => {
+    gsap.to(barRef.current, {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        scrub: true,
+        start: "top top",
+        end: "max"
+      }
+    });
   }, []);
 
   return (
     <div
-      className="fixed left-0 top-0 z-[60] h-[3px] bg-mood transition-[width] duration-150 ease-out"
-      style={{ width: `${pct}%` }}
+      ref={barRef}
+      className="fixed left-0 top-0 z-[60] h-[3px] bg-mood origin-left scale-x-0 w-full"
       aria-hidden
     />
   );

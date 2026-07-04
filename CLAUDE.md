@@ -32,12 +32,15 @@ Next.js **App Router** project. Currently a near-stock `create-next-app` scaffol
 There is **no `tailwind.config.js`**. Tailwind v4 is configured entirely in CSS:
 - `globals.css` starts with `@import "tailwindcss";`.
 - Theme tokens (colors, fonts) are declared in the `@theme inline { ... }` block in `globals.css`, wired to CSS custom properties. Add/adjust design tokens there, not in a JS config.
-- Dark mode currently uses `@media (prefers-color-scheme: dark)` via CSS variables.
+- Light-only palette (no dark mode, per DESIGN.md).
 - PostCSS uses `@tailwindcss/postcss` (`postcss.config.mjs`).
 
 ### Fonts
 
-Geist Sans / Geist Mono loaded via `next/font/google` in `app/layout.tsx`, exposed as `--font-geist-sans` / `--font-geist-mono` and mapped to Tailwind `--font-sans` / `--font-mono` in `globals.css`.
+Bebas Neue, Outfit, and Space Mono load via `next/font/google` in `app/layout.tsx`.
+- `--font-display`: Bebas Neue for large headings.
+- `--font-body` / `--font-sans`: Outfit for marketing prose only.
+- `--font-mono`: Space Mono for terminal, commands, UI labels, and code.
 
 ### TypeScript / ESLint
 

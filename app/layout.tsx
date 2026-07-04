@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Mono, Bebas_Neue } from "next/font/google";
+import { Space_Mono, Bebas_Neue, Outfit } from "next/font/google";
 import "./globals.css";
 import Nav from "./_components/Nav";
 import MoodBar from "./_components/MoodBar";
@@ -9,6 +9,12 @@ import SkipLink from "./_components/SkipLink";
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
@@ -45,12 +51,21 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "cognitiveOS",
     type: "website",
+    images: [
+      {
+        url: "/0xnull.svg",
+        width: 1200,
+        height: 630,
+        alt: "0xNull, the cognitiveOS mascot",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "cognitiveOS: stop relearning your own project",
     description:
       "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do.",
+    images: ["/0xnull.svg"],
   },
   appleWebApp: {
     title: "CogOS",
@@ -65,31 +80,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceMono.variable} ${bebasNeue.variable} h-full antialiased`}
+      className={`${spaceMono.variable} ${outfit.variable} ${bebasNeue.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const t = localStorage.getItem("theme");
-                if (t === "light") {
-                  document.documentElement.classList.add("light");
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
-      </head>
       <body className="min-h-full">
         <SkipLink />
-
-        {/* Theme Wipe Transition Overlay */}
-        <div
-          id="theme-transition-overlay"
-          className="fixed inset-0 z-[100] pointer-events-none"
-          style={{ clipPath: "circle(0% at 100% 0%)" }}
-        />
 
         {/* Fixed UI lives OUTSIDE the smooth wrapper (ScrollSmoother transforms
             #smooth-content, which would break position: fixed). */}

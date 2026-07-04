@@ -19,12 +19,12 @@ export type StopMeta = {
   accent: string;
   /** AA-safe mood ink (headline text on light bg). */
   accentInk: string;
-  /** Dark-mode headline ink (cool-anchored, distinct from mood). */
-  headlineInk: string;
   /** One-line kicker above the headline. */
   bubble: string;
   /** Display headline (Bebas Neue). */
   headline: string;
+  /** Timeline icon */
+  icon: string;
 };
 
 export const STOPS: StopMeta[] = [
@@ -34,9 +34,9 @@ export const STOPS: StopMeta[] = [
     name: "Overview",
     accent: "#34d399",
     accentInk: "#047857",
-    headlineInk: "#FBBF24",
-    bubble: "Built for developers with executive dysfunction.",
+    bubble: "For developers with executive dysfunction.",
     headline: "STOP RELEARNING YOUR OWN PROJECT",
+    icon: "/assets/generated/home.png",
   },
   {
     id: "stop-02",
@@ -44,9 +44,9 @@ export const STOPS: StopMeta[] = [
     name: "The Problem",
     accent: "#ff8a5c",
     accentInk: "#c2410c",
-    headlineInk: "#F87171",
-    bubble: "Why ADHD minds lose context every session.",
+    bubble: "Lost context becomes lost momentum.",
     headline: "THE 30-MINUTE TAX",
+    icon: "/assets/generated/rock.png",
   },
   {
     id: "stop-03",
@@ -54,9 +54,9 @@ export const STOPS: StopMeta[] = [
     name: "How It Works",
     accent: "#22d3ee",
     accentInk: "#0e7490",
-    headlineInk: "#FFFFFF",
-    bubble: "ICM turns your folders into a state machine.",
+    bubble: "Folders become modes. Agents read the room.",
     headline: "A FILESYSTEM THAT THINKS IN MODES",
+    icon: "/assets/generated/folder_flag.png",
   },
   {
     id: "stop-04",
@@ -64,19 +64,19 @@ export const STOPS: StopMeta[] = [
     name: "Six Zones",
     accent: "#a78bfa",
     accentInk: "#6d28d9",
-    headlineInk: "#F97316",
-    bubble: "Each folder is one mode of work.",
+    bubble: "One folder per cognitive mode.",
     headline: "SIX ZONES, ONE BRAIN",
+    icon: "/assets/generated/library.png",
   },
   {
     id: "stop-05",
     num: "05",
     name: "Commands",
-    accent: "#34d399",
-    accentInk: "#047857",
-    headlineInk: "#FDE047",
-    bubble: "Agent-agnostic CLI. Zero maintenance.",
+    accent: "#fbbf24",
+    accentInk: "#b45309",
+    bubble: "Agent-agnostic CLI. No upkeep ritual.",
     headline: "FOUR COMMANDS. THAT IS IT.",
+    icon: "/assets/generated/terminal_icon.png",
   },
   {
     id: "stop-06",
@@ -84,19 +84,19 @@ export const STOPS: StopMeta[] = [
     name: "Open Source",
     accent: "#fb7185",
     accentInk: "#e11d48",
-    headlineInk: "#E879F9",
-    bubble: "MIT. No servers. The repo is the product.",
+    bubble: "MIT. Local files. Your machine.",
     headline: "FREE. OPEN SOURCE. YOURS.",
+    icon: "/assets/generated/cherry_blossom.png",
   },
   {
     id: "stop-07",
     num: "07",
     name: "Start",
-    accent: "#34d399",
-    accentInk: "#047857",
-    headlineInk: "#A3E635",
-    bubble: "Start your journey. Stay in context.",
+    accent: "#60a5fa",
+    accentInk: "#1d4ed8",
+    bubble: "Install the structure. Keep the thread.",
     headline: "OPEN YOUR LAPTOP. KNOW WHAT TO DO.",
+    icon: "/assets/generated/street_lamp.png",
   },
 ];
 

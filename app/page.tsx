@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Terminal from "./_components/Terminal";
 import SceneStage from "./_components/scene/SceneStage";
+import FooterTagline from "./_components/scene/FooterTagline";
 import { ZONES } from "@/content/stops";
 
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
@@ -9,101 +10,95 @@ const X_URL = "https://x.com/Callmedas69";
 const FARCASTER_URL = "https://warpcast.com/callmedas69";
 
 // One body node per stop, aligned to STOPS. Number, kicker + headline come from
-// the section meta (rendered by SectionPanel).
+// the section meta (rendered by SectionPanel / HeroPanel). Copy follows the
+// one-idea-per-panel rule from the 2026-07-02 taste audit.
 const panels = [
-  // 01 Overview (hero body — eyebrow/kicker/headline come from HeroPanel)
-  <div key="01">
-    <p>
-      cognitiveOS scaffolds your project into an ICM filesystem. Your AI agent keeps the context
-      in a persistent <code className="font-mono font-bold">STATE.md</code>, so you open your
-      laptop already oriented, never from zero.
-    </p>
-    <div className="mt-5 max-w-[380px]">
-      <Terminal command="npx cognitiveos init" cursor />
-    </div>
-  </div>,
+  // 01 Overview (hero body)
+  <Terminal key="01" command="npx cognitiveos init" cursor />,
 
   // 02 The Problem
-  <div key="02">
-    <p>
-      Every time you reopen your laptop, you spend{" "}
-      <strong className="font-bold text-coral-ink">15 to 30 minutes</strong> remembering where you
-      were. Not coding. Recovering.
+  <div key="02" className="max-w-[560px]">
+    <p
+      data-enter
+      className="font-display text-[clamp(76px,13vw,168px)] leading-[0.82] tracking-wide"
+      style={{ color: "var(--local-ink)" }}
+    >
+      15-30
     </p>
-    <p className="mt-6 rounded-lg border border-border bg-surface/60 px-4 py-3 font-medium text-text">
+    <p data-enter className="mt-4 max-w-[26ch] text-2xl leading-tight text-text">
+      minutes lost reopening context. Not coding. Recovering.
+    </p>
+    <p
+      data-enter
+      className="mt-7 inline-flex rounded-lg bg-surface/65 px-4 py-3 font-mono text-sm font-bold text-text shadow-sm"
+    >
       Structure beats willpower.
     </p>
   </div>,
 
   // 03 How It Works
   <div key="03">
-    <p>
-      CognitiveOS scaffolds your project with ICM, the Interpreted Context Methodology. Each
-      folder is one cognitive mode, and a{" "}
-      <code className="font-mono font-bold text-text-muted">CONTEXT.md</code> tells your AI agent
-      how to behave there.
+    <p data-enter>
+      <code className="font-mono font-bold text-text">ICM</code> maps folders to modes;
+      <code className="font-mono font-bold text-text"> CONTEXT.md</code> tells your agent what each mode means.
     </p>
   </div>,
 
   // 04 Six Zones
   <div key="04">
-    <p>
-      <code className="font-mono font-bold">init</code> creates six zones plus STATE.md. Each
-      folder is one mode of work; <code className="font-mono font-bold">sessions/</code> logs your
-      history automatically.
-    </p>
-    <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 font-mono text-xs">
+    <ul data-enter className="grid gap-3 sm:grid-cols-2">
       {ZONES.map((z) => (
-        <li key={z.name} className="flex items-center gap-2">
+        <li
+          key={z.name}
+          className="group flex items-center gap-3 rounded-2xl bg-surface/70 px-4 py-3 shadow-sm"
+        >
           <span
-            className="h-2.5 w-2.5 shrink-0 rounded-full"
+            className="h-3 w-3 shrink-0 rounded-full transition-transform duration-300 group-hover:scale-125"
             style={{ background: z.color }}
             aria-hidden
           />
-          {z.name}
+          <span className="font-mono text-sm font-bold text-text">{z.name}</span>
         </li>
       ))}
     </ul>
-    <p className="mt-4 text-xs text-text-muted">
+    <p data-enter className="mt-5 max-w-[38ch] font-mono text-sm text-text-muted">
       focus/ holds exactly one task. The architecture makes two impossible.
     </p>
   </div>,
 
   // 05 Commands
   <div key="05">
-    <div className="mt-2">
-      <Terminal command="npx cognitiveos init" label="one-time setup" />
-    </div>
-    <p className="mt-4 font-mono text-xs text-text-muted">
-      then: start · dump · check
+    <ul data-enter className="mt-2 flex flex-wrap gap-2 font-mono text-sm font-bold text-text">
+      {["init", "start", "dump", "check"].map((c) => (
+        <li key={c} className="rounded-lg bg-surface/70 px-4 py-2 shadow-sm">
+          {c}
+        </li>
+      ))}
+    </ul>
+    <p data-enter className="mt-4 font-mono text-xs text-text-muted">
+      init once. then start · dump · check.
     </p>
   </div>,
 
   // 06 Open Source
   <div key="06">
-    <p>
-      MIT licensed. No servers, no accounts, no database. Just markdown files on your machine.
-      The repo is the product.
-    </p>
-    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">GitHub</a>
-      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">npm</a>
-      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">Farcaster</a>
+    <p data-enter>MIT licensed. No servers, accounts, or database. Just markdown on your machine.</p>
+    <div data-enter className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-sm">
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Farcaster</a>
     </div>
   </div>,
 
   // 07 Start
   <div key="07">
-    <div className="max-w-[360px]">
-      <Terminal command="npx cognitiveos init" cursor />
-    </div>
-    <div className="mt-5">
+    <p data-enter className="font-mono text-sm font-bold text-text">npx cognitiveos init</p>
+    <div data-enter className="mt-5">
       <a
         href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block rounded-lg bg-emerald px-4 py-2 text-sm font-bold text-[#06281d] transition-opacity hover:opacity-90"
+        className="inline-block rounded-lg bg-emerald px-4 py-2 font-mono text-sm font-bold text-[#06281d] transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
       >
         View on GitHub →
       </a>
@@ -113,28 +108,38 @@ const panels = [
 
 // Footer — the final horizontal panel, centered to fill the viewport.
 const footer = (
-  <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">
-    <p className="font-display text-[clamp(48px,9vw,120px)] leading-[0.9] tracking-wide text-mood-ink">
-      {"// the thinking is free."}
-    </p>
-    <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">GitHub</a>
-      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">npm</a>
-      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-ink">Farcaster</a>
-      <Link href="/docs" className="hover:text-emerald-ink">Docs</Link>
+  <footer className="flex h-full w-full flex-col items-center justify-center px-6 text-center text-mood-ink">
+    <FooterTagline text="// the thinking is free." />
+    <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 font-mono text-sm">
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">GitHub</a>
+      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
+      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">X</a>
+      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Farcaster</a>
+      <Link href="/docs" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Docs</Link>
     </div>
-    <p className="mt-6 text-xs text-text-muted">MIT · built by 0xDas</p>
-    <p className="mt-2 text-sm text-text-muted">
-      &quot;I opened my laptop and knew exactly what to do.&quot;
+    <p className="mt-6 font-mono text-xs opacity-60">MIT · built by 0xDas</p>
+    <p className="mt-2 font-body text-sm font-medium opacity-60">
+      I opened my laptop and knew exactly what to do.
     </p>
-  </div>
+  </footer>
 );
 
-// Hero headline — PROJECT is the selling word, tinted in the mood ink.
+// Hero headline — PROJECT is the selling word, tinted in the mood ink. Each
+// word is its own inline-block tagged with a scatter direction so the hero
+// pinned-hold tween (SceneStage) can fly it out of the viewport on scroll.
 const heroHeadline = (
   <>
-    STOP RELEARNING YOUR OWN <span className="text-mood-ink">PROJECT</span>
+    <span
+      data-hero-scatter="up"
+      className="mb-4 block font-mono text-sm font-medium tracking-normal text-text-muted"
+    >
+      the helper for a dev with executive dysfunction
+    </span>
+    <span data-hero-scatter="up" className="inline-block">STOP</span>{" "}
+    <span data-hero-scatter="left" className="inline-block">RELEARNING</span>{" "}
+    <span data-hero-scatter="up" className="inline-block">YOUR</span>{" "}
+    <span data-hero-scatter="down" className="inline-block">OWN</span>{" "}
+    <span data-hero-scatter="down" className="inline-block text-mood-ink">PROJECT</span>
   </>
 );
 
