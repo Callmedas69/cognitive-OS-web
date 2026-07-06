@@ -1,15 +1,30 @@
 export const metadata = {
   title: "Project Templates: cognitiveOS docs",
-  description: "Project-type templates: blockchain ships a full stage map, others start minimal.",
+  description: "10 project-type templates, each with its own stage map and role-scoped CONTEXT.md per stage.",
 };
 
 # Project Templates
 
-`init` asks for your project type in the 3-question wizard and tailors the first project under `projects/[name]/` to match. The zones and routing are the same for everyone, the template only sets how much structure your first project starts with.
+`init` asks for your project type in the 3-question wizard and tailors the first project under `projects/[name]/` to match. The zones and routing are the same for everyone; the template sets how much structure your first project starts with.
 
-## blockchain: the full vertical
+Nine types ship a full stage pipeline: one subfolder per stage, each with its own `CONTEXT.md` carrying a defined role, what "done" looks like for that stage, and the condition for moving to the next. A tenth type, `mixed`, is the deliberate catch-all: no prescribed stages, just the project root.
 
-The blockchain type ships a complete 5-stage pipeline, one subfolder per stage, each with its own `CONTEXT.md` and a defined reviewer role:
+| Type | Stages |
+| --- | --- |
+| blockchain | research → contracts → frontend → deploy → audit |
+| fullstack | design → api → frontend → infra |
+| cli-tool | spec → core → cli → docs |
+| content | research → drafts → review → published |
+| client-work | intake → proposal → delivery → wrap-up |
+| video-production | concept → script → assets → edit → published |
+| research | sources → notes → synthesis → draft |
+| learning | syllabus → practice → project → log |
+| mobile-app | design → build → test → release |
+| mixed | (none, minimal catch-all) |
+
+Each stage stays in its own job and hands off to the next when its work is done, so the agent never sprawls across the whole project at once.
+
+## blockchain: an example stage map
 
 ```
 projects/[name]/
@@ -20,12 +35,10 @@ projects/[name]/
 └── audit/        adversarial reviewer, find exploits
 ```
 
-Each stage stays in its own job and hands off to the next when its work is done, so the agent never sprawls across the whole project at once.
+Every other typed vertical follows the same shape: a role per stage (e.g. client-work's `intake` is "understand before promising", learning's `practice` is "hands on keyboard, not eyes on videos"), a "done" artifact, and an explicit move-on condition (e.g. cli-tool's `spec` stage moves to `core/` once the command surface is locked).
 
-## fullstack · cli-tool · content
+## mixed: the catch-all
 
-These types are selectable today but start **minimal**: just the project root, no prescribed stages. You add structure as the project grows, and the zones still give you capture, queue, and focus from day one. Only blockchain ships a full stage map in the current MVP.
+Selectable when nothing else fits. Just the project root, no prescribed stages. You add structure as the project grows, and the zones still give you capture, queue, and focus from day one.
 
-A richer set of per-type stage maps (the same treatment blockchain gets) is the open [contribution target](/docs/contributing). The scaffolding is in place, the verticals just need authoring.
-
-See also: [Getting Started](/docs) · [The Zones](/docs/zones).
+See also: [Getting Started](/docs) · [The Zones](/docs/zones) · [Contributing](/docs/contributing).

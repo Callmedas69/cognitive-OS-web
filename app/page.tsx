@@ -69,7 +69,7 @@ const panels = [
   // 05 Commands
   <div key="05">
     <ul data-enter className="mt-2 flex flex-wrap gap-2 font-mono text-sm font-bold text-text">
-      {["init", "start", "dump", "check"].map((c) => (
+      {["init", "start", "dump", "check", "install-skill"].map((c) => (
         <li key={c} className="rounded-lg bg-surface/70 px-4 py-2 shadow-sm">
           {c}
         </li>

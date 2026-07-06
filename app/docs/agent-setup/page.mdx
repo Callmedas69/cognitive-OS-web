@@ -5,18 +5,18 @@ export const metadata = {
 
 # Agent Setup
 
-cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md` (identical routing tables) plus an **agent skill** for whichever agents you pick, so your agent reads your context automatically. Nothing here is manual: you select agents in the 3-question wizard and `init` writes the right files.
+cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md` (identical routing tables) plus an **agent skill** and a **keeper subagent** for whichever agents you pick, so your agent reads your context automatically. Nothing here is manual: the first wizard question is a multi-select of agents (all four ticked by default), and `init` writes the right files for each one you keep checked.
 
 ## What each agent loads
 
-| Agent | Skill / rule it loads | Session-start hook |
-| --- | --- | --- |
-| Claude Code | `.claude/skills/cognitiveos/SKILL.md` + slash hooks `/start-session` `/end-session` `/dump` | ✅ auto-loads `STATE.md` |
-| Codex CLI | `.codex/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | not yet |
-| Antigravity | `.agents/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | ✅ auto-loads `STATE.md` |
-| Cursor / Windsurf | `.cursor/rules/cognitiveos.mdc` (+ `AGENTS.md`) | n/a |
+| Agent | Skill / rule it loads | Keeper subagent | Session hooks |
+| --- | --- | --- | --- |
+| Claude Code | `.claude/skills/cognitiveos/SKILL.md` + slash hooks `/start-session` `/end-session` `/dump` | `.claude/agents/cognitiveos-keeper.md` | ✅ `SessionStart` auto-loads `STATE.md`, ✅ `Stop` reminds you to save it |
+| Codex CLI | `.codex/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.codex/agents/cognitiveos-keeper.toml` | not yet |
+| Antigravity | `.agents/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.agents/agents/cognitiveos-keeper/agent.json` | ✅ `PreInvocation` auto-loads `STATE.md` |
+| Cursor / Windsurf | `.cursor/rules/cognitiveos.mdc` (+ `AGENTS.md`) | `.cursor/agents/cognitiveos-keeper.md` | n/a |
 
-Claude Code and Antigravity also get the deterministic [session-start hook](/docs/hooks) that loads `STATE.md` with zero typing. Codex and Cursor load the skill and `AGENTS.md`, so they pick up context on read, the automatic hook for those is an open [community target](/docs/contributing).
+Claude Code and Antigravity get the deterministic [session hooks](/docs/hooks) that load `STATE.md` with zero typing, and Claude Code alone gets the Stop-hook save reminder. Codex and Cursor load the skill and `AGENTS.md`, so they pick up context on read; the automatic hook for those is an open [community target](/docs/contributing). See [The Keeper](/docs/keeper) for what the keeper subagent actually does.
 
 ## The skill is the operating manual
 
@@ -28,4 +28,8 @@ The two routing files are byte-identical on purpose. `cognitiveos check` detects
 
 > `init` never overwrites or deletes your files. Existing configs and skill files are kept and merged, not clobbered.
 
-See also: [Hooks](/docs/hooks) · [Getting Started](/docs).
+## Project skill vs global skill
+
+`init` writes a **project** skill, scoped to the project you ran it in. If you want `/cognitiveos` available before you've even scaffolded a project, run `cognitiveos install-skill` once per machine: it writes the same skill to your home agent-skill dirs (`~/.claude`, `~/.codex`, `~/.agents`), so any future project can invoke it directly. See [Commands](/docs/commands#install-skill).
+
+See also: [Hooks](/docs/hooks) · [The Keeper](/docs/keeper) · [Getting Started](/docs).

@@ -1,0 +1,59 @@
+export const metadata = {
+  title: "The Keeper: cognitiveOS docs",
+  description: "0xnull, the maintenance subagent, and the 6-question first-run interview.",
+};
+
+# The Keeper
+
+`init` generates a dispatched subagent named **0xnull** for every AI agent you select. It owns the filesystem-maintenance chores (STATE.md upkeep, session handoff, drift repair, the first-run interview) so your main working thread never has to context-switch into bookkeeping.
+
+**Dispatched, not autonomous.** 0xnull acts when invoked for a specific task, updates state, and hands back. It does not loop on its own.
+
+## Where it lives
+
+| Agent | File |
+| --- | --- |
+| Claude Code | `.claude/agents/cognitiveos-keeper.md` |
+| Cursor / Windsurf | `.cursor/agents/cognitiveos-keeper.md` |
+| Codex CLI | `.codex/agents/cognitiveos-keeper.toml` |
+| Antigravity | `.agents/agents/cognitiveos-keeper/agent.json` |
+
+Same identity and rules on every platform, rendered into each agent's native custom-agent format. `model: inherit` on Claude Code: cognitiveOS is free and local, so the keeper runs whatever model you already run rather than hardcoding a tier.
+
+## What it owns
+
+1. **First-run setup interview** (see below), when the project context is still the scaffold.
+2. **STATE.md upkeep**: Current Focus, Blockers, Open Loops, and the Session Handoff stay true to what just happened. STATE.md is a snapshot, not a log; finished work rolls to `sessions/`.
+3. **CONTEXT.md upkeep**: each zone's and the active project's `CONTEXT.md` stays accurate as the project moves.
+4. **Session-end handoff**: last worked on / stopped because / pick up by / watch out for, so the next session resumes cold with zero ramp-up. The session log entry is named after the task; decisions get a revisit condition, and anything that outlives the day gets elevated to the project `CONTEXT.md`.
+5. **Drift repair**: run `cognitiveos check`, and for safe issues, `cognitiveos check --fix`. Never hand-edit generated files when `--fix` can do it.
+
+## The first-run interview
+
+`init` only knows your project's name. On a fresh project, `STATE.md` carries a hidden setup sentinel (`<!-- cognitiveos:setup-needed -->`) until real context is filled in. The first time your agent (or 0xnull) acts in the project, it offers:
+
+> "Want a 60-second setup? I'll ask 6 quick questions so I always know this project's context. (Y/n)"
+
+Decline, and the sentinel is swapped for a deferred marker so the offer never repeats, though you can still trigger setup any time later. Accept, and it asks **one question per turn**, pre-filling a guess from your repo (README, `package.json`, git log) where it can:
+
+1. What is this project, and who is it for?
+2. Who is this for: yourself, a client, or an audience? (Client: name + delivery rules.)
+3. What's the goal for this phase, and how will you know it's done?
+4. Stack, key tools, and any hard constraints?
+5. What's the very next action, and how will you know it's done?
+6. Anything to watch out for: decisions already made, gotchas, no-gos?
+
+Answers land in `projects/<project>/CONTEXT.md` (role, working mode, goal, stack, notes), `STATE.md` (Current Focus, the Watch out for handoff line), and `focus/current-task.md` (the next action as a **Task:** line plus its **Done when:** stop condition). Your working mode from Q2 then shapes how the agent thinks from then on: client work leans on scope and deadline discipline, audience work on publishing cadence and voice, a personal project on momentum over polish.
+
+## The in-session loop
+
+Whether it's your main agent or a dispatched 0xnull, the same working loop applies: read state, pick one thing, do it and update state, re-read, then **stop at done**. Every task carries a **Done when:** stop condition; when it's met, the agent stops, logs it, and clears the task instead of drifting into "just one more thing." Hyperfocus is a failure mode here, not a virtue.
+
+## Rules
+
+- Max 3 action items, max 1 question per response.
+- `focus/current-task.md` holds exactly one task, enforced.
+- Never present a menu of raw options: analyze, then recommend one.
+- Never overwrite your content. `--fix` only repairs generated files and never touches `STATE.md` content.
+
+See also: [Agent Setup](/docs/agent-setup) · [STATE.md](/docs/state) · [Hooks](/docs/hooks) · [Commands](/docs/commands).

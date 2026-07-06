@@ -7,15 +7,17 @@ export const metadata = {
 
 Each folder cognitiveOS generates is one **cognitive mode**. You never decide where to look. Your agent reads `STATE.md`, then routes to the right zone for what you're doing. The zones map to how an ADHD brain actually moves: capture without friction, triage later, then protect one task at a time.
 
-| Zone | What it holds |
-| --- | --- |
-| `brain-dump/` | Capture everything, no filter. |
-| `queue/` | What's next, already sorted. |
-| `focus/` | The ONE thing right now, one task, enforced. |
-| `projects/` | Active work. |
-| `ideas/` | Captured, not committed. |
-| `someday/` | Not now, not never. |
-| `sessions/` | Auto-logged history. |
+Six are ICM zones; `sessions/` is an auto-log, not a mode you work in. Every zone gets a `CONTEXT.md` telling your agent what it's for.
+
+| Zone | What it holds | Seed file(s) |
+| --- | --- | --- |
+| `brain-dump/` | Capture everything, no filter. | `inbox.md` |
+| `queue/` | What's next, already sorted. | `sorted.md` |
+| `focus/` | The ONE thing right now, one task, enforced. | `current-task.md`, `session-notes.md` |
+| `projects/` | Active work. | `[name]/` per project |
+| `ideas/` | Captured, not committed. | `ideas.md` |
+| `someday/` | Not now, not never. | `someday.md` |
+| `sessions/` | Auto-logged history. | (none, populated over time) |
 
 ## brain-dump
 
@@ -27,7 +29,7 @@ The triager. It turns raw captures into a sorted, ready backlog, reading `brain-
 
 ## focus
 
-The execution guard, the most opinionated zone. `focus/current-task.md` holds **exactly one task**. Try to add a second and the agent refuses, and `cognitiveos check` fails if two ever land there. Responses stay narrow: a few action items, one question at a time. Stuck longer than 30 minutes, it notes the blocker and offers the smallest next step instead of letting you spin.
+The execution guard, the most opinionated zone. `focus/current-task.md` holds **exactly one task**, seeded with a `**Task:**` line and a `**Done when:**` stop condition. Try to add a second task and the agent refuses, and `cognitiveos check` fails if two ever land there; a task with no `**Done when:**` gets a soft warning too, since a task without a stop condition is a hyperfocus risk. Responses stay narrow: a few action items, one question at a time. When the done-when condition is met, the agent stops, logs it, and clears the task instead of drifting into "just one more thing." Stuck longer than 30 minutes, it notes the blocker and offers the smallest next step instead of letting you spin.
 
 ## projects
 

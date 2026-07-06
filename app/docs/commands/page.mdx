@@ -1,17 +1,18 @@
 export const metadata = {
   title: "Commands: cognitiveOS docs",
-  description: "Full reference for the four cognitiveOS commands: init, start, dump, check.",
+  description: "Full reference for the five cognitiveOS commands: init, start, dump, check, install-skill.",
 };
 
 # Commands
 
-cognitiveOS ships four commands. The CLI is a scaffolding tool, not a runtime. `init` generates your filesystem once, and your agent plus hooks maintain state from then on.
+cognitiveOS ships five commands. The CLI is a scaffolding tool, not a runtime. `init` generates your filesystem once, and your agent plus hooks maintain state from then on.
 
 ```bash
 cognitiveos init     # one-time setup (3 questions)
 cognitiveos start    # Mission Control, where you left off, in your terminal
 cognitiveos dump "thought"   # capture anything, zero friction
 cognitiveos check    # verify everything is wired correctly
+cognitiveos install-skill    # install the global /cognitiveos skill (once per machine)
 ```
 
 ## init
@@ -34,7 +35,15 @@ Prints **Mission Control** to your terminal: a snapshot of where you left off, r
 cognitiveos start
 ```
 
-Wire it to run automatically on every directory change:
+`start` also has a machine-only hook mode, used by the deterministic session hooks (see [Hooks](/docs/hooks)):
+
+```bash
+npx cognitiveos start --hook --agent=claude        # or --agent=antigravity
+```
+
+`--hook` reads the agent's hook JSON on stdin instead of printing to a terminal. On session start it emits the Mission Control injection envelope. On a Claude Code Stop event, if `STATE.md` hasn't been saved today it blocks with a one-time reminder to do the end-session update. Never throws, never breaks the host agent CLI.
+
+Wire `start` (no flags) to run automatically on every directory change:
 
 ```bash
 # .zshrc / .bashrc
@@ -65,9 +74,27 @@ cognitiveos check          # report problems
 cognitiveos check --fix    # repair what it safely can
 ```
 
+Checks cover: `STATE.md` (7 sections present, size warning past ~150 lines), first-run setup status, active-projects cap (max 3), inbox rot (10+ items or oldest ≥7 days waiting triage), handoff staleness, `CLAUDE.md`/`AGENTS.md` drift, all 6 zone `CONTEXT.md` files, the one-task invariant in `focus/current-task.md`, a **Done when:** stop condition on the current task, the 3 slash hooks, `sessions/` writability, the shared loop block, and that the deterministic session hook (plus, for Claude Code, the Stop hook) is wired for each installed agent.
+
+Most of these are soft `⚠` advisories, not failures: they surface drift and rot without blocking you. `--fix` auto-repairs what's safely mechanical: renames legacy `memory.md` → `STATE.md`, regenerates `CLAUDE.md` from `AGENTS.md`, restores any missing zone `CONTEXT.md`, and re-wires missing session hooks. It **never** touches `STATE.md` content or anything you wrote.
+
 Run it whenever something feels off, or after editing the generated files by hand.
+
+## install-skill
+
+Installs the distributable `/cognitiveos` skill into your home directory, once per machine, so any future project can invoke it directly without running `init` first.
+
+```bash
+cognitiveos install-skill                  # defaults to --agent claude
+cognitiveos install-skill --agent codex
+cognitiveos install-skill --agent antigravity
+cognitiveos install-skill --agent all
+```
+
+Writes `SKILL.md` to `~/.claude/skills/cognitiveos/`, `~/.codex/skills/cognitiveos/`, and/or `~/.agents/skills/cognitiveos/` depending on `--agent`. If a copy already exists and differs, it's backed up to a timestamped `.bak` first, then replaced. Safe to re-run any time you upgrade the CLI. This is separate from the **project** skill `init` generates; see [Agent Setup](/docs/agent-setup).
 
 ## Next steps
 
 - [The Zones](/docs/zones): what each folder means.
 - [Hooks](/docs/hooks): the automation that updates `STATE.md` for you.
+- [The Keeper](/docs/keeper): the maintenance subagent and first-run interview.

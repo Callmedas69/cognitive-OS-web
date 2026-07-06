@@ -36,22 +36,23 @@ your-project/
 └── sessions/        auto-logged history
 ```
 
-Each folder is one cognitive mode. Your agent reads `STATE.md` at session start and updates it at session end, via hooks, automatically. You never run a "save" command. You never maintain anything.
+Each zone folder also gets its own `CONTEXT.md`, and `init` writes a **keeper subagent** plus the deterministic session hooks for whichever AI agents you selected. Your agent reads `STATE.md` at session start and updates it at session end, via hooks, automatically. You never run a "save" command. You never maintain anything.
 
 > This is not a productivity system. It's a cognitive prosthetic. A productivity system asks you to maintain it. This maintains itself.
 
 ## Your first session
 
-1. Run `npx cognitiveos init` in your project and answer the 3 questions.
-2. Open your AI agent (Claude Code, Codex, Antigravity, Cursor). It reads `CLAUDE.md` / `AGENTS.md` and loads your context automatically.
+1. Run `npx cognitiveos init` in your project. First question is which AI agent(s) you use (multi-select, all ticked by default), then project type, then your project's name.
+2. Open your AI agent (Claude Code, Codex, Antigravity, Cursor). It reads `CLAUDE.md` / `AGENTS.md` and loads your context automatically. First time in, it offers a 60-second, 6-question setup so your project context isn't blank. See [The Keeper](/docs/keeper).
 3. Run `cognitiveos start` any time to print **Mission Control**, exactly where you left off, in your terminal.
 4. Capture stray thoughts with `cognitiveos dump "..."` without breaking flow.
 5. Run `cognitiveos check` to confirm everything is wired correctly.
 
 ## Next steps
 
-- [Commands](/docs/commands): full reference for `init`, `start`, `dump`, `check`.
+- [Commands](/docs/commands): full reference for `init`, `start`, `dump`, `check`, `install-skill`.
 - [The Zones](/docs/zones): what each folder means and when to use it.
 - [Agent Setup](/docs/agent-setup): wire your specific AI agent.
+- [The Keeper](/docs/keeper): the maintenance subagent and first-run interview.
 
 **The bet: structure beats willpower.**

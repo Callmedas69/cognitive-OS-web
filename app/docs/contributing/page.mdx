@@ -15,15 +15,13 @@ cd cognitive-OS
 npm install
 npm run build        # tsup → dist/cli.js
 npm test             # vitest
-node dist/cli.js --help   # must list init, start, dump, check
+node dist/cli.js --help   # must list init, start, dump, check, install-skill
 ```
 
-The CLI is TypeScript (ESM, Node >=18) with exactly three runtime dependencies: `commander`, `@clack/prompts`, and `chalk`. Adding a fourth is a real maintenance cost for a solo project, so it needs a strong reason. Templates live as typed string functions in `src/templates/`, generators in `src/generators/`, the four commands in `src/commands/`. Windows is the primary test platform, so use `path.join()` everywhere and write `\n` while parsing both `\n` and `\r\n`.
+The CLI is TypeScript (ESM, Node >=18) with exactly three runtime dependencies: `commander`, `@clack/prompts`, and `chalk`. Adding a fourth is a real maintenance cost for a solo project, so it needs a strong reason. Templates live as typed string functions in `src/templates/`, generators in `src/generators/`, the five commands in `src/commands/`. Windows is the primary test platform, so use `path.join()` everywhere and write `\n` while parsing both `\n` and `\r\n`.
 
-## Highest-value open targets
+## Highest-value open target
 
-The best place to contribute is **hook implementations for Codex and Antigravity**, bringing the same automatic session start/end state updates that Claude Code already has to every agent. The agent skill and routing files already ship for all four agents, so this is the gap that closes the loop.
+The best place to contribute is a **hook implementation for Codex**, bringing the same automatic session start/end state updates that Claude Code and Antigravity already have. The agent skill, keeper subagent, and routing files already ship for all four agents; Codex is the one gap left in the hook layer.
 
-Per-type project templates beyond blockchain (see [Project Templates](/docs/project-templates)) are the other open area. The scaffolding exists, the verticals need authoring.
-
-See also: [Hooks](/docs/hooks) · [Agent Setup](/docs/agent-setup).
+See also: [Hooks](/docs/hooks) · [Agent Setup](/docs/agent-setup) · [The Keeper](/docs/keeper).

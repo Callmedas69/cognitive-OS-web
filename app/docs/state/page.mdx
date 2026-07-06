@@ -11,6 +11,8 @@ It is **a snapshot, not a log.** It holds CURRENT state only and stays roughly t
 
 > Why not `memory.md`? `MEMORY.md` is now an agent-memory convention (Claude Code keeps its own under `.claude/`). Naming this file `STATE.md` sidesteps that collision and says what it is: the current state, curated by you, not the agent's auto-memory.
 
+On a fresh `init`, `STATE.md` carries a hidden setup sentinel until your project context is filled in. It's what triggers the first-run interview covered in [The Keeper](/docs/keeper); `cognitiveos check` also surfaces it as a soft reminder until you've answered (or explicitly skipped) it.
+
 ## The 7 sections
 
 ```markdown
@@ -76,7 +78,7 @@ This is what an ADHD brain needs first: not "here's your state," but "here's lit
 └────────────────────────────────────────────┘
 ```
 
-The same pick-up line leads the hook envelope your agent reads at session start, so it resumes exactly where you left off.
+The same pick-up line leads the hook envelope your agent reads at session start, so it resumes exactly where you left off. If files in the project changed on a later day than the last `STATE.md` save, Mission Control flags the handoff as possibly stale, since the summary may predate the real last work.
 
 ## How it stays flat
 

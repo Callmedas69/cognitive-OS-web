@@ -19,13 +19,13 @@ Hooks are what make cognitiveOS zero-maintenance. They read and update [`STATE.m
 
 `/end-session` is the one that keeps `STATE.md` flat: it overwrites current state, moves closed loops and older wins to `sessions/`, and prunes Agent Notes. You run `/end-session` when wrapping up, and the next session starts already knowing where you stopped.
 
-## Deterministic session-start hook
+## Deterministic session hooks
 
 So you never even have to type `/start-session`, `init` wires a hook into your agent's native config that loads `STATE.md` the moment a session opens. It can't be skipped and needs zero typing.
 
 | Agent | Config file | Wiring |
 | --- | --- | --- |
-| Claude Code | `.claude/settings.json` | `hooks.SessionStart` |
+| Claude Code | `.claude/settings.json` | `hooks.SessionStart` (load state) + `hooks.Stop` (save reminder) |
 | Antigravity | `.agents/hooks.json` | `cognitiveos-session.PreInvocation` |
 
 Both run the same command:
@@ -37,6 +37,10 @@ npx -y cognitiveos start --hook --agent=claude       # or --agent=antigravity
 The merge is safe by design. If the config is absent it's created; if it exists, the hook is appended after a backup and the write is idempotent (running `init` again never duplicates it); if the file is malformed it's left untouched and the snippet is printed for you to paste manually. It never overwrites your existing settings.
 
 If the hook ever misfires, nothing breaks. The [agent skill](/docs/agent-setup) still instructs your agent to read `STATE.md` first thing.
+
+## The Claude Stop hook
+
+Claude Code also gets a second hook, wired into `hooks.Stop`. It fires when Claude finishes responding: if `STATE.md` hasn't been saved today, it blocks with a one-time reminder to do the end-session update (rewrite the state sections, append today's `sessions/` entry) before Claude's reply finishes. It fires at most once per day, and a loop guard means it never nags twice for the same stop. This is the deterministic half of "session ends, state gets saved": the hook triggers it, your agent does the actual write.
 
 ## Verifying the wiring
 
@@ -51,6 +55,6 @@ cognitiveos check --fix    # restores missing hooks (idempotent, never touches y
 > npm i -g cognitiveos
 > ```
 
-Codex and Antigravity hook coverage is an open [community target](/docs/contributing).
+Codex hook coverage is an open [community target](/docs/contributing); Claude Code and Antigravity are both wired.
 
-See also: [Agent Setup](/docs/agent-setup) · [STATE.md](/docs/state).
+See also: [Agent Setup](/docs/agent-setup) · [STATE.md](/docs/state) · [The Keeper](/docs/keeper).

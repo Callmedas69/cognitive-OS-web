@@ -8,6 +8,7 @@ export const DOCS_NAV: DocLink[] = [
   { title: "STATE.md", href: "/docs/state" },
   { title: "Hooks", href: "/docs/hooks" },
   { title: "Agent Setup", href: "/docs/agent-setup" },
+  { title: "The Keeper", href: "/docs/keeper" },
   { title: "Project Templates", href: "/docs/project-templates" },
   { title: "Contributing", href: "/docs/contributing" },
 ];

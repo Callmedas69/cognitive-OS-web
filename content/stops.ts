@@ -6,7 +6,7 @@
  * display headline. A final footer panel scrolls in after section 07 but is not
  * listed here (it has no timeline dot).
  *
- * Copy is reconciled to cognitiveos@0.3.0. Components render this text; they
+ * Copy is reconciled to cognitiveos@0.10.2. Components render this text; they
  * never invent product facts. No em-dashes (house style).
  */
 export type StopMeta = {
@@ -75,7 +75,7 @@ export const STOPS: StopMeta[] = [
     accent: "#fbbf24",
     accentInk: "#b45309",
     bubble: "Agent-agnostic CLI. No upkeep ritual.",
-    headline: "FOUR COMMANDS. THAT IS IT.",
+    headline: "FIVE COMMANDS. THAT IS IT.",
     icon: "/assets/generated/terminal_icon.png",
   },
   {
