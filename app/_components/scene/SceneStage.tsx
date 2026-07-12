@@ -161,10 +161,12 @@ export default function SceneStage({
               c.style.setProperty("--reveal", idx <= i ? "1" : "0");
             });
             root.style.setProperty("--footer-reveal", i >= PANELS - 1 ? "1" : "0");
-            root.style.setProperty(
-              "--village-progress",
-              String(PANELS > 1 ? i / (PANELS - 1) : 0)
-            );
+            // Vertical fallback has no pan/dwell distinction — both the
+            // continuous progress line and the section-tracking icon scale
+            // read the same discrete per-section value.
+            const discreteProgress = String(PANELS > 1 ? i / (PANELS - 1) : 0);
+            root.style.setProperty("--village-progress", discreteProgress);
+            root.style.setProperty("--village-icons", discreteProgress);
           }
         },
         { threshold: 0.5 }
@@ -286,17 +288,26 @@ export default function SceneStage({
             );
           }
           commitFooterOpen(master.time() >= CURTAIN_START);
-          // village-progress feeds TimelineNav's progress line + char-stagger
-          // math. seg alone caps at `last` once 07 settles (the track never
-          // pans further), so the curtain+reveal phase adds its own 0..1
-          // progress on top, reaching a full 1.0 exactly when the reveal ends
-          // — the line keeps filling and the timeline keeps updating right
-          // through the curtain close, even though the section content
-          // underneath has stopped morphing.
+          // village-icons feeds TimelineNav's icon scale (section-tracking):
+          // seg alone caps at `last` once 07 settles (the track never pans
+          // further), so the curtain+reveal phase adds its own 0..1 progress
+          // on top, reaching a full 1.0 exactly when the reveal ends — icon
+          // growth keeps advancing right through the curtain close, even
+          // though the section content underneath has stopped morphing.
           const curtainT = gsap.utils.clamp(0, 1, (master.time() - CURTAIN_START) / CURTAIN_SPAN);
           root.style.setProperty(
-            "--village-progress",
+            "--village-icons",
             String(gsap.utils.clamp(0, 1, (seg + curtainT) / (PANELS - 1)))
+          );
+          // village-progress feeds TimelineNav's progress line: a piecewise-
+          // linear map of master.time() across each stop's timeline label,
+          // continuous through the pinned hold and every dwell (not just the
+          // pans) instead of freezing whenever seg (derived from the track's
+          // x position) holds still. Falls back to the seg+curtain formula
+          // above if the stop labels are ever missing or out of order.
+          root.style.setProperty(
+            "--village-progress",
+            String(stopTimesValid ? villageProgressFromTime(master.time()) : gsap.utils.clamp(0, 1, (seg + curtainT) / (PANELS - 1)))
           );
         };
         // Timeline units: 1 hero-exit hold, then per section a 1-unit pan +
@@ -460,6 +471,36 @@ export default function SceneStage({
         // cross-fading via a shared pan, so there's a hard cut between them
         // rather than a blended dissolve.
         master.addLabel(`stop-${PANELS - 1}`, CURTAIN_START + CURTAIN_DURATION);
+
+        // Absolute timeline times for every stop label (hero at 0, then
+        // stop-1..stop-(PANELS-1) — the last of which is the footer curtain
+        // fully closed). Read now that every label above has been added.
+        // Used by villageProgressFromTime() (apply(), above) to derive the
+        // continuous progress line straight from master.time() instead of
+        // the track's x position, which holds still through every hold/dwell.
+        const stopLabelTimes: number[] = [0];
+        for (let k = 1; k <= PANELS - 1; k++) {
+          const t = master.labels[`stop-${k}`];
+          if (typeof t !== "number") {
+            stopLabelTimes.length = 0;
+            break;
+          }
+          stopLabelTimes.push(t);
+        }
+        const stopTimesValid =
+          stopLabelTimes.length === PANELS &&
+          stopLabelTimes.every((t, i) => i === 0 || t > stopLabelTimes[i - 1]);
+        const villageProgressFromTime = (t: number): number => {
+          const totalTime = stopLabelTimes[stopLabelTimes.length - 1];
+          const clampedT = gsap.utils.clamp(0, totalTime, t);
+          let k = 0;
+          while (k < PANELS - 2 && clampedT >= stopLabelTimes[k + 1]) k++;
+          const segStart = stopLabelTimes[k];
+          const segEnd = stopLabelTimes[k + 1];
+          const frac = segEnd > segStart ? (clampedT - segStart) / (segEnd - segStart) : 0;
+          return gsap.utils.clamp(0, 1, (k + frac) / (PANELS - 1));
+        };
+
         if (footerCurtainRef.current) {
           // `x: 0` is pinned at BOTH ends on purpose: the element carries a
           // class-based `transform: translateX(100%)` (first-paint hiding),
@@ -588,8 +629,7 @@ export default function SceneStage({
           { opacity: 1, y: 0, duration: 0.5, clearProps: "opacity,transform" },
           "-=0.3"
         )
-        .to("[data-entrance-mascot].js-entrance-hide", { opacity: 1, y: 0 }, "-=0.4")
-        .to("nav.js-entrance-hide", { opacity: 1, y: 0 }, "-=0.4");
+        .to("[data-entrance-mascot].js-entrance-hide", { opacity: 1, y: 0 }, "-=0.4");
     });
 
     return () => {
