@@ -34,7 +34,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
         smoother = ScrollSmoother.create({
           wrapper: wrapper.current,
           content: content.current,
-          smooth: 1.4,
+          smooth: 0.9,
           smoothTouch: 0, // native scroll on touch (smoothing feels laggy there)
           effects: false,
           normalizeScroll: false,

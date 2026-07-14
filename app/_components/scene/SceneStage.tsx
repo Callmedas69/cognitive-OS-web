@@ -166,12 +166,10 @@ export default function SceneStage({
               c.style.setProperty("--reveal", idx <= i ? "1" : "0");
             });
             root.style.setProperty("--footer-reveal", i >= PANELS - 1 ? "1" : "0");
-            // Vertical fallback has no pan/dwell distinction — both the
-            // continuous progress line and the section-tracking icon scale
-            // read the same discrete per-section value.
+            // Vertical fallback has no pan/dwell distinction, so the progress
+            // line reads the active section as a discrete value.
             const discreteProgress = String(PANELS > 1 ? i / (PANELS - 1) : 0);
             root.style.setProperty("--village-progress", discreteProgress);
-            root.style.setProperty("--village-icons", discreteProgress);
           }
         },
         { threshold: 0.5 }
@@ -293,17 +291,7 @@ export default function SceneStage({
             );
           }
           commitFooterOpen(master.time() >= CURTAIN_START);
-          // village-icons feeds TimelineNav's icon scale (section-tracking):
-          // seg alone caps at `last` once 07 settles (the track never pans
-          // further), so the curtain+reveal phase adds its own 0..1 progress
-          // on top, reaching a full 1.0 exactly when the reveal ends — icon
-          // growth keeps advancing right through the curtain close, even
-          // though the section content underneath has stopped morphing.
-          const curtainT = gsap.utils.clamp(0, 1, (master.time() - CURTAIN_START) / CURTAIN_SPAN);
-          root.style.setProperty(
-            "--village-icons",
-            String(gsap.utils.clamp(0, 1, (seg + curtainT) / (PANELS - 1)))
-          );
+          const curtainT = gsap.utils.clamp(0, 1, (master.time() - CURTAIN_START) / (CURTAIN_DURATION + DWELL));
           // village-progress feeds TimelineNav's progress line: a piecewise-
           // linear map of master.time() across each stop's timeline label,
           // continuous through the pinned hold and every dwell (not just the
@@ -329,7 +317,6 @@ export default function SceneStage({
         // away) and the curtain slides over it.
         const CURTAIN_START = HOLD + last * (1 + DWELL);
         const CURTAIN_DURATION = 1;
-        const CURTAIN_SPAN = CURTAIN_DURATION + DWELL;
 
         // Zero-duration placeholder used only to pin the timeline's total
         // duration to TOTAL_UNITS before T6/T8/T9 add real content into the
@@ -368,17 +355,17 @@ export default function SceneStage({
         master
           .to(
             scatterEls("up"),
-            { y: "-120vh", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.in" },
+            { y: "-72vh", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.inOut" },
             0
           )
           .to(
             scatterEls("left"),
-            { x: "-120vw", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.in" },
+            { x: "-72vw", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.inOut" },
             0.05
           )
           .to(
             scatterEls("down"),
-            { y: "120vh", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.in" },
+            { y: "72vh", stagger: 0.06, duration: SCATTER_DUR, ease: "power2.inOut" },
             0.1
           );
         // Mascot dock: glides from the hero slot (set by positionMascotOverlay)

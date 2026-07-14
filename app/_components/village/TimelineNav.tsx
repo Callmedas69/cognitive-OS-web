@@ -46,7 +46,6 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
   const iconsRef = useRef<(HTMLImageElement | null)[]>([]);
   const containerRef = useRef<HTMLOListElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const isHovering = useRef(false);
 
   useGSAP(() => {
     if (!mounted || !containerRef.current || !lineRef.current) return;
@@ -55,83 +54,39 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const quickToVars = { duration: prefersReduced ? 0 : 0.15, ease: "power2.out" };
 
-    // Per-icon quickTo setters for scale + y, created once — shared by both
-    // the scroll-driven onTick below and the mousemove hover path, instead
-    // of firing a fresh gsap.to() per icon on every frame/mousemove.
-    // scaleX/scaleY, NOT the "scale" alias: quickTo's resetTo() looks up the
-    // PropTween by name, and CSSPlugin splits "scale" into scaleX+scaleY
-    // internally — quickTo(icon, "scale") silently writes nothing.
     const scaleXTo = iconsRef.current.map((icon) =>
       icon ? gsap.quickTo(icon, "scaleX", quickToVars) : null
     );
     const scaleYTo = iconsRef.current.map((icon) =>
       icon ? gsap.quickTo(icon, "scaleY", quickToVars) : null
     );
-    const yTo = iconsRef.current.map((icon) => (icon ? gsap.quickTo(icon, "y", quickToVars) : null));
+    const yTo = iconsRef.current.map((icon) =>
+      icon ? gsap.quickTo(icon, "y", quickToVars) : null
+    );
     const setIcon = (i: number, scale: number, y: number) => {
       scaleXTo[i]?.(scale);
       scaleYTo[i]?.(scale);
       yTo[i]?.(y);
     };
+    const resetIcons = () => {
+      iconsRef.current.forEach((icon, i) => icon && setIcon(i, 1, 0));
+    };
 
-    // Dirty-check state for the permanent ticker below: re-read each frame,
-    // compared by string, so a frame where neither var changed is a free
-    // early return (no icon math, no gsap writes).
     let lastProgress = "";
-    let lastIcons = "";
-
     const onTick = () => {
-      const root = document.documentElement;
-      const progressStr = root.style.getPropertyValue("--village-progress");
-      const iconsStr = root.style.getPropertyValue("--village-icons");
-      if (progressStr === lastProgress && iconsStr === lastIcons) return;
+      const progressStr = document.documentElement.style.getPropertyValue("--village-progress");
+      if (!progressStr || progressStr === lastProgress) return;
       lastProgress = progressStr;
-      lastIcons = iconsStr;
-      if (!progressStr || !iconsStr) return;
-
-      // Progress line: continuous, straight off --village-progress.
       const lineSeg = parseFloat(progressStr) * totalStops;
       const lineP = gsap.utils.clamp(0, 1, lineSeg / Math.max(1, totalStops - 1));
       gsap.set(lineRef.current, { scaleX: lineP });
-
-      if (isHovering.current) return; // Let mousemove take over icons
-
-      // Icon scale: section-tracking, off --village-icons (same seg+curtain
-      // shape as the line used before this was split — holds its peak while
-      // a section is centered instead of advancing continuously).
-      const iconSeg = parseFloat(iconsStr) * totalStops;
-      const iconP = gsap.utils.clamp(0, 1, iconSeg / Math.max(1, totalStops - 1));
-      const segmentDist = 1 / Math.max(1, totalStops - 1);
-
-      iconsRef.current.forEach((icon, i) => {
-        if (!icon) return;
-        const stopP = i / Math.max(1, totalStops - 1);
-        const dist = Math.abs(iconP - stopP);
-        // Map distance (0 -> 1 segment) to scale (1.5 -> 1)
-        const scale = gsap.utils.mapRange(0, segmentDist, 1.5, 1, dist);
-        const clampedScale = Math.max(1, Math.min(1.5, scale));
-        const yOffset = (1 - clampedScale) * 10; // slightly up when larger
-        setIcon(i, clampedScale, yOffset);
-      });
     };
 
-    // Run once immediately so the line/icons reflect current state on mount
-    // and on every discrete `active` change (vertical-mode fallback).
     onTick();
-
-    // Permanent ticker — not gated to ScrollTrigger's scrollStart/scrollEnd.
-    // ScrollSmoother's eased scroll (normalizeScroll: false) emits no native
-    // scroll events while it's still settling, so a scrollEnd-based gate died
-    // mid-ease on every flick and froze the line/icons during the momentum
-    // tail. The dirty check above keeps this effectively free at rest instead.
     gsap.ticker.add(onTick);
 
-    // A ScrollTrigger refresh (resize) can transiently rewrite the line while
-    // the pin is reverted, without the CSS vars ever changing — which the
-    // dirty check would then never repair. Re-sync once after every refresh.
     const onRefresh = () => {
       lastProgress = "";
-      lastIcons = "";
       onTick();
     };
     ScrollTrigger.addEventListener("refresh", onRefresh);
@@ -140,42 +95,37 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
       iconsRef.current.forEach((icon, i) => {
         if (!icon) return;
         const rect = icon.getBoundingClientRect();
-        const iconCenter = rect.x + rect.width / 2;
-        const dist = Math.abs(e.clientX - iconCenter);
-        // Map distance 0->150px to scale 1.6->1
-        const scale = gsap.utils.mapRange(0, 150, 1.6, 1, dist);
-        // Clamp scale to max 1.6, min 1
-        const clampedScale = Math.max(1, Math.min(1.6, scale));
-        // Move slightly up
-        const yOffset = gsap.utils.mapRange(0, 150, -10, 0, dist);
-        const clampedY = Math.min(0, Math.max(-10, yOffset));
-        setIcon(i, clampedScale, clampedY);
+        const dist = Math.abs(e.clientX - (rect.x + rect.width / 2));
+        const scale = Math.max(1, Math.min(1.6, gsap.utils.mapRange(0, 150, 1.6, 1, dist)));
+        const y = Math.min(0, Math.max(-10, gsap.utils.mapRange(0, 150, -10, 0, dist)));
+        setIcon(i, scale, y);
       });
     };
 
-    const onMouseEnter = () => {
-      isHovering.current = true;
+    const onFocusIn = (e: FocusEvent) => {
+      const button = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-timeline-index]");
+      if (!button) return;
+      const focused = Number(button.dataset.timelineIndex);
+      iconsRef.current.forEach((icon, i) =>
+        icon && setIcon(i, i === focused ? 1.35 : 1, i === focused ? -7 : 0)
+      );
+    };
+    const onFocusOut = (e: FocusEvent) => {
+      if (!ol.contains(e.relatedTarget as Node | null)) resetIcons();
     };
 
-    const onMouseLeave = () => {
-      isHovering.current = false;
-      // Reset the dirty check and tick immediately so the icons restore to
-      // scroll-based state right away instead of waiting for --village-icons
-      // to next change.
-      lastIcons = "";
-      onTick();
-    };
-
-    ol.addEventListener("mouseenter", onMouseEnter);
     ol.addEventListener("mousemove", onMouseMove);
-    ol.addEventListener("mouseleave", onMouseLeave);
+    ol.addEventListener("mouseleave", resetIcons);
+    ol.addEventListener("focusin", onFocusIn);
+    ol.addEventListener("focusout", onFocusOut);
 
     return () => {
       gsap.ticker.remove(onTick);
       ScrollTrigger.removeEventListener("refresh", onRefresh);
-      ol.removeEventListener("mouseenter", onMouseEnter);
       ol.removeEventListener("mousemove", onMouseMove);
-      ol.removeEventListener("mouseleave", onMouseLeave);
+      ol.removeEventListener("mouseleave", resetIcons);
+      ol.removeEventListener("focusin", onFocusIn);
+      ol.removeEventListener("focusout", onFocusOut);
     };
   }, [mounted, stops.length]);
 
@@ -196,6 +146,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
             <li key={s.id}>
               <button
                 type="button"
+                data-timeline-index={i}
                 onClick={() => onJump(i)}
                 aria-current={i === a ? "step" : undefined}
                 title={s.name}

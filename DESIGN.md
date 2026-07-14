@@ -34,6 +34,12 @@ This supersedes the single-plate cinematic village (`docs/2026-06-27_single-plat
 was removed. See `docs/2026-06-28_horizontal-sections.md`.
 
 ## Motion
+- Default direction: calm, inevitable, precise, quietly magical. Preserve the cinematic horizontal
+  deck, mood morph, mascot dock, and footer curtain, but prioritize relief before spectacle.
+- Desktop smoothing is deliberately restrained (`smooth: 0.9`); hero scatter uses shorter travel
+  and soft easing; timeline icons magnify only on hover or keyboard focus, never from scroll.
+- `prefers-reduced-motion` is the hard accessibility override. Do not add a visible calm-motion
+  toggle unless future evidence shows that the extra control is justified.
 - GSAP ScrollTrigger: horizontal pin + x-translate (whole section row) + snap-per-section
   (`scene/SceneStage`); mood scrub across the seven content sections.
 - Deck background: one shared surface (`--deck-surface` = bg mixed 6% toward the scrubbed
