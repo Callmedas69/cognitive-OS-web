@@ -87,9 +87,14 @@ export default function SceneStage({
   };
   const panelLayout = (id: string) => {
     if (id === "stop-02") return "numeral" as const;
+    // 03 + 04 both split: headline/kicker left, concrete content (terminal /
+    // zone pills) in the wider right column. 05 + 07 both leftAnchor so the
+    // Start CTA left-aligns to the same edge as the rest of the deck.
+    if (id === "stop-03") return "splitEqual" as const;
     if (id === "stop-04") return "split" as const;
     if (id === "stop-05") return "leftAnchor" as const;
     if (id === "stop-06") return "statement" as const;
+    if (id === "stop-07") return "leftAnchor" as const;
     return "center" as const;
   };
 

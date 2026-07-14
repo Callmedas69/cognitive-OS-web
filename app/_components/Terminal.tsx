@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "@phosphor-icons/react";
 import { useState } from "react";
 
 type TerminalProps = {
@@ -39,7 +40,14 @@ export default function Terminal({ command, cursor = false }: TerminalProps) {
         aria-label={copied ? "Copied" : `Copy command: ${command}`}
         className="shrink-0 rounded-[6px] px-2 py-1 text-xs text-term-text/60 transition-colors hover:bg-white/10 hover:text-term-text active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-term-green"
       >
-        {copied ? "copied ✓" : "copy"}
+        {copied ? (
+          <span className="inline-flex items-center gap-1">
+            copied
+            <Check size={12} weight="bold" aria-hidden />
+          </span>
+        ) : (
+          "copy"
+        )}
       </button>
     </div>
   );

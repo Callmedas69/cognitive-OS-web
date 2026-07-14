@@ -1,0 +1,83 @@
+export const metadata = {
+  title: "Add to an existing project: cognitiveOS docs",
+  description: "Drop cognitiveOS into a repo that already exists. It adds files beside your code and never overwrites them.",
+};
+
+# Add to an existing project
+
+cognitiveOS is not a starter template. It is a set of markdown files that sit next to code you already wrote. Most people install it into a repo that has been running for months.
+
+**It never touches your code.** `init` writes new files alongside yours. Anything that already exists is kept, not overwritten.
+
+## The four steps
+
+### 1. Run init inside your project
+
+```bash
+cd your-project
+npx cognitiveos init
+```
+
+Three questions: which agents you use, what kind of project this is, and its name.
+
+If you already have a `CLAUDE.md` or an `AGENTS.md`, init spots them and asks before it scaffolds anything. The prompt defaults to **no**, so an accidental run in the wrong folder does nothing.
+
+### 2. It adds files, it does not replace them
+
+You get the [six zones](/docs/zones) (each with its own `CONTEXT.md`), [`STATE.md`](/docs/state), a `sessions/` log folder, agent skill files, and the [keeper subagent](/docs/keeper). All of it lands beside your source tree.
+
+Every write goes through a guard: if the file exists, it is skipped. When init finishes it tells you what it left alone.
+
+```bash
+Kept 2 existing file(s): CLAUDE.md, AGENTS.md
+```
+
+The one exception is your agent's hook config (`.claude/settings.json`, `.agents/hooks.json`). Those get the session hook appended rather than replaced, and a timestamped `.bak` is written first. If the JSON is malformed, init leaves the file alone and prints the snippet for you to paste in by hand.
+
+### 3. STATE.md starts nearly blank, on purpose
+
+`init` does not read your code. It does not read your git log. It does not summarize your README. Nothing is inferred, so nothing is quietly wrong.
+
+What you get is a scaffold with a hidden setup marker in it:
+
+```md
+## Current Focus
+- **Project:** your-project
+- **Task:** (not set yet: run `cognitiveos start`)
+- **Status:** just initialized
+```
+
+### 4. Seed it once, in one agent session
+
+Open your agent in the project. The setup marker triggers a one-time offer:
+
+> "Want a 60-second setup? I'll ask 6 quick questions so I always know this project's context. (Y/n)"
+
+Six questions, one at a time, each pre-filled with the agent's best guess from your README, `package.json`, and git log. You correct the guess instead of writing from scratch. The answers land in `projects/<project>/CONTEXT.md`, `STATE.md`, and `focus/current-task.md`.
+
+That is the whole seeding step. Correct the draft once, and the [hooks](/docs/hooks) keep it current from then on.
+
+## Then what
+
+Next time you open the project, `cognitiveos start` reads back a snapshot instead of you rebuilding one from memory:
+
+```bash
+$ start
+┌─ cognitiveOS ──────────────────────────────────────────┐
+│ FOCUS    fix wallet connection bug                     │
+│          (projects/my-dapp)                            │
+│ LAST     2 days ago                                    │
+│ LOOPS    1 open                                        │
+│ BLOCKED  waiting on Base RPC key                       │
+│ NEXT     open focus/current-task.md                    │
+│          done when: wallet connects on Base mainnet    │
+└────────────────────────────────────────────────────────┘
+```
+
+Run [`cognitiveos check`](/docs/commands) any time to catch drift, and `check --fix` to repair the generated files. It never edits `STATE.md` content: your words stay yours.
+
+## Uninstalling
+
+There is nothing to uninstall. Delete the folders. Your code was never modified.
+
+See also: [Getting Started](/docs) · [The Zones](/docs/zones) · [The Keeper](/docs/keeper) · [Commands](/docs/commands).

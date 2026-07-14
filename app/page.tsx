@@ -13,8 +13,16 @@ const FARCASTER_URL = "https://warpcast.com/callmedas69";
 // the section meta (rendered by SectionPanel / HeroPanel). Copy follows the
 // one-idea-per-panel rule from the 2026-07-02 taste audit.
 const panels = [
-  // 01 Overview (hero body)
-  <Terminal key="01" command="npx cognitiveos init" cursor />,
+  // 01 Overview (hero body) — the subhead is the mechanism. Without it readers
+  // guess "viewer / summarizer"; the pain and the audience alone never say what
+  // the thing IS.
+  <div key="01">
+    <p className="mb-5 text-base leading-snug text-text-muted">
+      Plain markdown files your AI agent keeps updated. Come back and it already knows where you
+      left off.
+    </p>
+    <Terminal command="npx cognitiveos init" cursor />
+  </div>,
 
   // 02 The Problem
   <div key="02" className="max-w-[560px]">
@@ -36,12 +44,31 @@ const panels = [
     </p>
   </div>,
 
-  // 03 How It Works
+  // 03 How It Works — concrete first, then the payoff made visible. The box is
+  // the real `cognitiveos start` output (src/lib/output.ts), not a mock: same
+  // labels, same 9-col label gutter. Keep it that way.
   <div key="03">
-    <p data-enter>
-      <code className="font-mono font-bold text-text">ICM</code> maps folders to modes;
-      <code className="font-mono font-bold text-text"> CONTEXT.md</code> tells your agent what each mode means.
+    <p data-enter className="max-w-[46ch]">
+      Plain markdown next to your code. Your agent updates it as you work, and reads it back
+      before it touches anything.
     </p>
+    <pre
+      data-enter
+      className="mt-6 w-full overflow-x-auto rounded-[10px] bg-term-bg px-4 py-3.5 font-mono text-[11px] leading-relaxed text-term-text sm:text-sm lg:w-max lg:max-w-none lg:overflow-visible"
+      aria-label="Example output of the cognitiveos start command"
+    >
+      <span className="text-term-green select-none">$ </span>start
+      {`
+┌─ cognitiveOS ──────────────────────────────────────────┐
+│ FOCUS    fix wallet connection bug                     │
+│          (projects/my-dapp)                            │
+│ LAST     2 days ago                                    │
+│ LOOPS    1 open                                        │
+│ BLOCKED  waiting on Base RPC key                       │
+│ NEXT     open focus/current-task.md                    │
+│          done when: wallet connects on Base mainnet    │
+└────────────────────────────────────────────────────────┘`}
+    </pre>
   </div>,
 
   // 04 Six Zones
@@ -90,10 +117,24 @@ const panels = [
     </div>
   </div>,
 
-  // 07 Start
+  // 07 Start — the closing CTA should read as strong as the hero's, so reuse
+  // the same styled Terminal copy-block instead of naked bold text. The
+  // existing-project reassurance stays, demoted to small secondary text under
+  // the command.
   <div key="07">
-    <p data-enter className="font-mono text-sm font-bold text-text">npx cognitiveos init</p>
-    <div data-enter className="mt-5">
+    <div data-enter className="max-w-[400px]">
+      <Terminal command="npx cognitiveos init" />
+    </div>
+    <p data-enter className="mt-3 max-w-[46ch] text-sm leading-snug text-text-muted">
+      <Link
+        href="/docs/existing-project"
+        className="font-medium text-text underline decoration-emerald decoration-2 underline-offset-4 transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
+      >
+        Already have a project?
+      </Link>{" "}
+      cd in and run init. It adds files next to your code and never touches your code.
+    </p>
+    <div data-enter className="mt-6">
       <a
         href={GITHUB_URL}
         target="_blank"
@@ -133,7 +174,7 @@ const heroHeadline = (
       data-hero-scatter="up"
       className="mb-4 block font-mono text-sm font-medium tracking-normal text-text-muted"
     >
-      the helper for a dev with executive dysfunction
+      the memory for a dev with executive dysfunction
     </span>
     <span data-hero-scatter="up" className="inline-block">STOP</span>{" "}
     <span data-hero-scatter="left" className="inline-block">RELEARNING</span>{" "}

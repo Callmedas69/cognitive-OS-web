@@ -1,11 +1,15 @@
 import type { ReactNode } from "react";
 import type { StopMeta } from "@/content/stops";
 
-type SectionLayout = "center" | "split" | "numeral" | "leftAnchor" | "statement";
+type SectionLayout = "center" | "split" | "splitEqual" | "numeral" | "leftAnchor" | "statement";
 
 const shellByLayout: Record<SectionLayout, string> = {
   center: "items-center justify-center px-6 py-4",
   split: "items-center justify-center px-6 py-4 lg:px-12",
+  // Equal 50/50 columns; the right column is allowed to bleed its content past
+  // the panel edge (the pinned deck clips it at the viewport). Used by stop-03
+  // so the terminal reads as a wide artifact spilling off-screen.
+  splitEqual: "items-center justify-center px-6 py-4 lg:px-12",
   numeral: "items-center justify-center px-6 py-4 lg:px-12",
   // Asymmetric: content hugs the left edge instead of sitting centered.
   leftAnchor: "items-center justify-start px-6 py-4 lg:px-16",
@@ -17,6 +21,7 @@ const shellByLayout: Record<SectionLayout, string> = {
 const innerByLayout: Record<SectionLayout, string> = {
   center: "max-w-[680px]",
   split: "grid max-w-[1180px] items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16",
+  splitEqual: "grid max-w-[1180px] items-center gap-10 lg:grid-cols-2 lg:gap-16",
   numeral: "grid max-w-[1120px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14",
   leftAnchor: "max-w-[760px]",
   statement: "max-w-[1400px]",
@@ -28,6 +33,9 @@ const innerByLayout: Record<SectionLayout, string> = {
 const contentByLayout: Record<SectionLayout, string> = {
   center: "mt-6 max-w-[58ch] font-body text-lg font-medium leading-[1.75] tracking-[-0.01em] text-text",
   split: "font-body text-lg font-medium leading-[1.75] tracking-[-0.01em] text-text lg:pt-8",
+  // min-w-0 lets the equal columns hold their 50% even when the terminal's
+  // content is wider — the overflow bleeds instead of stretching the column.
+  splitEqual: "min-w-0 font-body text-lg font-medium leading-[1.75] tracking-[-0.01em] text-text lg:pt-8",
   numeral: "font-body text-lg font-medium leading-[1.75] tracking-[-0.01em] text-text lg:pt-8",
   leftAnchor: "mt-6 font-body text-lg font-medium leading-[1.75] tracking-[-0.01em] text-text",
   statement: "mt-8 max-w-[62ch] font-body text-base font-medium leading-[1.6] tracking-[-0.01em] text-text-muted",
@@ -41,6 +49,7 @@ const contentByLayout: Record<SectionLayout, string> = {
 const kickerVisibleByLayout: Record<SectionLayout, boolean> = {
   center: true,
   split: true,
+  splitEqual: true,
   numeral: true,
   leftAnchor: true,
   statement: false,
@@ -53,6 +62,7 @@ const kickerVisibleByLayout: Record<SectionLayout, boolean> = {
 const rulePositionByLayout: Record<SectionLayout, "before" | "after" | "none"> = {
   center: "after",
   split: "after",
+  splitEqual: "after",
   numeral: "after",
   leftAnchor: "before",
   statement: "none",

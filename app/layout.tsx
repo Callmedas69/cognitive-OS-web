@@ -53,10 +53,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/0xnull.svg",
+        url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "0xNull, the cognitiveOS mascot",
+        alt: "cognitiveOS: stop relearning your own project. Run npx cognitiveos init.",
       },
     ],
   },
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     title: "cognitiveOS: stop relearning your own project",
     description:
       "An AI filesystem for developers with executive dysfunction. Open your laptop and know exactly what to do.",
-    images: ["/0xnull.svg"],
+    images: ["/og.png"],
   },
   appleWebApp: {
     title: "CogOS",

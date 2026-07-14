@@ -3,6 +3,7 @@ export type DocLink = { title: string; href: string };
 
 export const DOCS_NAV: DocLink[] = [
   { title: "Getting Started", href: "/docs" },
+  { title: "Add to an existing project", href: "/docs/existing-project" },
   { title: "Commands", href: "/docs/commands" },
   { title: "The Zones", href: "/docs/zones" },
   { title: "STATE.md", href: "/docs/state" },

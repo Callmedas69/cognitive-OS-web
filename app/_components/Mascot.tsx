@@ -21,27 +21,41 @@ export default function Mascot({ size = "default", parallax = false }: MascotPro
   const stageRef = useRef<HTMLDivElement>(null);
   const [enhanced, setEnhanced] = useState(false);
 
-  // Scroll-parallax drift — translateY tied to scroll, rAF-throttled, gated by
-  // reduced-motion. Only the hero stage opts in.
+  // Scroll-parallax drift — translateY tied to the same ScrollTrigger scroll
+  // source as the horizontal deck/nav, gated by reduced-motion. Only the hero
+  // stage opts in.
   useEffect(() => {
     if (!parallax) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const el = stageRef.current;
     if (!el) return;
-    let raf = 0;
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        const y = Math.min(window.scrollY, 600) * 0.12;
-        el.style.setProperty("--parallax", `${y}px`);
-      });
+
+    let cancelled = false;
+    let trigger: { kill: () => void; scroll: () => number } | null = null;
+
+    const setParallax = (scrollY: number) => {
+      const y = Math.min(scrollY, 600) * 0.12;
+      el.style.setProperty("--parallax", `${y}px`);
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+
+    Promise.all([import("gsap"), import("gsap/ScrollTrigger")])
+      .then(([{ gsap }, { ScrollTrigger }]) => {
+        if (cancelled) return;
+        gsap.registerPlugin(ScrollTrigger);
+        trigger = ScrollTrigger.create({
+          start: 0,
+          end: "max",
+          onUpdate: (self) => setParallax(self.scroll()),
+        });
+        setParallax(trigger.scroll());
+      })
+      .catch(() => {
+        /* GSAP unavailable — mascot remains static */
+      });
+
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
+      cancelled = true;
+      trigger?.kill();
     };
   }, [parallax]);
 
