@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+const clamp = (min: number, max: number, value: number) => Math.min(Math.max(value, min), max);
 
 export default function FooterTagline({ text }: { text: string }) {
   const [discrete, setDiscrete] = useState(false);
@@ -26,61 +24,63 @@ export default function FooterTagline({ text }: { text: string }) {
 
   const words = text.split(" ");
 
-  useGSAP(() => {
-    if (!containerRef.current) return;
-    const chars = gsap.utils.toArray<HTMLElement>('.tagline-char', containerRef.current);
-    const cursor = containerRef.current.querySelector('.tagline-cursor');
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const chars = Array.from(container.querySelectorAll<HTMLElement>(".tagline-char"));
+    const cursor = container.querySelector<HTMLElement>(".tagline-cursor");
     const root = document.documentElement;
-    const ease = gsap.parseEase("power2.out");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduced) {
+      chars.forEach((char) => { char.style.transform = "translateY(0)"; });
+      if (cursor) cursor.style.opacity = "1";
+      return;
+    }
 
     if (discrete) {
-      // Vertical fallback: trigger once when scrolled into view
-      gsap.fromTo(
-        chars,
-        { yPercent: 115 },
-        {
-          yPercent: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.02,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 85%",
-          },
-        }
-      );
-      if (cursor) {
-        gsap.fromTo(
-          cursor,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.4,
-            delay: 0.9,
-          }
-        );
-      }
-    } else {
-      // Horizontal mode: read scrubbed --footer-reveal variable directly
-      const onTick = () => {
-        const revealStr = root.style.getPropertyValue('--footer-reveal');
-        if (!revealStr) return;
-        const reveal = parseFloat(revealStr);
+      chars.forEach((char) => {
+        char.style.transform = "translateY(115%)";
+        char.style.transition = "transform 700ms cubic-bezier(0.16, 1, 0.3, 1)";
+      });
+      if (cursor) cursor.style.opacity = "0";
 
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          chars.forEach((char, i) => {
+            char.style.transitionDelay = `${i * 20}ms`;
+            char.style.transform = "translateY(0)";
+          });
+          if (cursor) {
+            cursor.style.transition = "opacity 400ms ease-out 900ms";
+            cursor.style.opacity = "1";
+          }
+          obs.disconnect();
+        },
+        { threshold: 0.15 }
+      );
+      obs.observe(container);
+      return () => obs.disconnect();
+    }
+
+    let raf = 0;
+    const tick = () => {
+      const revealStr = root.style.getPropertyValue("--footer-reveal");
+      if (revealStr) {
+        const reveal = parseFloat(revealStr);
         chars.forEach((char, i) => {
           const d = (i / Math.max(chars.length - 1, 1)) * 0.45;
-          const p = gsap.utils.clamp(0, 1, (reveal - d) / 0.5);
-          const easedP = ease(p);
-          gsap.set(char, { yPercent: (1 - easedP) * 115 });
+          const p = clamp(0, 1, (reveal - d) / 0.5);
+          char.style.transform = `translateY(${(1 - easeOut(p)) * 115}%)`;
         });
-        if (cursor) {
-          gsap.set(cursor, { opacity: reveal });
-        }
-      };
+        if (cursor) cursor.style.opacity = String(reveal);
+      }
+      raf = requestAnimationFrame(tick);
+    };
 
-      gsap.ticker.add(onTick);
-      return () => gsap.ticker.remove(onTick);
-    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [discrete]);
 
   return (

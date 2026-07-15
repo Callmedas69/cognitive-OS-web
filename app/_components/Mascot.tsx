@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * 0xNull hero mascot. The 2D SVG renders immediately (SSR / no-JS / mobile /
- * reduced-motion fallback). On a capable desktop with motion allowed, the
- * Three.js scene is lazy-imported and fades in over the SVG — so Three.js
- * stays out of the initial bundle and never blocks the hero (spec §2.5).
+ * reduced-motion fallback). On capable desktop, the Three.js scene waits for
+ * idle time and fades in over the SVG, so it never competes with hero LCP.
  */
 type MascotProps = {
   /** Stage size. hero = big anchored stage; default = inline. */
@@ -21,42 +20,30 @@ export default function Mascot({ size = "default", parallax = false }: MascotPro
   const stageRef = useRef<HTMLDivElement>(null);
   const [enhanced, setEnhanced] = useState(false);
 
-  // Scroll-parallax drift — translateY tied to the same ScrollTrigger scroll
-  // source as the horizontal deck/nav, gated by reduced-motion. Only the hero
-  // stage opts in.
+  // Scroll-parallax drift for the vertical/reduced fallback hero. Keep it
+  // GSAP-free so mascot enhancement never pulls scene choreography into this
+  // small component by itself.
   useEffect(() => {
     if (!parallax) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const el = stageRef.current;
     if (!el) return;
 
-    let cancelled = false;
-    let trigger: { kill: () => void; scroll: () => number } | null = null;
-
-    const setParallax = (scrollY: number) => {
-      const y = Math.min(scrollY, 600) * 0.12;
+    let ticking = false;
+    const setParallax = () => {
+      ticking = false;
+      const y = Math.min(window.scrollY, 600) * 0.12;
       el.style.setProperty("--parallax", `${y}px`);
     };
-
-    Promise.all([import("gsap"), import("gsap/ScrollTrigger")])
-      .then(([{ gsap }, { ScrollTrigger }]) => {
-        if (cancelled) return;
-        gsap.registerPlugin(ScrollTrigger);
-        trigger = ScrollTrigger.create({
-          start: 0,
-          end: "max",
-          onUpdate: (self) => setParallax(self.scroll()),
-        });
-        setParallax(trigger.scroll());
-      })
-      .catch(() => {
-        /* GSAP unavailable — mascot remains static */
-      });
-
-    return () => {
-      cancelled = true;
-      trigger?.kill();
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(setParallax);
     };
+
+    setParallax();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [parallax]);
 
   useEffect(() => {
@@ -66,32 +53,43 @@ export default function Mascot({ size = "default", parallax = false }: MascotPro
 
     let disposed = false;
     let handle: { resize: () => void; dispose: () => void } | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let idleId: number | undefined;
 
-    import("./mascot/scene")
-      .then(async ({ createMascot }) => {
-        if (disposed || !canvasRef.current) return;
-        handle = await createMascot(canvasRef.current, { reducedMotion: false });
-        if (disposed) {
-          handle.dispose();
-          return;
-        }
-        const onResize = () => handle?.resize();
-        window.addEventListener("resize", onResize);
-        handle.resize();
-        setEnhanced(true);
-        // store remover on handle for cleanup
-        const baseDispose = handle.dispose;
-        handle.dispose = () => {
-          window.removeEventListener("resize", onResize);
-          baseDispose();
-        };
-      })
-      .catch(() => {
-        /* WebGL unavailable / import failed — 2D SVG stays */
-      });
+    const enhance = () => {
+      import("./mascot/scene")
+        .then(async ({ createMascot }) => {
+          if (disposed || !canvasRef.current) return;
+          handle = await createMascot(canvasRef.current, { reducedMotion: false });
+          if (disposed) {
+            handle.dispose();
+            return;
+          }
+          const onResize = () => handle?.resize();
+          window.addEventListener("resize", onResize);
+          handle.resize();
+          setEnhanced(true);
+          const baseDispose = handle.dispose;
+          handle.dispose = () => {
+            window.removeEventListener("resize", onResize);
+            baseDispose();
+          };
+        })
+        .catch(() => {
+          /* WebGL unavailable / import failed - 2D SVG stays */
+        });
+    };
+
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(enhance, { timeout: 1800 });
+    } else {
+      timeoutId = globalThis.setTimeout(enhance, 900);
+    }
 
     return () => {
       disposed = true;
+      if (idleId !== undefined && "cancelIdleCallback" in window) window.cancelIdleCallback(idleId);
+      if (timeoutId) globalThis.clearTimeout(timeoutId);
       handle?.dispose();
     };
   }, []);

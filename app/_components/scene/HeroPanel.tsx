@@ -31,26 +31,16 @@ export default function HeroPanel({
     const isHorizontal = mqWide.matches && !mqMotion.matches;
     if (!isHorizontal) return;
 
-    // Same one-shot "scrolled past 20px" signal as before, but sourced from
-    // the GSAP ScrollTrigger engine already driving the page (dynamically
-    // imported, matching SceneStage's own lazy-load pattern) instead of a
-    // raw window scroll listener.
-    let cancelled = false;
-    let trigger: { kill: () => void } | null = null;
-    import("gsap/ScrollTrigger").then(async ({ ScrollTrigger }) => {
-      if (cancelled) return;
-      const { default: gsap } = await import("gsap");
-      gsap.registerPlugin(ScrollTrigger);
-      trigger = ScrollTrigger.create({
-        start: 20,
-        once: true,
-        onEnter: () => setHasScrolled(true),
-      });
-    });
-    return () => {
-      cancelled = true;
-      trigger?.kill();
+    const onScroll = () => {
+      if (window.scrollY > 20) {
+        setHasScrolled(true);
+        window.removeEventListener("scroll", onScroll);
+      }
     };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

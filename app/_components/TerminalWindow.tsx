@@ -32,7 +32,7 @@ export default function TerminalWindow({
         <span className="h-3 w-3 rounded-full bg-[#ff5f57]" aria-hidden />
         <span className="h-3 w-3 rounded-full bg-[#febc2e]" aria-hidden />
         <span className="h-3 w-3 rounded-full bg-[#28c840]" aria-hidden />
-        <span className="absolute inset-x-0 text-center font-mono text-xs text-term-text/50">
+        <span className="absolute inset-x-0 text-center font-mono text-xs text-term-muted">
           {title}
         </span>
       </div>

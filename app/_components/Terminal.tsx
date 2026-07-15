@@ -38,7 +38,7 @@ export default function Terminal({ command, cursor = false }: TerminalProps) {
         type="button"
         onClick={copy}
         aria-label={copied ? "Copied" : `Copy command: ${command}`}
-        className="shrink-0 rounded-[6px] px-2 py-1 text-xs text-term-text/60 transition-colors hover:bg-white/10 hover:text-term-text active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-term-green"
+        className="shrink-0 rounded-[6px] px-2 py-1 text-xs text-term-muted transition-colors hover:bg-white/10 hover:text-term-text active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-term-green"
       >
         {copied ? (
           <span className="inline-flex items-center gap-1">

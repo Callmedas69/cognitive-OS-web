@@ -29,6 +29,7 @@
   /* Terminal contrast element (the ONE dark element) */
   --color-term-bg: #1a1a1f;
   --color-term-text: #e8e8e8;
+  --color-term-muted: #b9b9c2;
   --color-term-green: #10b981;
 
   /* Village world palette (pixel backdrop) */
@@ -254,6 +255,56 @@ body::before {
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+/* Bespoke horizontal-scroll cue: quiet, mechanical, and brand-native.
+   Keeps the necessary affordance without a stock pulsing arrow. */
+.calm-scroll-cue {
+  position: relative;
+  display: inline-flex;
+  width: 76px;
+  height: 16px;
+  align-items: center;
+}
+
+.calm-scroll-cue::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: color-mix(in oklab, var(--color-text-muted) 70%, transparent);
+}
+
+.calm-scroll-cue::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mood);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--mood) 14%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .calm-scroll-cue::after {
+    animation: calm-cue-slide 1.9s var(--ease-out) infinite;
+  }
+}
+
+@keyframes calm-cue-slide {
+  0%,
+  18% {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+  54% {
+    transform: translateX(68px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(68px);
+    opacity: 0;
   }
 }
 

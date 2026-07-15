@@ -1,31 +1,40 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef } from "react";
 
 /**
  * Always-visible scroll-progress bar pinned at the viewport top. Its width
- * tracks scroll progress; its color follows the live --mood var (vivid fill —
- * a bar, not text, so no contrast concern). Color lerps via the html
- * transition in globals.css.
+ * tracks native scroll progress; its color follows the live --mood var.
+ * Kept GSAP-free because it is persistent chrome, not scene choreography.
  */
 export default function MoodBar() {
   const barRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    gsap.to(barRef.current, {
-      scaleX: 1,
-      ease: "none",
-      scrollTrigger: {
-        scrub: true,
-        start: "top top",
-        end: "max"
+  useEffect(() => {
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      const progress = Math.min(Math.max(window.scrollY / max, 0), 1);
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${progress})`;
       }
-    });
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (

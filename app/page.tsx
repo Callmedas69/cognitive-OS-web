@@ -39,7 +39,8 @@ const panels = [
     </p>
     <p
       data-enter
-      className="mt-7 inline-flex rounded-lg bg-surface/65 px-4 py-3 font-mono text-sm font-bold text-text shadow-sm"
+      className="mt-7 max-w-[24ch] border-l-4 pl-4 font-body text-base font-semibold leading-snug text-text"
+      style={{ borderColor: "var(--local-accent)" }}
     >
       Structure beats willpower.
     </p>
@@ -109,10 +110,10 @@ NEXT     open focus/current-task.md
       {ZONES.map((z) => (
         <li
           key={z.name}
-          className="group flex items-center gap-3 rounded-2xl bg-surface/70 px-4 py-3 shadow-sm"
+          className="group flex items-center gap-3 rounded-full border border-border/80 bg-bg/45 px-4 py-3 shadow-[0_1px_0_rgba(26,26,26,0.04)] backdrop-blur-sm"
         >
           <span
-            className="h-3 w-3 shrink-0 rounded-full transition-transform duration-300 group-hover:scale-125"
+            className="h-4 w-4 shrink-0 rounded-full ring-4 ring-white/70 transition-transform duration-300 group-hover:scale-110"
             style={{ background: z.color }}
             aria-hidden
           />
@@ -129,7 +130,7 @@ NEXT     open focus/current-task.md
   // 06 Commands — recovery controls, not the product: what each one does when
   // a session goes sideways, plus the honest hook-parity line.
   <div key="06">
-    <ul data-enter className="mt-2 grid gap-3 sm:grid-cols-2">
+    <div data-enter className="mt-2 overflow-hidden rounded-2xl bg-term-bg shadow-xl">
       {[
         { c: "init", role: "scaffold once" },
         { c: "start", role: "show the handoff" },
@@ -137,12 +138,12 @@ NEXT     open focus/current-task.md
         { c: "check", role: "verify the install" },
         { c: "install-skill", role: "add skills to your agents" },
       ].map(({ c, role }) => (
-        <li key={c} className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
-          <p className="font-mono text-sm font-bold text-text">{c}</p>
-          <p className="mt-1 font-mono text-xs text-text-muted">{role}</p>
-        </li>
+        <div key={c} className="grid gap-1 border-b border-white/10 px-4 py-3 last:border-b-0 sm:grid-cols-[150px_1fr] sm:gap-4">
+          <p className="font-mono text-sm font-bold text-term-text">cognitiveos {c}</p>
+          <p className="font-mono text-xs text-term-muted sm:text-sm">{role}</p>
+        </div>
       ))}
-    </ul>
+    </div>
   </div>,
 
   // 07 Open Source
@@ -195,8 +196,8 @@ const footer = (
       <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Farcaster</a>
       <Link href="/docs" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Docs</Link>
     </div>
-    <p className="mt-6 font-mono text-xs opacity-60">MIT · built by 0xDas</p>
-    <p className="mt-2 font-body text-sm font-medium opacity-60">
+    <p className="mt-6 font-mono text-xs text-term-muted">MIT · built by 0xDas</p>
+    <p className="mt-2 font-body text-sm font-medium text-term-muted">
       I opened my laptop and knew exactly what to do.
     </p>
   </footer>
