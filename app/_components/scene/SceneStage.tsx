@@ -311,7 +311,7 @@ export default function SceneStage({
         // Timeline units: 1 hero-exit hold, then per section a 1-unit pan +
         // 1-unit dwell. TOTAL_UNITS * UNIT_PX() is the scroll distance.
         const HOLD = 1;
-        const DWELL = 1;
+        const DWELL = 1.6;
         const TOTAL_UNITS = HOLD + (PANELS - 1) * (1 + DWELL);
         const UNIT_PX = () => 0.6 * window.innerWidth;
 
@@ -356,7 +356,7 @@ export default function SceneStage({
           Array.from(
             heroSection?.querySelectorAll<HTMLElement>(`[data-hero-scatter="${dir}"]`) ?? []
           );
-        const SCATTER_DUR = HOLD * 0.9;
+        const SCATTER_DUR = HOLD * 0.7;
         master
           .to(
             scatterEls("up"),
@@ -455,7 +455,7 @@ export default function SceneStage({
               {
                 ...enterVars(dir, false),
                 stagger: 0.08,
-                duration: DWELL * 0.8,
+                duration: 0.8,
                 ease: "power3.out",
               },
               panStart + 1
