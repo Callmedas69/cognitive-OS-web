@@ -48,10 +48,20 @@ const panels = [
   // 03 Beyond CLAUDE.md — the objection kill: readers who already have a
   // CLAUDE.md need to see what this adds before the mechanism (04) proves it.
   <div key="03">
-    <p data-enter className="max-w-[46ch]">
-      CLAUDE.md tells your agent how to work. cognitiveOS adds current STATE.md, six routed
-      zones, agent skills, and session hooks.
-    </p>
+    <div className="flex flex-col gap-3">
+      <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
+        <p className="font-mono text-sm font-bold text-text">CLAUDE.md</p>
+        <p className="mt-2 font-mono text-xs text-text-muted">how to work</p>
+        <p className="font-mono text-xs text-text-muted">written by you</p>
+        <p className="font-mono text-xs text-text-muted">static between sessions</p>
+      </div>
+      <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm ring-1 ring-emerald/40">
+        <p className="font-mono text-sm font-bold text-emerald-ink">STATE.md</p>
+        <p className="mt-2 font-mono text-xs text-text-muted">where you are</p>
+        <p className="font-mono text-xs text-text-muted">rewritten by your agent</p>
+        <p className="font-mono text-xs text-text-muted">current every session</p>
+      </div>
+    </div>
     <p
       data-enter
       className="mt-7 inline-flex rounded-lg bg-surface/65 px-4 py-3 font-mono text-sm font-bold text-text shadow-sm"
@@ -119,26 +129,28 @@ NEXT     open focus/current-task.md
   // 06 Commands — recovery controls, not the product: what each one does when
   // a session goes sideways, plus the honest hook-parity line.
   <div key="06">
-    <ul data-enter className="mt-2 flex flex-wrap gap-2 font-mono text-sm font-bold text-text">
-      {["init", "start", "dump", "check", "install-skill"].map((c) => (
-        <li key={c} className="rounded-lg bg-surface/70 px-4 py-2 shadow-sm">
-          {c}
+    <ul data-enter className="mt-2 grid gap-3 sm:grid-cols-2">
+      {[
+        { c: "init", role: "scaffold once" },
+        { c: "start", role: "show the handoff" },
+        { c: "dump", role: "capture a thought" },
+        { c: "check", role: "verify the install" },
+        { c: "install-skill", role: "add skills to your agents" },
+      ].map(({ c, role }) => (
+        <li key={c} className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
+          <p className="font-mono text-sm font-bold text-text">{c}</p>
+          <p className="mt-1 font-mono text-xs text-text-muted">{role}</p>
         </li>
       ))}
     </ul>
-    <p data-enter className="mt-4 font-mono text-xs text-text-muted">
-      start shows the handoff. dump captures a thought. check catches drift. Hooks handle
-      session upkeep.
-    </p>
   </div>,
 
   // 07 Open Source
   <div key="07">
     <p data-enter>MIT licensed. No servers, accounts, or database. Just markdown on your machine.</p>
     <div data-enter className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-sm">
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">GitHub</a>
       <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
-      <a href={X_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Farcaster</a>
     </div>
   </div>,
 
@@ -147,7 +159,7 @@ NEXT     open focus/current-task.md
   // existing-project reassurance stays, demoted to small secondary text under
   // the command.
   <div key="08">
-    <div data-enter className="max-w-[400px]">
+    <div data-enter className="max-w-[520px]">
       <Terminal command="npx cognitiveos init" />
     </div>
     <p data-enter className="mt-3 max-w-[46ch] text-sm leading-snug text-text-muted">
@@ -164,7 +176,7 @@ NEXT     open focus/current-task.md
         href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block rounded-lg bg-emerald px-4 py-2 font-mono text-sm font-bold text-[#06281d] transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
+        className="font-mono text-sm font-bold text-text underline decoration-emerald decoration-2 underline-offset-4 transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
       >
         View on GitHub →
       </a>

@@ -87,12 +87,15 @@ export default function SceneStage({
   };
   const panelLayout = (id: string) => {
     if (id === "stop-02") return "numeral" as const;
-    // 04 + 05 both split: headline/kicker left, concrete content (terminal /
-    // zone pills) in the wider right column. 06 + 08 both leftAnchor so the
-    // Start CTA left-aligns to the same edge as the rest of the deck.
-    // 03 is leftAnchor, not statement: statement hides the kicker, and 03's
-    // kicker ("Instructions are not session state.") is load-bearing copy.
-    if (id === "stop-03") return "leftAnchor" as const;
+    // 03 + 04 + 05 all split/splitEqual: headline/kicker left, concrete
+    // content (contrast cards / terminal / zone pills) in the wider right
+    // column. 06 + 08 both leftAnchor so the Start CTA left-aligns to the
+    // same edge as the rest of the deck.
+    // 03 uses split, not statement: statement hides the kicker, and 03's
+    // kicker ("Instructions are not session state.") is load-bearing copy —
+    // split keeps the kicker visible, so it can stay this compact instead of
+    // needing to restate what the cards on the right now carry.
+    if (id === "stop-03") return "split" as const;
     if (id === "stop-04") return "splitEqual" as const;
     if (id === "stop-05") return "split" as const;
     if (id === "stop-06") return "leftAnchor" as const;
