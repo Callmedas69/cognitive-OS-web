@@ -11,10 +11,10 @@ cognitiveOS is agent-agnostic. `init` generates both `CLAUDE.md` and `AGENTS.md`
 
 | Agent | Skill / rule it loads | Keeper subagent | Session hooks |
 | --- | --- | --- | --- |
-| Claude Code | `.claude/skills/cognitiveos/SKILL.md` + slash hooks `/start-session` `/end-session` `/dump` | `.claude/agents/cognitiveos-keeper.md` | ✅ `SessionStart` auto-loads `STATE.md`, ✅ `Stop` reminds you to save it |
-| Codex CLI | `.codex/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.codex/agents/cognitiveos-keeper.toml` | not yet |
-| Antigravity | `.agents/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.agents/agents/cognitiveos-keeper/agent.json` | ✅ `PreInvocation` auto-loads `STATE.md` |
-| Cursor / Windsurf | `.cursor/rules/cognitiveos.mdc` (+ `AGENTS.md`) | `.cursor/agents/cognitiveos-keeper.md` | n/a |
+| Claude Code | `.claude/skills/cognitiveos/SKILL.md` + slash hooks `/start-session` `/end-session` `/dump` | `.claude/agents/0xnull-the-keeper.md` | ✅ `SessionStart` auto-loads `STATE.md`, ✅ `Stop` reminds you to save it |
+| Codex CLI | `.codex/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.codex/agents/0xnull-the-keeper.toml` | not yet |
+| Antigravity | `.agents/skills/cognitiveos/SKILL.md` (+ `AGENTS.md`) | `.agents/agents/0xnull-the-keeper/agent.json` | ✅ `PreInvocation` auto-loads `STATE.md` |
+| Cursor / Windsurf | `.cursor/rules/cognitiveos.mdc` (+ `AGENTS.md`) | `.cursor/agents/0xnull-the-keeper.md` | n/a |
 
 Claude Code and Antigravity get the deterministic [session hooks](/docs/hooks) that load `STATE.md` with zero typing, and Claude Code alone gets the Stop-hook save reminder. Codex and Cursor load the skill and `AGENTS.md`, so they pick up context on read; the automatic hook for those is an open [community target](/docs/contributing). See [The Keeper](/docs/keeper) for what the keeper subagent actually does.
 

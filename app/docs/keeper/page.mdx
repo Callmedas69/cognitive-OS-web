@@ -1,13 +1,13 @@
 export const metadata = {
   title: "The Keeper: cognitiveOS docs",
-  description: "0xnull, the maintenance subagent, and the 6-question first-run interview.",
+  description: "0xnull, the maintenance subagent that writes state so your main thread doesn't have to.",
 };
 
 # The Keeper
 
-`init` generates a dispatched subagent named **0xnull** for every AI agent you select. It owns the filesystem-maintenance chores (STATE.md upkeep, session handoff, drift repair, the first-run interview) so your main working thread never has to context-switch into bookkeeping.
+`init` generates a dispatched subagent named **0xnull** for every AI agent you select. It owns the filesystem-maintenance chores (STATE.md upkeep, session handoff, drift repair, writing up the first-run setup answers) so your main working thread never has to context-switch into bookkeeping.
 
-**Dispatched, not autonomous.** 0xnull acts when invoked for a specific task, updates state, and hands back. It does not loop on its own.
+**Dispatched, not autonomous.** 0xnull acts when invoked for a specific task, updates state, and hands back. It does not loop on its own, and it has no channel to ask you anything: it never interviews or prompts. If a task needs an answer it wasn't given, it stops and hands back to the main thread with exactly what it needs.
 
 ## Where it lives
 
@@ -22,7 +22,7 @@ Same identity and rules on every platform, rendered into each agent's native cus
 
 ## What it owns
 
-1. **First-run setup interview** (see below), when the project context is still the scaffold.
+1. **First-run setup writes** (see below): after your main agent runs the interview, 0xnull takes the 6 answers and writes them into the project files, then removes the setup marker.
 2. **STATE.md upkeep**: Current Focus, Blockers, Open Loops, and the Session Handoff stay true to what just happened. STATE.md is a snapshot, not a log; finished work rolls to `sessions/`.
 3. **CONTEXT.md upkeep**: each zone's and the active project's `CONTEXT.md` stays accurate as the project moves.
 4. **Session-end handoff**: last worked on / stopped because / pick up by / watch out for, so the next session resumes cold with zero ramp-up. The session log entry is named after the task; decisions get a revisit condition, and anything that outlives the day gets elevated to the project `CONTEXT.md`.
@@ -30,11 +30,11 @@ Same identity and rules on every platform, rendered into each agent's native cus
 
 ## The first-run interview
 
-`init` only knows your project's name. On a fresh project, `STATE.md` carries a hidden setup sentinel (`<!-- cognitiveos:setup-needed -->`) until real context is filled in. The first time your agent (or 0xnull) acts in the project, it offers:
+`init` only knows your project's name. On a fresh project, `STATE.md` carries a hidden setup sentinel (`<!-- cognitiveos:setup-needed -->`) until real context is filled in. The first time your **main agent** acts in the project, it offers:
 
 > "Want a 60-second setup? I'll ask 6 quick questions so I always know this project's context. (Y/n)"
 
-Decline, and the sentinel is swapped for a deferred marker so the offer never repeats, though you can still trigger setup any time later. Accept, and it asks **one question per turn**, pre-filling a guess from your repo (README, `package.json`, git log) where it can:
+This interview runs on your main working thread, not 0xnull: the keeper is a headless subagent with no channel to ask you anything. Decline, and the sentinel is swapped for a deferred marker so the offer never repeats, though you can still trigger setup any time later. Accept, and your agent asks **one question per turn**, pre-filling a guess from your repo (README, `package.json`, git log) where it can:
 
 1. What is this project, and who is it for?
 2. Who is this for: yourself, a client, or an audience? (Client: name + delivery rules.)
@@ -43,7 +43,7 @@ Decline, and the sentinel is swapped for a deferred marker so the offer never re
 5. What's the very next action, and how will you know it's done?
 6. Anything to watch out for: decisions already made, gotchas, no-gos?
 
-Answers land in `projects/<project>/CONTEXT.md` (role, working mode, goal, stack, notes), `STATE.md` (Current Focus, the Watch out for handoff line), and `focus/current-task.md` (the next action as a **Task:** line plus its **Done when:** stop condition). Your working mode from Q2 then shapes how the agent thinks from then on: client work leans on scope and deadline discipline, audience work on publishing cadence and voice, a personal project on momentum over polish.
+Once you've answered, 0xnull is dispatched to write the answers: `projects/<project>/CONTEXT.md` (role, working mode, goal, stack, notes), `STATE.md` (Current Focus, the Watch out for handoff line), and `focus/current-task.md` (the next action as a **Task:** line plus its **Done when:** stop condition). Your working mode from Q2 then shapes how the agent thinks from then on: client work leans on scope and deadline discipline, audience work on publishing cadence and voice, a personal project on momentum over polish.
 
 ## The in-session loop
 

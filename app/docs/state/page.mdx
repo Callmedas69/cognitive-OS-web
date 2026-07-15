@@ -16,7 +16,7 @@ On a fresh `init`, `STATE.md` carries a hidden setup sentinel until your project
 ## The 7 sections
 
 ```markdown
-# STATE.md: Current State
+# STATE.md — Current State
 > A snapshot, not a log. Overwritten each session. History lives in sessions/.
 
 ## Current Focus
@@ -67,15 +67,14 @@ This is what an ADHD brain needs first: not "here's your state," but "here's lit
 `cognitiveos start` reads the Handoff and leads with it. The **➡ PICK UP** line is the first thing you see: the exact next action, with the stop reason underneath:
 
 ```
-┌─ cognitiveOS ──────────────────────────────┐
-│  ➡  PICK UP    Wire the deploy script       │
-│               (stopped: waiting on RPC key) │
-│                                            │
-│  🔥 FOCUS     Fix wallet connection bug     │
-│  🔁 LOOPS     2 open                        │
-│  🧱 BLOCKED   Base RPC key                  │
-│  ✅ RECENT    Shipped contract v2           │
-└────────────────────────────────────────────┘
+┌─ cognitiveOS ──────────────────────────┐
+│ ➡ PICK UP  Wire the deploy script     │
+│           stopped: waiting on RPC key │
+│ FOCUS    Fix wallet connection bug    │
+│ LOOPS    2 open                       │
+│ BLOCKED  Base RPC key                 │
+│ RECENT   Shipped contract v2          │
+└───────────────────────────────────────┘
 ```
 
 The same pick-up line leads the hook envelope your agent reads at session start, so it resumes exactly where you left off. If files in the project changed on a later day than the last `STATE.md` save, Mission Control flags the handoff as possibly stale, since the summary may predate the real last work.
