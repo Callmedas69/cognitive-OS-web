@@ -44,13 +44,35 @@ const panels = [
     </p>
   </div>,
 
-  // 03 How It Works — concrete first, then the payoff made visible. The box is
+  // 03 Beyond CLAUDE.md — the objection kill: readers who already have a
+  // CLAUDE.md need to see what this adds before the mechanism (04) proves it.
+  <div key="03">
+    <p data-enter className="max-w-[46ch]">
+      CLAUDE.md tells your agent how to work. cognitiveOS adds current STATE.md, six routed
+      zones, agent skills, and session hooks.
+    </p>
+    <p
+      data-enter
+      className="mt-7 inline-flex rounded-lg bg-surface/65 px-4 py-3 font-mono text-sm font-bold text-text shadow-sm"
+    >
+      A productivity system asks you to maintain it. This maintains itself.
+    </p>
+    <p data-enter className="mt-5 max-w-[38ch] font-mono text-sm text-text-muted">
+      Keep your file. Add the state layer.
+    </p>
+  </div>,
+
+  // 04 How It Works — concrete first, then the payoff made visible. The box is
   // the real `cognitiveos start` output (src/lib/output.ts), not a mock: same
   // labels, same 9-col label gutter. Keep it that way.
-  <div key="03">
+  <div key="04">
     <p data-enter className="max-w-[46ch]">
       Plain markdown next to your code. Your agent updates it as you work, and reads it back
       before it touches anything.
+    </p>
+    <p data-enter className="mt-4 max-w-[46ch]">
+      Hooks save your state when you close the session and load it when you open. You never
+      run a save command. Disappear for two weeks and it still knows where you were.
     </p>
     <pre
       data-enter
@@ -71,8 +93,8 @@ const panels = [
     </pre>
   </div>,
 
-  // 04 Six Zones
-  <div key="04">
+  // 05 Six Zones
+  <div key="05">
     <ul data-enter className="grid gap-3 sm:grid-cols-2">
       {ZONES.map((z) => (
         <li
@@ -89,12 +111,14 @@ const panels = [
       ))}
     </ul>
     <p data-enter className="mt-5 max-w-[38ch] font-mono text-sm text-text-muted">
-      focus/ holds exactly one task. The architecture makes two impossible.
+      focus/ holds exactly one task. The agent refuses a second. check fails loudly if two
+      ever appear.
     </p>
   </div>,
 
-  // 05 Commands
-  <div key="05">
+  // 06 Commands — recovery controls, not the product: what each one does when
+  // a session goes sideways, plus the honest hook-parity line.
+  <div key="06">
     <ul data-enter className="mt-2 flex flex-wrap gap-2 font-mono text-sm font-bold text-text">
       {["init", "start", "dump", "check", "install-skill"].map((c) => (
         <li key={c} className="rounded-lg bg-surface/70 px-4 py-2 shadow-sm">
@@ -103,12 +127,13 @@ const panels = [
       ))}
     </ul>
     <p data-enter className="mt-4 font-mono text-xs text-text-muted">
-      init once. then start · dump · check.
+      start shows the handoff. dump captures a thought. check catches drift. Hooks handle
+      session upkeep.
     </p>
   </div>,
 
-  // 06 Open Source
-  <div key="06">
+  // 07 Open Source
+  <div key="07">
     <p data-enter>MIT licensed. No servers, accounts, or database. Just markdown on your machine.</p>
     <div data-enter className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-sm">
       <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
@@ -117,11 +142,11 @@ const panels = [
     </div>
   </div>,
 
-  // 07 Start — the closing CTA should read as strong as the hero's, so reuse
+  // 08 Start — the closing CTA should read as strong as the hero's, so reuse
   // the same styled Terminal copy-block instead of naked bold text. The
   // existing-project reassurance stays, demoted to small secondary text under
   // the command.
-  <div key="07">
+  <div key="08">
     <div data-enter className="max-w-[400px]">
       <Terminal command="npx cognitiveos init" />
     </div>
@@ -174,7 +199,7 @@ const heroHeadline = (
       data-hero-scatter="up"
       className="mb-4 block font-mono text-sm font-medium tracking-normal text-text-muted"
     >
-      the memory for a dev with executive dysfunction
+      the memory for an ADHD developer
     </span>
     <span data-hero-scatter="up" className="inline-block">STOP</span>{" "}
     <span data-hero-scatter="left" className="inline-block">RELEARNING</span>{" "}

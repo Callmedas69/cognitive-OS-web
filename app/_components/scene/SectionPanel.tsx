@@ -7,7 +7,7 @@ const shellByLayout: Record<SectionLayout, string> = {
   center: "items-center justify-center px-6 py-4",
   split: "items-center justify-center px-6 py-4 lg:px-12",
   // Equal 50/50 columns; the right column is allowed to bleed its content past
-  // the panel edge (the pinned deck clips it at the viewport). Used by stop-03
+  // the panel edge (the pinned deck clips it at the viewport). Used by stop-04
   // so the terminal reads as a wide artifact spilling off-screen.
   splitEqual: "items-center justify-center px-6 py-4 lg:px-12",
   numeral: "items-center justify-center px-6 py-4 lg:px-12",
