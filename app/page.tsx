@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Terminal from "./_components/Terminal";
+import TerminalWindow from "./_components/TerminalWindow";
 import SceneStage from "./_components/scene/SceneStage";
 import FooterTagline from "./_components/scene/FooterTagline";
 import { ZONES } from "@/content/stops";
@@ -62,9 +63,10 @@ const panels = [
     </p>
   </div>,
 
-  // 04 How It Works — concrete first, then the payoff made visible. The box is
-  // the real `cognitiveos start` output (src/lib/output.ts), not a mock: same
-  // labels, same 9-col label gutter. Keep it that way.
+  // 04 How It Works — concrete first, then the payoff made visible. Labels
+  // and values mirror the real `cognitiveos start` output (src/lib/output.ts).
+  // The macOS chrome replaces the CLI's ASCII border; content isn't a
+  // verbatim frame anymore.
   <div key="04">
     <p data-enter className="max-w-[46ch]">
       Plain markdown next to your code. Your agent updates it as you work, and reads it back
@@ -74,23 +76,21 @@ const panels = [
       Hooks save your state when you close the session and load it when you open. You never
       run a save command. Disappear for two weeks and it still knows where you were.
     </p>
-    <pre
+    <TerminalWindow
       data-enter
-      className="mt-6 w-full overflow-x-auto rounded-[10px] bg-term-bg px-4 py-3.5 font-mono text-[11px] leading-relaxed text-term-text sm:text-sm lg:w-max lg:max-w-none lg:overflow-visible"
+      className="mt-6"
       aria-label="Example output of the cognitiveos start command"
     >
       <span className="text-term-green select-none">$ </span>start
       {`
-┌─ cognitiveOS ──────────────────────────────────────────┐
-│ FOCUS    fix wallet connection bug                     │
-│          (projects/my-dapp)                            │
-│ LAST     2 days ago                                    │
-│ LOOPS    1 open                                        │
-│ BLOCKED  waiting on Base RPC key                       │
-│ NEXT     open focus/current-task.md                    │
-│          done when: wallet connects on Base mainnet    │
-└────────────────────────────────────────────────────────┘`}
-    </pre>
+FOCUS    fix wallet connection bug
+         (projects/my-dapp)
+LAST     2 days ago
+LOOPS    1 open
+BLOCKED  waiting on Base RPC key
+NEXT     open focus/current-task.md
+         done when: wallet connects on Base mainnet`}
+    </TerminalWindow>
   </div>,
 
   // 05 Six Zones
