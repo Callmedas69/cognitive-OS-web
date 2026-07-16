@@ -322,6 +322,9 @@ export default function SceneStage({
         // away) and the curtain slides over it.
         const CURTAIN_START = HOLD + last * (1 + DWELL);
         const CURTAIN_DURATION = 1;
+        // Extra hold after the curtain fully closes before the footer tagline
+        // char-stagger begins, so the close reads as finished before text moves.
+        const FOOTER_REVEAL_DELAY = 0.6;
 
         // Zero-duration placeholder used only to pin the timeline's total
         // duration to TOTAL_UNITS before T6/T8/T9 add real content into the
@@ -419,6 +422,7 @@ export default function SceneStage({
         // it to --footer-reveal (FooterTagline reads it every rAF tick).
         const footerReveal = { v: 0 };
         root.style.setProperty("--footer-reveal", "0");
+        root.style.setProperty("--chrome-hide", "0");
 
         const ENTER_DIRECTIONS = ["up", "left", "down", "right"] as const;
         type EnterDir = (typeof ENTER_DIRECTIONS)[number];
@@ -529,10 +533,21 @@ export default function SceneStage({
                 lerp(STOPS[last].accent, FOOTER_ACCENT, moodToFooter.t) as string,
                 lerp(STOPS[last].accentInk, FOOTER_ACCENT, moodToFooter.t) as string
               );
+              root.style.setProperty("--chrome-hide", String(moodToFooter.t));
             },
           },
           CURTAIN_START
         );
+        // Fade the mascot out as the footer curtain closes, reversible on
+        // scroll-back since it's driven by the same scrubbed master timeline
+        // (not a one-shot). See TimelineNav's --chrome-hide read for the nav.
+        if (mascotOverlayRef.current) {
+          master.to(
+            mascotOverlayRef.current,
+            { autoAlpha: 0, ease: "none", duration: CURTAIN_DURATION },
+            CURTAIN_START
+          );
+        }
         // Footer tagline: starts only once the curtain has fully closed
         // (100% covering), then rises across nearly the whole hold that
         // follows — a deliberate, unhurried close rather than a snap.
@@ -545,7 +560,7 @@ export default function SceneStage({
             ease: "power2.out",
             onUpdate: () => root.style.setProperty("--footer-reveal", String(footerReveal.v)),
           },
-          CURTAIN_START + CURTAIN_DURATION
+          CURTAIN_START + CURTAIN_DURATION + FOOTER_REVEAL_DELAY
         );
 
         master.set(durationProxy, {}, TOTAL_UNITS);
@@ -718,6 +733,9 @@ export default function SceneStage({
             aria-hidden
           >
             <Mascot size="hero" />
+            <span className="absolute inset-x-0 top-full mt-1 text-center font-mono text-[10px] tracking-wide text-text-muted">
+              0xnull · the keeper
+            </span>
           </div>,
           document.body
         )}

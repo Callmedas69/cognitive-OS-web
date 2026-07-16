@@ -56,7 +56,7 @@ export default function HeroPanel({
             className="js-entrance-hide mt-6 block h-1 w-14 rounded-full bg-mood"
             aria-hidden
           />
-          <div data-hero-scatter="left" className="js-entrance-hide mt-7 max-w-[380px]">
+          <div data-hero-scatter="left" className="js-entrance-hide mt-7 max-w-[500px]">
             {children}
           </div>
 

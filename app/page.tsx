@@ -8,7 +8,6 @@ import { ZONES } from "@/content/stops";
 const GITHUB_URL = "https://github.com/Callmedas69/cognitive-OS";
 const NPM_URL = "https://www.npmjs.com/package/cognitiveos";
 const X_URL = "https://x.com/Callmedas69";
-const FARCASTER_URL = "https://warpcast.com/callmedas69";
 
 // One body node per stop, aligned to STOPS. Number, kicker + headline come from
 // the section meta (rendered by SectionPanel / HeroPanel). Copy follows the
@@ -19,8 +18,8 @@ const panels = [
   // the thing IS.
   <div key="01">
     <p className="mb-5 text-base leading-snug text-text-muted">
-      Plain markdown files your AI agent keeps updated. Come back and it already knows where you
-      left off.
+      Plain markdown files your AI agent keeps updated. Come back and it{" "}
+      <span className="text-mood-ink">already knows</span> where you left off.
     </p>
     <Terminal command="npx cognitiveos init" cursor />
   </div>,
@@ -34,8 +33,10 @@ const panels = [
     >
       15-30
     </p>
-    <p data-enter className="mt-4 max-w-[26ch] text-2xl leading-tight text-text">
-      minutes lost reopening context. Not coding. Recovering.
+    <p data-enter className="mt-4 max-w-[40ch] text-2xl leading-tight text-text">
+      minutes lost reopening context. Not coding.
+      <br/>
+      Recovering.
     </p>
     <p
       data-enter
@@ -49,18 +50,24 @@ const panels = [
   // 03 Beyond CLAUDE.md — the objection kill: readers who already have a
   // CLAUDE.md need to see what this adds before the mechanism (04) proves it.
   <div key="03">
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col-2 gap-3">
       <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
         <p className="font-mono text-sm font-bold text-text">CLAUDE.md</p>
-        <p className="mt-2 font-mono text-xs text-text-muted">how to work</p>
-        <p className="font-mono text-xs text-text-muted">written by you</p>
-        <p className="font-mono text-xs text-text-muted">static between sessions</p>
+        <p className="mt-2 font-mono text-xs text-text-muted">the map + routes</p>
+        <p className="font-mono text-xs text-text-muted">where things live</p>
+        <p className="font-mono text-xs text-text-muted">mostly static</p>
       </div>
       <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm ring-1 ring-emerald/40">
         <p className="font-mono text-sm font-bold text-emerald-ink">STATE.md</p>
         <p className="mt-2 font-mono text-xs text-text-muted">where you are</p>
-        <p className="font-mono text-xs text-text-muted">rewritten by your agent</p>
+        <p className="font-mono text-xs text-text-muted">rewritten by agent</p>
         <p className="font-mono text-xs text-text-muted">current every session</p>
+      </div>
+      <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
+        <p className="font-mono text-sm font-bold text-text">CONTEXT.md</p>
+        <p className="mt-2 font-mono text-xs text-text-muted">one per zone</p>
+        <p className="font-mono text-xs text-text-muted">the workspace&apos;s manual</p>
+        <p className="font-mono text-xs text-text-muted">how to work in it</p>
       </div>
     </div>
     <p
@@ -69,8 +76,8 @@ const panels = [
     >
       A productivity system asks you to maintain it. This maintains itself.
     </p>
-    <p data-enter className="mt-5 max-w-[38ch] font-mono text-sm text-text-muted">
-      Keep your file. Add the state layer.
+    <p data-enter className="mt-5 max-w-[60ch] font-mono text-sm text-text-muted">
+      0xnull, the keeper, writes STATE.md and repairs drift, so you never do the bookkeeping.
     </p>
   </div>,
 
@@ -84,8 +91,9 @@ const panels = [
       before it touches anything.
     </p>
     <p data-enter className="mt-4 max-w-[46ch]">
-      Hooks save your state when you close the session and load it when you open. You never
-      run a save command. Disappear for two weeks and it still knows where you were.
+      Hooks save your state when you close the session and load it when you open. You{" "}
+      <span style={{ color: "var(--local-ink)" }}>never run a save command</span>. Disappear for
+      two weeks and it still knows where you were.
     </p>
     <TerminalWindow
       data-enter
@@ -121,9 +129,9 @@ NEXT     open focus/current-task.md
         </li>
       ))}
     </ul>
-    <p data-enter className="mt-5 max-w-[38ch] font-mono text-sm text-text-muted">
-      focus/ holds exactly one task. The agent refuses a second. check fails loudly if two
-      ever appear.
+    <p data-enter className="mt-5 max-w-[60ch] font-mono text-sm text-text-muted">
+      focus/ holds <span style={{ color: "var(--local-ink)" }}>exactly one task</span>. The agent
+      refuses a second. check fails loudly if two appear.
     </p>
   </div>,
 
@@ -138,21 +146,27 @@ NEXT     open focus/current-task.md
         { c: "check", role: "verify the install" },
         { c: "install-skill", role: "add skills to your agents" },
       ].map(({ c, role }) => (
-        <div key={c} className="grid gap-1 border-b border-white/10 px-4 py-3 last:border-b-0 sm:grid-cols-[150px_1fr] sm:gap-4">
+        <div key={c} className="grid gap-1 border-b border-white/10 px-4 py-3 last:border-b-0 sm:grid-cols-[max-content_1fr] sm:gap-4">
           <p className="font-mono text-sm font-bold text-term-text">cognitiveos {c}</p>
           <p className="font-mono text-xs text-term-muted sm:text-sm">{role}</p>
         </div>
       ))}
     </div>
+    <p data-enter className="mt-4 font-mono text-xs text-text-muted sm:text-sm">
+      Works with: Claude Code, Codex, Cursor, Antigravity.
+      <br />
+      Session hooks: Claude Code, Antigravity. Skill files: all four.
+    </p>
   </div>,
 
   // 07 Open Source
   <div key="07">
-    <p data-enter>MIT licensed. No servers, accounts, or database. Just markdown on your machine.</p>
-    <div data-enter className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-sm">
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">GitHub</a>
-      <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
-    </div>
+    <p data-enter className="flex-col">
+      MIT licensed.{" "}
+      <span style={{ color: "var(--local-ink)" }}>No servers, accounts, or database</span>.
+      <br />
+      Just markdown on your machine.
+    </p>  
   </div>,
 
   // 08 Start — the closing CTA should read as strong as the hero's, so reuse
@@ -193,7 +207,6 @@ const footer = (
       <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">GitHub</a>
       <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">npm</a>
       <a href={X_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">X</a>
-      <a href={FARCASTER_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Farcaster</a>
       <Link href="/docs" className="transition-colors hover:text-emerald focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald">Docs</Link>
     </div>
     <p className="mt-6 font-mono text-xs text-term-muted">MIT · built by 0xDas</p>

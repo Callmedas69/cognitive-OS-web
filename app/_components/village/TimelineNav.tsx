@@ -35,6 +35,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
   const iconsRef = useRef<(HTMLImageElement | null)[]>([]);
   const containerRef = useRef<HTMLOListElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!mounted || !containerRef.current || !lineRef.current) return;
@@ -62,6 +63,15 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
         const lineSeg = parseFloat(progressStr) * totalStops;
         const lineP = clamp(0, 1, lineSeg / Math.max(1, totalStops - 1));
         if (lineRef.current) lineRef.current.style.transform = `scaleX(${lineP})`;
+      }
+      // Fade the nav out as the footer curtain closes (--chrome-hide, driven
+      // by SceneStage's scrubbed master timeline) and drop pointer events
+      // once it's fully hidden, since it's fixed + z-40 and would otherwise
+      // still intercept clicks on the footer links behind it.
+      const hide = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--chrome-hide")) || 0;
+      if (navRef.current) {
+        navRef.current.style.opacity = String(1 - hide);
+        navRef.current.style.pointerEvents = hide > 0.99 ? "none" : "";
       }
       raf = requestAnimationFrame(tick);
     };
@@ -105,6 +115,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
 
   const nav = (
     <nav
+      ref={navRef}
       aria-label="Journey stops"
       className="chrome-glass fixed inset-x-0 bottom-0 z-40 backdrop-blur-sm"
     >
@@ -138,7 +149,7 @@ export default function TimelineNav({ stops, active, onJump }: TimelineNavProps)
                     className="h-full w-full object-contain pointer-events-none transition-transform duration-200 ease-out"
                   />
                 </span>
-                <span className="hidden lg:block">{s.name}</span>
+                <span className={i === a ? "block font-bold" : "hidden lg:block"}>{s.name}</span>
               </button>
             </li>
           ))}

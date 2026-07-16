@@ -99,7 +99,7 @@ export default function SectionPanel({
         {meta.num} / {meta.name}
       </p>
       {showKicker && (
-        <p data-enter className="mt-4 max-w-[36ch] font-mono text-sm leading-snug text-text-muted">
+        <p data-enter className="mt-4 max-w-[45ch] font-mono text-sm leading-snug text-text-muted">
           {meta.bubble}
         </p>
       )}
