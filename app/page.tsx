@@ -50,7 +50,7 @@ const panels = [
   // 03 Beyond CLAUDE.md — the objection kill: readers who already have a
   // CLAUDE.md need to see what this adds before the mechanism (04) proves it.
   <div key="03">
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       <div data-enter className="rounded-2xl bg-surface/70 px-4 py-3 shadow-sm">
         <p className="font-mono text-sm font-bold text-text">CLAUDE.md</p>
         <p className="mt-2 font-mono text-xs text-text-muted">the map + routes</p>
