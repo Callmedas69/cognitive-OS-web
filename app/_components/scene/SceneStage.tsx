@@ -311,7 +311,7 @@ export default function SceneStage({
         // Timeline units: 1 hero-exit hold, then per section a 1-unit pan +
         // 1-unit dwell. TOTAL_UNITS * UNIT_PX() is the scroll distance.
         const HOLD = 1;
-        const DWELL = 1.6;
+        const DWELL = 2.6;
         const TOTAL_UNITS = HOLD + (PANELS - 1) * (1 + DWELL);
         const UNIT_PX = () => 0.6 * window.innerWidth;
 
@@ -344,7 +344,7 @@ export default function SceneStage({
             // Lock the section to scroll position (no lag) so the timeline dot
             // and mood always match the visible section. A scrub delay would
             // make the highlight lead the section during scrolling.
-            scrub: true,
+            scrub: 1,
             invalidateOnRefresh: true,
             onUpdate: apply,
           },
@@ -459,11 +459,44 @@ export default function SceneStage({
               {
                 ...enterVars(dir, false),
                 stagger: 0.08,
-                duration: 0.8,
+                duration: 1.0,
                 ease: "power3.out",
               },
               panStart + 1
             );
+          }
+
+          // Headline keyword wipe: after the entrance settles, a solid
+          // accentInk block slides across the keyword (curtain), letters
+          // knock out to the page surface. Live on all seven panels.
+          // Start/duration are uniform but load-bearing, not arbitrary:
+          // panel 03 has the latest entrance of all seven (9 [data-enter]
+          // nodes, stagger 0.08, duration 1.0 -> ends at panStart + 1 +
+          // 8*0.08 + 1.0 = panStart + 2.64). WIPE_START (2.69) is that
+          // latest end + a 0.05 buffer, the earliest uniform start that
+          // clears every panel's entrance. WIPE_DURATION (0.45) is slow
+          // enough to read as deliberate, not a snap. Panels with earlier
+          // entrances (e.g. 07 ends sooner) sit still for a beat before
+          // wiping — intended, not a gap to fill. Wipe ends at panStart +
+          // 3.14; the next pan doesn't start until panStart + 1 + DWELL =
+          // panStart + 3.6, leaving a ~0.46-unit hold after the block anim
+          // finishes before the pin releases (eyeball fix: pin must not
+          // release right after the block anim).
+          // Two-value backgroundPosition: [data-keyword] carries two bg
+          // layers (text-clipped knockout + border-box block, see
+          // globals.css) and both must slide together or the effect tears.
+          if (STOPS[k].keyword) {
+            const kw = sectionEls[k]?.querySelector("[data-keyword]");
+            if (kw) {
+              const WIPE_START = 2.69;
+              const WIPE_DURATION = 0.45;
+              master.fromTo(
+                kw,
+                { backgroundPosition: "100% 0, 100% 0" },
+                { backgroundPosition: "0% 0, 0% 0", ease: "none", duration: WIPE_DURATION },
+                panStart + WIPE_START
+              );
+            }
           }
         }
 
@@ -538,13 +571,14 @@ export default function SceneStage({
           },
           CURTAIN_START
         );
-        // Fade the mascot out as the footer curtain closes, reversible on
+        // Slide the mascot off as the footer curtain closes, reversible on
         // scroll-back since it's driven by the same scrubbed master timeline
         // (not a one-shot). See TimelineNav's --chrome-hide read for the nav.
         if (mascotOverlayRef.current) {
-          master.to(
+          master.fromTo(
             mascotOverlayRef.current,
-            { autoAlpha: 0, ease: "none", duration: CURTAIN_DURATION },
+            { yPercent: 0 },
+            { yPercent: 140, ease: "none", duration: CURTAIN_DURATION },
             CURTAIN_START
           );
         }

@@ -308,3 +308,38 @@ body::before {
   }
 }
 
+/* Headline keyword highlighter knockout (SectionPanel). Two background
+   layers on one span, both parked at the INK end so it renders identical to
+   a plain text node until task 3 slides both layers together toward 0%.
+   Layer 1 (text-clipped): the knockout surface color on the left half,
+   --local-ink on the right half — parked, only the --local-ink half shows.
+   Layer 2 (border-box): the ink block on the left half, transparent on the
+   right half — parked, only the transparent half shows. The hard 50% color
+   stop is the curtain edge; at full wipe the ink block covers the keyword
+   and the glyphs knock out to the page surface color. */
+[data-keyword] {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0.08em 0.22em;
+  background-image:
+    linear-gradient(90deg, var(--color-bg) 0 50%, var(--local-ink) 50% 100%),
+    linear-gradient(90deg, var(--local-ink) 0 50%, transparent 50% 100%);
+  background-size: 200% 100%, 200% 100%;
+  background-position: 100% 0, 100% 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text, border-box;
+  background-clip: text, border-box;
+  color: transparent;
+}
+
+/* The wipe is a horizontal-mode-only GSAP tween (SceneStage). Below the
+   900px pin breakpoint and under prefers-reduced-motion, that engine never
+   runs, so the keyword would otherwise sit stuck at the parked (unwiped)
+   position. Force the wiped end-state statically instead — still reads as
+   emphasized, no animation. */
+@media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
+  [data-keyword] {
+    background-position: 0% 0, 0% 0;
+  }
+}
+

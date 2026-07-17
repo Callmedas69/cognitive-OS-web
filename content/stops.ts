@@ -23,6 +23,10 @@ export type StopMeta = {
   bubble: string;
   /** Display headline (Bebas Neue). */
   headline: string;
+  /** Substring of `headline` that gets the accent wipe. Must match exactly. */
+  keyword?: string;
+  /** Smaller display size for headlines whose longest line won't fit the column at default scale. */
+  compactHeadline?: boolean;
   /** Timeline icon */
   icon: string;
 };
@@ -45,7 +49,8 @@ export const STOPS: StopMeta[] = [
     accent: "#ff8a5c",
     accentInk: "#c2410c",
     bubble: "Lost context becomes lost momentum.",
-    headline: "THE 30-MINUTE TAX",
+    headline: "THE 30 MINUTE TAX",
+    keyword: "30 MINUTE",
     icon: "/assets/generated/rock.png",
   },
   {
@@ -56,6 +61,7 @@ export const STOPS: StopMeta[] = [
     accentInk: "#4338ca",
     bubble: "Instructions are not session state.",
     headline: "RULES DO NOT REMEMBER WHERE YOU STOPPED",
+    keyword: "REMEMBER",
     icon: "/assets/generated/workshop.png",
   },
   {
@@ -66,6 +72,7 @@ export const STOPS: StopMeta[] = [
     accentInk: "#0e7490",
     bubble: "Come back. Your agent already knows.",
     headline: "YOUR AGENT READS THE FILES FIRST",
+    keyword: "AGENT READS",
     icon: "/assets/generated/folder_flag.png",
   },
   {
@@ -75,7 +82,8 @@ export const STOPS: StopMeta[] = [
     accent: "#a78bfa",
     accentInk: "#6d28d9",
     bubble: "One folder per cognitive mode.",
-    headline: "SIX ZONES, ONE BRAIN",
+    headline: "SIX ZONES ONE BRAIN",
+    keyword: "ONE BRAIN",
     icon: "/assets/generated/library.png",
   },
   {
@@ -85,7 +93,9 @@ export const STOPS: StopMeta[] = [
     accent: "#fbbf24",
     accentInk: "#b45309",
     bubble: "Session hooks for Claude Code + Antigravity. Skill files for all four.",
-    headline: "INIT ONCE. KEEP THE THREAD.",
+    headline: "INIT ONCE\nKEEP THE THREAD",
+    keyword: "INIT ONCE",
+    compactHeadline: true,
     icon: "/assets/generated/terminal_icon.png",
   },
   {
@@ -95,7 +105,8 @@ export const STOPS: StopMeta[] = [
     accent: "#fb7185",
     accentInk: "#e11d48",
     bubble: "MIT. Local files. Your machine.",
-    headline: "FREE. OPEN SOURCE. YOURS.",
+    headline: "FREE • OPEN SOURCE • YOURS.",
+    keyword: "OPEN SOURCE",
     icon: "/assets/generated/cherry_blossom.png",
   },
   {
@@ -105,7 +116,8 @@ export const STOPS: StopMeta[] = [
     accent: "#60a5fa",
     accentInk: "#1d4ed8",
     bubble: "Install the structure. Keep the thread.",
-    headline: "OPEN YOUR LAPTOP. KNOW WHAT TO DO.",
+    headline: "OPEN YOUR LAPTOP KNOW WHAT TO DO",
+    keyword: "KNOW WHAT TO DO",
     icon: "/assets/generated/street_lamp.png",
   },
 ];

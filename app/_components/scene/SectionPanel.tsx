@@ -93,6 +93,21 @@ export default function SectionPanel({
   );
   const headlineTopClass = rulePosition === "before" ? "mt-5" : showKicker ? "mt-2" : "mt-5";
 
+  // Split once on the keyword substring (not a word-split — keywords like
+  // "30-MINUTE" and "AGENT READS" don't sit on clean word boundaries). No
+  // keyword, or a keyword that doesn't resolve, renders the headline as-is.
+  const keywordIndex = meta.keyword ? meta.headline.indexOf(meta.keyword) : -1;
+  const headlineContent =
+    keywordIndex === -1 || !meta.keyword ? (
+      meta.headline
+    ) : (
+      <>
+        {meta.headline.slice(0, keywordIndex)}
+        <span data-keyword>{meta.keyword}</span>
+        {meta.headline.slice(keywordIndex + meta.keyword.length)}
+      </>
+    );
+
   const metaBlock = (
     <div>
       <p data-enter className="font-mono text-xs tracking-[0.15em] text-text-muted">
@@ -106,10 +121,10 @@ export default function SectionPanel({
       {rulePosition === "before" && <div className="mt-5">{rule}</div>}
       <h2
         data-enter
-        className={`${headlineTopClass} font-display text-[clamp(40px,6vw,92px)] leading-[0.92] tracking-wide text-balance`}
+        className={`${headlineTopClass} font-display ${meta.compactHeadline ? "text-[clamp(34px,4.8vw,74px)]" : "text-[clamp(40px,6vw,92px)]"} leading-[0.92] tracking-wide text-balance whitespace-pre-line`}
         style={{ color: "var(--local-ink)" }}
       >
-        {meta.headline}
+        {headlineContent}
       </h2>
       {rulePosition === "after" && <div className="mt-5">{rule}</div>}
     </div>
